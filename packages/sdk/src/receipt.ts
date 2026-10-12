@@ -199,6 +199,9 @@ function compare(
     if (lower(tx.to) !== lower(request.to)) mismatches.push('Destination differs from the reviewed request.')
   }
   const budget = expected.fee?.maxFeeBudget18
+  if (budget !== undefined && actualFee18 > budget) {
+    mismatches.push(`Actual network fee ${actualFee18} exceeds the reviewed maximum fee budget ${budget}. Delivery may have succeeded, but the reviewed fee limit was not met.`)
+  }
   return {
     expectedLines: expected.lines,
     linesMatch: mismatches.length === 0,

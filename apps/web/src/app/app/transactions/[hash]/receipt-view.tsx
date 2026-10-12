@@ -123,6 +123,11 @@ export function ReceiptView({ hash }: { hash: `0x${string}` }) {
                 This transaction is not a direct USDC transfer or a call to the LastDollar splitter, so it is not labelled as a LastDollar payment.
               </p>
             ) : null}
+            {r.comparison?.feeWithinBudget === false ? (
+              <Callout tone="warning" className="mt-3" icon={<CircleAlert />} title="Delivered, but fee budget exceeded">
+                The payment may have been delivered, but its actual network fee exceeded the maximum you reviewed. This receipt is not fully verified against the reviewed terms.
+              </Callout>
+            ) : null}
             {r.operation !== 'splitter-batch' && r.operation !== 'unknown' ? (
               <p className="mt-3 text-xs text-muted">Direct transfers carry no on-chain LastDollar marker. Any wallet can produce one; the receipt below is read the same way regardless.</p>
             ) : null}
