@@ -26,4 +26,4 @@ Provide a public builder profile (GitHub, X or Farcaster) and review [submission
 ## Optional
 
 - npm publication of `@lastdollar/arc` (needs an npm account with the `@lastdollar` scope).
-- Explorer source verification on explorer.arc.io (Solidity 0.8.30, optimizer 10,000 runs, EVM `cancun`).
+- Explorer source verification by hand on explorer.arc.io: "Solidity (Standard JSON input)", compiler 0.8.30, upload `evidence/mainnet/splitter-standard-input.json` (automated verification is blocked by Cloudflare).
