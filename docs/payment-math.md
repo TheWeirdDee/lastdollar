@@ -74,7 +74,7 @@ Gas depends on the call, and the call depends on the amount, which depends on ga
 1. Estimate the call with the full balance as the candidate amount (estimation without fee fields only checks `value ≤ balance`). If that fails, retry with 1 micro-USDC: direct-transfer gas does not depend on the amount's size.
 2. Build the fee quote from the estimate and compute the amount under that budget.
 3. Re-estimate the **final** call. If its gas still fits inside the reserved `gasLimit`, stop and keep the earlier reservation. Otherwise use the larger estimate and repeat.
-4. Simulate the final request with `eth_call`, including its exact `gas`, `maxFeePerGas` and `maxPriorityFeePerGas`, so the node applies the same balance check it will apply to the signed transaction.
+4. Simulate the final request with `eth_call`, including its exact `gas`, `maxFeePerGas` and `maxPriorityFeePerGas`, to check execution. Some Arc RPC implementations do **not** apply signed-transaction gas-balance admission to `eth_call`; explicit integer affordability arithmetic remains authoritative for payment-plus-reserve affordability.
 
 ### What remains after send-max
 
@@ -112,7 +112,7 @@ A quote records the chain, account, nonce, block, both balance views, gas limit 
 
 - chain, account, destination, calldata, value and nonce are unchanged, and
 - the reviewed `maxFeePerGas` still covers the current next base fee plus tip, and the reviewed gas limit still covers the current estimate, and
-- `value + gas × maxFeePerGas ≤ B18` still holds, and
+- `recipientTotal18 + gas × maxFeePerGas ≤ B18` still holds, including ERC-20 transfers whose request value is zero, and
 - the exact reviewed request simulates successfully.
 
 For send-max, a balance change changes `value` and therefore always requires a new review. For exact payments, an unrelated balance increase leaves the reviewed terms intact. Any pending transaction from the account blocks quoting until it settles, because it changes the balance in ways the quote cannot see.

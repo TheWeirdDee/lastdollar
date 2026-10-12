@@ -4,9 +4,13 @@ Arc-aware USDC payments for [viem](https://viem.sh): quote the full cost, rechec
 
 On Arc, USDC is both the payment asset and the gas token. The same balance is visible as an 18-decimal native balance and through a 6-decimal ERC-20 interface at `0x3600…0000`. This package handles that model so a payment can be quoted and verified without unit mistakes.
 
+This SDK is not published to npm. Build it from a checked-out LastDollar repository:
+
 ```sh
-npm install @lastdollar/arc viem
+pnpm --filter @lastdollar/arc build
 ```
+
+For an independent consumer, run `npm pack` in `packages/sdk` and install the resulting tarball alongside `viem`. Do not use `npm install @lastdollar/arc` until a published release is explicitly announced.
 
 ## Quick start
 

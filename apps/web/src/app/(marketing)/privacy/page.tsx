@@ -31,7 +31,7 @@ export default function PrivacyPage() {
           <strong>Wallet connection state</strong> kept by the wagmi library so the app can reconnect on refresh. Reconnecting never signs anything.
         </li>
       </ul>
-      <p>None of this leaves your browser through LastDollar. None of it is a secret: it contains no private keys, recovery phrases or signatures.</p>
+      <p>LastDollar does not intentionally transmit this local history to an application database, but browser extensions, backups, device sharing, and the providers described below may have their own data handling. None of these values is a private key, recovery phrase or signature.</p>
       <h2>Who else sees requests</h2>
       <ul>
         <li>
@@ -59,7 +59,7 @@ export default function PrivacyPage() {
         Transactions on Arc are public and permanent. Anyone can see the sender, recipients, amounts and fees of a payment once it is on chain. Clearing local history does not change that.
       </p>
       <p>
-        Questions or corrections: open an issue in the <Link href="/developers">public repository</Link>.
+        Questions or corrections: open an issue in the <Link href="https://github.com/TheWeirdDee/lastdollar" target="_blank" rel="noreferrer">public repository</Link>.
       </p>
     </article>
   )
