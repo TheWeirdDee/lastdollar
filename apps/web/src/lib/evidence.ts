@@ -47,8 +47,8 @@ export interface MainnetEntry {
   issues: string[]
   verification: { primaryRpc: string; independentRpc: string; independentStatus: string; rpcsAgree: boolean; verifiedAt: string }
   sdkVersion: string
-  /** Set when the payment was signed in a browser wallet through the live app. */
-  signer?: string
+  /** Chain data alone cannot establish execution channel or wallet identity. */
+  provenance?: { channel: 'unknown' | 'sdk-script' | 'browser-wallet'; source: string; reviewedEvidence?: string }
 }
 
 export interface SimulationEntry {

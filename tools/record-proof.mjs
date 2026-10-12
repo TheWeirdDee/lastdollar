@@ -47,7 +47,9 @@ const entry = {
   id,
   label,
   evidenceType: 'mainnet',
-  signer: 'browser wallet (MetaMask) via the live app',
+  // A hash and receipt cannot prove which UI or wallet produced it.  Callers
+  // may add owner-attested provenance outside this recorder; unknown stays unknown.
+  provenance: { channel: 'unknown', source: 'chain receipt and caller-supplied hash', reviewedEvidence: 'unavailable unless exported before signing' },
   kind: id.includes('batch') ? 'batch' : id.includes('max') ? 'max' : 'exact',
   mode: id.startsWith('erc20') ? 'erc20' : 'native',
   chainId: 5042,

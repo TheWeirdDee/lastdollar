@@ -38,14 +38,17 @@ for (const url of rpcs) {
     if (e.evidenceType !== 'mainnet') continue
     const r = await verifyPaymentReceipt({ publicClient: client, hash: e.hash, config })
     const delivered = r.delivered.map((d) => ({ recipient: d.recipient, amount18: d.amount18.toString() }))
+    const expectedOperation = e.kind === 'batch' ? 'splitter-batch' : e.mode === 'erc20' ? 'erc20-transfer' : 'native-transfer'
     const ok =
       r.status === 'observed' &&
+      r.operation === expectedOperation &&
+      (!e.operation || e.operation === r.operation) &&
       r.actualFee18?.toString() === e.actual.fee18 &&
       JSON.stringify(delivered) === JSON.stringify(e.delivered) &&
       JSON.stringify(e.delivered) === JSON.stringify(e.intended) &&
       r.blockNumber?.toString() === e.blockNumber
     console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${e.id} ${e.hash} fee ${formatUsdc(r.actualFee18 ?? 0n)} USDC, ${delivered.length} payout(s)`)
-    if (!ok) fail(`${e.id} does not match chain data`)
+    if (!ok) fail(`${e.id} does not match chain data (expected ${expectedOperation}, observed ${r.operation})`)
   }
 }
 

@@ -61,7 +61,7 @@ function EntryCard({ e }: { e: MainnetEntry }) {
           <Badge tone="success" icon={<BadgeCheck className="size-3" aria-hidden />}>
             Mainnet · {e.result}
           </Badge>
-          {e.signer ? <Badge tone="accent">{e.signer}</Badge> : <Badge tone="warning">Origin not recorded</Badge>}
+          <Badge tone={e.provenance?.channel === 'sdk-script' ? 'accent' : 'warning'}>{e.provenance?.channel === 'sdk-script' ? 'SDK script evidence' : 'Execution channel unknown'}</Badge>
           {e.verification.rpcsAgree ? <Badge tone="neutral">2 RPCs agree</Badge> : <Badge tone="danger">RPCs disagree</Badge>}
         </div>
       </div>
@@ -442,7 +442,7 @@ pnpm test && pnpm test:contracts && pnpm test:integration`}
 
       <Section id="limits" icon={<CircleDashed />} title="What this evidence does not show" kind={null}>
         <ul className="max-w-3xl list-disc space-y-2 pl-5 text-sm text-muted">
-          <li>Proof transactions were signed by local proof wallets through the SDK, the same code the app runs, rather than through a browser wallet extension.</li>
+          <li>Each entry labels its own recorded provenance. A receipt alone cannot establish whether a browser wallet, MetaMask, or an SDK script created it; historical entries without independent provenance are labelled unknown.</li>
           <li>Transfers moved value between wallets controlled for this proof. They demonstrate mechanics, not adoption or third-party usage.</li>
           <li>The splitter contract has internal tests and no external audit.</li>
           <li>Fee estimates reflect conditions at the time; a quote is never a fee guarantee.</li>
