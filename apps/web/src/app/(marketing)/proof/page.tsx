@@ -1,5 +1,5 @@
 import { SCALE } from '@lastdollar/arc'
-import { BadgeCheck, Beaker, Calculator, CircleDashed, ExternalLink, FlaskConical, Network, TerminalSquare } from 'lucide-react'
+import { Ban, BadgeCheck, Beaker, Calculator, CircleDashed, ExternalLink, FlaskConical, Network, TerminalSquare } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Reverify } from './reverify'
@@ -7,7 +7,7 @@ import { CodeBlock } from '@/components/code'
 import { Badge, Card } from '@/components/ui'
 import networkCheck from '@/generated/network-check.json'
 import testSummary from '@/generated/test-summary.json'
-import { computationEntries, hasMainnetEvidence, mainnetEntries, simulationEntries, type MainnetEntry } from '@/lib/evidence'
+import { computationEntries, hasMainnetEvidence, mainnetEntries, rejectionEntries, simulationEntries, type MainnetEntry } from '@/lib/evidence'
 import { addressUrl, formatTime, gweiString, shortAddress, shortHash, txUrl, usd, usdExact } from '@/lib/format'
 import { APP_VERSION, REPO_URL, splitterDeployment } from '@/lib/network'
 
@@ -141,6 +141,7 @@ export default function ProofPage() {
         <div className="mt-6 flex flex-wrap gap-2">
           <Badge tone={hasMainnetEvidence ? 'success' : 'warning'}>{mainnetEntries.length} mainnet transactions</Badge>
           <Badge tone="neutral">{simulationEntries.length} simulations</Badge>
+          <Badge tone="neutral">{rejectionEntries.length} node rejections</Badge>
           <Badge tone="neutral">{computationEntries.length} computations</Badge>
           <Badge tone="neutral">Build {APP_VERSION}</Badge>
         </div>
@@ -283,11 +284,27 @@ export default function ProofPage() {
 
       <Section id="baselines" icon={<Calculator />} title="Baselines" kind={<Badge tone="neutral">Simulation and computation, not transactions</Badge>}>
         <p className="mb-5 max-w-3xl text-sm text-muted">
-          A naive full-balance send is simulated with the same gas limit and fee caps LastDollar used, instead of being broadcast and wasting fees. A competent fee-aware approach written with
-          plain viem is computed for comparison: it also works, which is the point. LastDollar&apos;s value is the full lifecycle, not a secret formula.
+          A naive full-balance send was simulated with the same gas limit and fee caps LastDollar used. On Arc, <code>eth_call</code> accepted it, so simulation alone does not show the
+          failure. A real signed naive native send was then submitted to mainnet: the node rejected it before inclusion, at no cost. A competent fee-aware approach written with plain viem is
+          computed for comparison: it also works, which is the point. LastDollar&apos;s value is the full lifecycle, not a secret formula.
         </p>
-        {simulationEntries.length || computationEntries.length ? (
+        {simulationEntries.length || computationEntries.length || rejectionEntries.length ? (
           <div className="grid gap-4 lg:grid-cols-2 [&>*]:min-w-0">
+            {rejectionEntries.map((r) => (
+              <Card key={r.id} className="p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-semibold">{r.label}</p>
+                  <Badge tone="danger" icon={<Ban className="size-3" aria-hidden />}>
+                    Mainnet · rejected before inclusion
+                  </Badge>
+                </div>
+                <p className="mt-2 text-sm text-muted">
+                  Tried to send the full balance of {usdExact(r.balance18)} USDC with a {r.feeCaps.gasLimit}-gas limit at {gweiString(r.feeCaps.maxFeePerGas)}.
+                </p>
+                <p className="mt-2 rounded-lg bg-surface-2 p-2 font-mono text-xs break-all">{r.outcome.message}</p>
+                <p className="mt-2 text-xs text-muted">{r.method}</p>
+              </Card>
+            ))}
             {simulationEntries.map((s) => (
               <Card key={s.id} className="p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -301,6 +318,7 @@ export default function ProofPage() {
                 </p>
                 <p className="mt-2 rounded-lg bg-surface-2 p-2 font-mono text-xs break-all">{s.outcome.message}</p>
                 <p className="mt-2 text-xs text-muted">{s.method}</p>
+                {s.note ? <p className="mt-2 text-xs text-warning">{s.note}</p> : null}
               </Card>
             ))}
             {computationEntries.map((c) => (
