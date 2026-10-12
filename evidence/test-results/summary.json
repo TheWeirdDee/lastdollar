@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-10-11T18:31:59.506Z",
+  "suites": [
+    {
+      "name": "SDK unit and property tests",
+      "kind": "unit / property (deterministic mock RPC)",
+      "passed": 71,
+      "failed": 0
+    },
+    {
+      "name": "SDK integration on local anvil",
+      "kind": "integration (local chain, real signing)",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "name": "LastDollarSplitter contract tests",
+      "kind": "contract (Foundry: unit, fuzz, invariant)",
+      "passed": 22,
+      "failed": 0
+    },
+    {
+      "name": "Browser end-to-end (Playwright)",
+      "kind": "browser (local anvil + labelled wallet stub, axe, 7 widths x 2 themes)",
+      "passed": 26,
+      "failed": 0
+    }
+  ]
+}
