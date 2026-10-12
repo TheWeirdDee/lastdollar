@@ -557,6 +557,139 @@
         "verifiedAt": "2026-10-12T10:11:22.388Z"
       },
       "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "browser-erc20-exact",
+      "label": "Exact ERC-20 payment made in the live app with MetaMask, 0.001 USDC",
+      "evidenceType": "mainnet",
+      "signer": "browser wallet (MetaMask) via the live app",
+      "kind": "exact",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0x8aabc23240746e8c4af5a5d949b34edbab1a3a6deef0ffb824ab31f76545304b",
+      "blockNumber": "25565955",
+      "blockTimestamp": "1791800044",
+      "from": "0xe306b8ae6e958f7c8e3401f1f12d550e5daecab6",
+      "to": "0x3600000000000000000000000000000000000000",
+      "intended": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "1000000000000000"
+        }
+      ],
+      "intendedSource": "stated before signing",
+      "delivered": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "1000000000000000"
+        }
+      ],
+      "submitted": {
+        "gasLimit": "49326",
+        "maxFeePerGas": "25000001041",
+        "maxPriorityFeePerGas": "1041"
+      },
+      "quote": {
+        "gasLimit": "49326",
+        "maxFeePerGas": "25000001041",
+        "maxFeeBudget18": "1233150051348366"
+      },
+      "actual": {
+        "gasUsed": "48938",
+        "effectiveGasPrice": "20000001041",
+        "fee18": "978760050944458",
+        "feeWithinBudget": true,
+        "mirroredNativeLogs": 1
+      },
+      "sender": {
+        "before18": "594710694273682055",
+        "beforeToken6": "594710",
+        "after18": "592731934222737597",
+        "afterToken6": "592731",
+        "afterSubMicro18": "934222737597"
+      },
+      "result": "verified",
+      "operation": "erc20-transfer",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "observed",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T10:21:40.009Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "browser-native-batch",
+      "label": "Atomic batch made in the live app with MetaMask, 2 recipients",
+      "evidenceType": "mainnet",
+      "signer": "browser wallet (MetaMask) via the live app",
+      "kind": "batch",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0xc28799b3900e58a64e4fe66582ae0af3fe7d889aa2cdc4135bac1f9b24b55fd7",
+      "blockNumber": "25566376",
+      "blockTimestamp": "1791800258",
+      "from": "0xe306b8ae6e958f7c8e3401f1f12d550e5daecab6",
+      "to": "0xfff3427e2e3c9ceac64ebeb3f34e48485d434944",
+      "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944",
+      "intended": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "1000000000000000"
+        },
+        {
+          "recipient": "0x8C62431d780dE38Da550890A88D3c609131eF90e",
+          "amount18": "1000000000000000"
+        }
+      ],
+      "intendedSource": "stated before signing",
+      "delivered": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "1000000000000000"
+        },
+        {
+          "recipient": "0x8C62431d780dE38Da550890A88D3c609131eF90e",
+          "amount18": "1000000000000000"
+        }
+      ],
+      "submitted": {
+        "gasLimit": "92999",
+        "maxFeePerGas": "25000001041",
+        "maxPriorityFeePerGas": "1041"
+      },
+      "quote": {
+        "gasLimit": "92999",
+        "maxFeePerGas": "25000001041",
+        "maxFeeBudget18": "2324975096811959"
+      },
+      "actual": {
+        "gasUsed": "77122",
+        "effectiveGasPrice": "20000001041",
+        "fee18": "1542440080284002",
+        "feeWithinBudget": true,
+        "mirroredNativeLogs": 0
+      },
+      "sender": {
+        "before18": "592731934222737597",
+        "beforeToken6": "592731",
+        "after18": "589189494142453595",
+        "afterToken6": "589189",
+        "afterSubMicro18": "494142453595"
+      },
+      "result": "verified",
+      "operation": "splitter-batch",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "observed",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T10:21:44.782Z"
+      },
+      "sdkVersion": "0.1.0"
     }
   ],
   "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944"
