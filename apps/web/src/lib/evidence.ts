@@ -47,6 +47,8 @@ export interface MainnetEntry {
   issues: string[]
   verification: { primaryRpc: string; independentRpc: string; independentStatus: string; rpcsAgree: boolean; verifiedAt: string }
   sdkVersion: string
+  /** Set when the payment was signed in a browser wallet through the live app. */
+  signer?: string
 }
 
 export interface SimulationEntry {
