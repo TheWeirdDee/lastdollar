@@ -498,7 +498,7 @@
     },
     {
       "id": "browser-native-exact",
-      "label": "Exact native payment made in the live app with MetaMask, 0.001 USDC",
+      "label": "Historical exact native payment, 0.001 USDC (execution channel unknown)",
       "evidenceType": "mainnet",
       "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
       "kind": "exact",
@@ -560,7 +560,7 @@
     },
     {
       "id": "browser-erc20-exact",
-      "label": "Exact ERC-20 payment made in the live app with MetaMask, 0.001 USDC",
+      "label": "Historical exact ERC-20 payment, 0.001 USDC (execution channel unknown)",
       "evidenceType": "mainnet",
       "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
       "kind": "exact",
@@ -622,7 +622,7 @@
     },
     {
       "id": "browser-native-batch",
-      "label": "Atomic batch made in the live app with MetaMask, 2 recipients",
+      "label": "Historical atomic batch, 2 recipients (execution channel unknown)",
       "evidenceType": "mainnet",
       "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
       "kind": "batch",
