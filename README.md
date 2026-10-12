@@ -12,9 +12,9 @@ LastDollar is an open-source payment tool for USDC on [Arc](https://arc.io). On 
 
 | Capability | Status |
 |---|---|
-| Exact payments, native and ERC-20 | Implemented and tested; mainnet proof pending |
-| Send-max, native and ERC-20, with bounded fee reserve | Implemented and tested; mainnet proof pending |
-| Atomic native batches (one transaction, no approval) through `LastDollarSplitter` | Implemented and tested; contract deployed on mainnet at [`0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944`](https://explorer.arc.io/address/0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944); batch proof pending |
+| Exact payments, native and ERC-20 | Proven on mainnet: [native](https://explorer.arc.io/tx/0x2a73bfe16ae49a560ad6e0b8888f677228e06bdec2082c1eae8394c3cc03611c), [ERC-20](https://explorer.arc.io/tx/0x20097e74da7563afdbc22760a313c8ea2950e0614ff568fe2db34ce8e6fd42fb) |
+| Send-max, native and ERC-20, with bounded fee reserve | Proven on mainnet: [native](https://explorer.arc.io/tx/0x11be46c80f9c2f7405f5a4257b4f31027d35720c69e24f699f309b8579196a14), [ERC-20](https://explorer.arc.io/tx/0xa687a1904a6739e7acd8fb708dce4c364bfb1b48df9b6c6b00c7f315848322db) |
+| Atomic native batches (one transaction, no approval) through `LastDollarSplitter` | Contract [`0xFfF3…4944`](https://explorer.arc.io/address/0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944); [3-recipient batch proven on mainnet](https://explorer.arc.io/tx/0x36e3472439ba7259523c97fe40a365959239c712adff461b50d1568ce90dcf55) |
 | Quote, review, pre-signing recheck, sign, receipt reconciliation | Implemented in SDK and app |
 | App-tracked history with refresh recovery | Implemented (browser-local, per chain and account) |
 | Receipt lookup for any hash | Implemented |
