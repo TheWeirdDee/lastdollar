@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { WalletClient } from 'viem'
 import { useWalletClient } from 'wagmi'
-import { acquireSubmissionLock, patchRecord, releaseSubmissionLock, saveReviewSnapshot, takeReviewSnapshot, upsertRecord } from './history'
+import { acquireSubmissionLock, getReviewSnapshot, patchRecord, releaseSubmissionLock, saveReviewSnapshot, upsertRecord } from './history'
 import { appNetwork } from './network'
 import { statusFromReceipt, useArcPublicClient, useWallet } from './use-arc'
 
@@ -151,7 +151,7 @@ export function usePaymentFlow() {
               total18: q.recipientTotal18.toString(),
               estimatedFee18: q.fee?.estimatedFee18.toString(),
               maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
-              reviewed: takeReviewSnapshot(q.chainId, q.account, q.id),
+              reviewed: getReviewSnapshot(q.chainId, q.account, q.id),
             })
           },
           onUpdate: (u) => setState({ step: 'executing', plan, status: u.status, hash: u.hash ?? broadcastHash }),
@@ -174,7 +174,7 @@ export function usePaymentFlow() {
             total18: q.recipientTotal18.toString(),
             estimatedFee18: q.fee?.estimatedFee18.toString(),
             maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
-            reviewed: takeReviewSnapshot(q.chainId, q.account, q.id),
+            reviewed: getReviewSnapshot(q.chainId, q.account, q.id),
             note: `Sped up by the wallet; replaces ${broadcastHash}.`,
           })
         }

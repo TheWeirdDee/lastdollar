@@ -24,8 +24,8 @@ interface Row {
 let nextId = 1
 const blank = (): Row => ({ id: nextId++, recipient: '', amount: '', reference: '' })
 
-function checkRow(r: Row): { recipient?: string; amount?: string; amount18?: bigint; address?: `0x${string}` } {
-  const out: { recipient?: string; amount?: string; amount18?: bigint; address?: `0x${string}` } = {}
+function checkRow(r: Row): { recipient?: string; amount?: string; reference?: string; amount18?: bigint; address?: `0x${string}` } {
+  const out: { recipient?: string; amount?: string; reference?: string; amount18?: bigint; address?: `0x${string}` } = {}
   const a = r.recipient.trim()
   if (!a) out.recipient = 'Required'
   else if (!isAddress(a, { strict: false })) out.recipient = 'Invalid address'
@@ -38,6 +38,7 @@ function checkRow(r: Row): { recipient?: string; amount?: string; amount18?: big
   } catch (err) {
     out.amount = r.amount.trim() === '' ? 'Required' : isLastDollarError(err, 'INVALID_PRECISION') ? 'Max 6 decimals' : 'Invalid amount'
   }
+  if (r.reference.length > 64) out.reference = 'Reference must be 64 characters or fewer'
   return out
 }
 
@@ -67,7 +68,7 @@ export function BatchView() {
   }, [checks])
   const dupRows = new Set(duplicates.flatMap(([, idx]) => idx))
   const total18 = checks.reduce((s, c) => s + (c.amount18 ?? 0n), 0n)
-  const invalidCount = checks.filter((c) => c.recipient || c.amount).length
+  const invalidCount = checks.filter((c) => c.recipient || c.amount || c.reference).length
   const tooMany = rows.length > SPLITTER_MAX_RECIPIENTS
 
   function update(id: number, patch: Partial<Row>) {
@@ -280,7 +281,10 @@ export function BatchView() {
                           placeholder="Reference"
                           autoComplete="off"
                           className={cx(inputClass, 'h-10 text-sm')}
+                          aria-invalid={showErr && !!c.reference}
+                          aria-describedby={showErr && c.reference ? `f-${r.id}-err` : undefined}
                         />
+                        {showErr && c.reference ? <p id={`f-${r.id}-err`} className="mt-1 text-xs text-danger">{c.reference}</p> : null}
                       </div>
                       <button
                         type="button"

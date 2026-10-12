@@ -55,12 +55,11 @@ export function saveReviewSnapshot(snapshot: StoredReviewSnapshot) {
   try { window.localStorage.setItem(reviewKeyFor(snapshot.chainId, snapshot.account, snapshot.quoteId), JSON.stringify(snapshot)) } catch { /* best effort */ }
 }
 
-/** Attaches and removes the pre-signing snapshot once a hash exists. */
-export function takeReviewSnapshot(chainId: number, account: string, quoteId: string): ReviewSnapshot | undefined {
+/** Reads the pre-signing snapshot without consuming it: replacement hashes need the same evidence. */
+export function getReviewSnapshot(chainId: number, account: string, quoteId: string): ReviewSnapshot | undefined {
   const key = reviewKeyFor(chainId, account, quoteId)
   try {
     const raw = window.localStorage.getItem(key)
-    window.localStorage.removeItem(key)
     if (!raw) return undefined
     const value = JSON.parse(raw) as StoredReviewSnapshot
     return value.quoteId === quoteId ? value : undefined

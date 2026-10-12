@@ -18,7 +18,7 @@ const opLabel: Record<ReconciledPayment['operation'], string> = {
   unknown: 'Not a recognised USDC payment',
 }
 
-function Headline({ r }: { r: ReconciledPayment }) {
+function Headline({ r, overBudget = false }: { r: ReconciledPayment; overBudget?: boolean }) {
   if (r.status === 'pending')
     return (
       <div className="flex items-center gap-2 text-accent">
@@ -40,7 +40,12 @@ function Headline({ r }: { r: ReconciledPayment }) {
         <span className="font-semibold">Not found on {appNetwork.name}</span>
       </div>
     )
-  return (
+  return overBudget ? (
+    <div className="flex items-center gap-2 text-warning">
+      <CircleAlert className="size-5" aria-hidden />
+      <span className="font-semibold">Delivered, but reviewed fee budget exceeded</span>
+    </div>
+  ) : (
     <div className="flex items-center gap-2 text-success">
       <CheckCircle2 className="size-5" aria-hidden />
       <span className="font-semibold">Executed successfully</span>
@@ -68,6 +73,7 @@ export function ReceiptView({ hash }: { hash: `0x${string}` }) {
     return !!d && !!e && d.recipient.toLowerCase() === e.recipient.toLowerCase() && d.amount18.toString() === e.amount18
   }
   const allMatch = !!r && intended.length > 0 && r.delivered.length === intended.length && intended.every((_, i) => lineMatch(i))
+  const overBudget = !!record?.maxFeeBudget18 && r?.actualFee18 !== undefined && r.actualFee18 > BigInt(record.maxFeeBudget18)
 
   return (
     <div className="space-y-6">
@@ -106,7 +112,7 @@ export function ReceiptView({ hash }: { hash: `0x${string}` }) {
         <>
           <Card className="p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Headline r={r} />
+              <Headline r={r} overBudget={overBudget} />
               <div className="flex flex-wrap gap-1.5">
                 <Badge tone={r.operation === 'unknown' ? 'warning' : 'accent'}>{opLabel[r.operation]}</Badge>
                 {record ? <StatusBadge status={record.status} /> : null}
@@ -123,7 +129,7 @@ export function ReceiptView({ hash }: { hash: `0x${string}` }) {
                 This transaction is not a direct USDC transfer or a call to the LastDollar splitter, so it is not labelled as a LastDollar payment.
               </p>
             ) : null}
-            {r.comparison?.feeWithinBudget === false ? (
+            {overBudget || r.comparison?.feeWithinBudget === false ? (
               <Callout tone="warning" className="mt-3" icon={<CircleAlert />} title="Delivered, but fee budget exceeded">
                 The payment may have been delivered, but its actual network fee exceeded the maximum you reviewed. This receipt is not fully verified against the reviewed terms.
               </Callout>
