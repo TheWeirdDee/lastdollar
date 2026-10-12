@@ -1,0 +1,41 @@
+{
+  "network": {
+    "name": "Arc",
+    "chainId": 5042
+  },
+  "address": "0xfff3427e2e3c9ceac64ebeb3f34e48485d434944",
+  "deployer": "0xe306b8ae6e958f7c8e3401f1f12d550e5daecab6",
+  "signer": "browser wallet (MetaMask)",
+  "transactionHash": "0xebe9549472f9f8607560a8f34fc92827b240b5a0b69830fb090ce07c74750fe9",
+  "blockNumber": "25557974",
+  "gasUsed": "437057",
+  "effectiveGasPrice": "21500000000",
+  "fee18": "9396725500000000",
+  "compiler": "0.8.30+commit.73712a01",
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 10000
+    },
+    "evmVersion": "cancun",
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    }
+  },
+  "source": "contracts/src/LastDollarSplitter.sol",
+  "localRuntimeKeccak": "0xf4d5293101b1b2c1971688c2f71855fd1ef89af7177c245fce07b53ce7fed29a",
+  "onchainRuntimeKeccak": "0xf4d5293101b1b2c1971688c2f71855fd1ef89af7177c245fce07b53ce7fed29a",
+  "runtimeMatches": true,
+  "independentRpcRuntimeMatches": true,
+  "explorer": "https://explorer.arc.io/address/0xfff3427e2e3c9ceac64ebeb3f34e48485d434944",
+  "explorerVerification": "pending",
+  "recordedAt": "2026-10-12T09:08:26.036Z",
+  "unusedDuplicate": {
+    "note": "An identical second deployment was broadcast by mistake during wallet signing. It is not used by the app.",
+    "address": "0xfe2555916e0311dc58a9bf98cfc1b8a7497f062c",
+    "transactionHash": "0xda96f7c3743ff16d3dab5001250b522f13541d6abb6defe9fab69c3612df0b84",
+    "blockNumber": "25557968",
+    "fee18": "8741140000000000",
+    "runtimeMatches": true
+  }
+}
