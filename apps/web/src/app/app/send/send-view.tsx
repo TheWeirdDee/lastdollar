@@ -6,6 +6,7 @@ import { useRef, useState } from 'react'
 import { getAddress, isAddress, zeroAddress } from 'viem'
 import { BalanceCard } from '@/components/balance'
 import { FlowPanel } from '@/components/flow-panel'
+import { SplitColumns } from '@/components/split-columns'
 import { Button, Callout, Card, Field, Segmented, cx, inputClass } from '@/components/ui'
 import { ConnectDialog } from '@/components/wallet'
 import { appNetwork } from '@/lib/network'
@@ -84,8 +85,11 @@ export function SendView() {
         </Callout>
       ) : null}
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-        <div className="space-y-6">
+      <SplitColumns
+        breakpoint="lg"
+        className="lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
+        left={
+          <>
           {isConnected ? (
             <BalanceCard
               balance={balance.data}
@@ -209,9 +213,11 @@ export function SendView() {
               </fieldset>
             </form>
           </Card>
-        </div>
+          </>
+        }
 
-        <div className="lg:sticky lg:top-24">
+        right={
+          <>
           {flow.state.step === 'idle' ? (
             <Card className="p-6 text-sm text-muted">
               <p className="font-medium text-text">Your quote appears here</p>
@@ -220,8 +226,9 @@ export function SendView() {
           ) : (
             <FlowPanel flow={flow} onRefreshQuote={runQuote} />
           )}
-        </div>
-      </div>
+          </>
+        }
+      />
       <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} />
     </div>
   )
