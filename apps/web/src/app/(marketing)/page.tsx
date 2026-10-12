@@ -122,7 +122,7 @@ export default function LandingPage() {
               <ol className="mt-4 space-y-2 text-sm text-muted">
                 <li>1. Read the ERC-20 balance.</li>
                 <li>2. Transfer all of it.</li>
-                <li>3. Nothing is left for the fee, so the transfer cannot execute.</li>
+                <li>3. The balance no longer covers the fee. On Arc mainnet the node rejects a full-balance native send outright.</li>
               </ol>
             </Card>
             <Card className="p-6">
