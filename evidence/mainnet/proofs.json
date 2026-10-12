@@ -1,0 +1,501 @@
+{
+  "schema": 1,
+  "description": "LastDollar public evidence. Integer amounts are decimal strings in base units: *18 = native 18-decimal USDC, *6 = ERC-20 6-decimal USDC.",
+  "network": {
+    "name": "Arc",
+    "chainId": 5042,
+    "explorer": "https://explorer.arc.io",
+    "usdc": "0x3600000000000000000000000000000000000000"
+  },
+  "wallets": {
+    "payer": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+    "recipientB": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+    "recipientC": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+    "recipientD": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA"
+  },
+  "entries": [
+    {
+      "id": "native-exact",
+      "label": "Exact native payment, 0.010000 USDC",
+      "evidenceType": "mainnet",
+      "kind": "exact",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0x2a73bfe16ae49a560ad6e0b8888f677228e06bdec2082c1eae8394c3cc03611c",
+      "blockNumber": "25560594",
+      "blockTimestamp": "1791797323",
+      "from": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+      "to": "0x97f32ba0b4dd5c274dfd9c2a7e6aa403a9b7de8d",
+      "intended": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        }
+      ],
+      "delivered": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        }
+      ],
+      "quote": {
+        "blockNumber": "25560587",
+        "balance18": "631862134500000000",
+        "token6": "631862",
+        "gasEstimate": "21000",
+        "gasLimit": "25100",
+        "maxFeePerGas": "25000001152",
+        "maxPriorityFeePerGas": "1152",
+        "estimatedFee18": "420000024192000",
+        "maxFeeBudget18": "627500028915200",
+        "maxDebit18": "10627500028915200",
+        "iterations": 1,
+        "feePolicy": {
+          "gasMarginBps": "1000",
+          "gasMarginFixed": "2000",
+          "baseFeeHeadroomBps": "12500",
+          "minPriorityFeePerGas": "0",
+          "maxPriorityFeePerGas": "2000000000"
+        }
+      },
+      "actual": {
+        "gasUsed": "21000",
+        "effectiveGasPrice": "20000001152",
+        "fee18": "420000024192000",
+        "feeWithinBudget": true,
+        "walletModifiedParameters": false,
+        "mirroredNativeLogs": 0
+      },
+      "sender": {
+        "before18": "631862134500000000",
+        "beforeToken6": "631862",
+        "after18": "621442134475808000",
+        "afterToken6": "621442",
+        "afterSubMicro18": "134475808000"
+      },
+      "result": "verified",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "verified",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T09:28:46.888Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "erc20-exact",
+      "label": "Exact ERC-20 payment, 0.010000 USDC",
+      "evidenceType": "mainnet",
+      "kind": "exact",
+      "mode": "erc20",
+      "chainId": 5042,
+      "hash": "0x20097e74da7563afdbc22760a313c8ea2950e0614ff568fe2db34ce8e6fd42fb",
+      "blockNumber": "25560605",
+      "blockTimestamp": "1791797329",
+      "from": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+      "to": "0x3600000000000000000000000000000000000000",
+      "intended": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        }
+      ],
+      "delivered": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        }
+      ],
+      "tokenAmount6": "10000",
+      "quote": {
+        "blockNumber": "25560599",
+        "balance18": "621442134475808000",
+        "token6": "621442",
+        "gasEstimate": "49326",
+        "gasLimit": "56259",
+        "maxFeePerGas": "25000001152",
+        "maxPriorityFeePerGas": "1152",
+        "estimatedFee18": "986520056823552",
+        "maxFeeBudget18": "1406475064810368",
+        "maxDebit18": "11406475064810368",
+        "iterations": 1,
+        "feePolicy": {
+          "gasMarginBps": "1000",
+          "gasMarginFixed": "2000",
+          "baseFeeHeadroomBps": "12500",
+          "minPriorityFeePerGas": "0",
+          "maxPriorityFeePerGas": "2000000000"
+        }
+      },
+      "actual": {
+        "gasUsed": "48938",
+        "effectiveGasPrice": "20000001152",
+        "fee18": "978760056376576",
+        "feeWithinBudget": true,
+        "walletModifiedParameters": false,
+        "mirroredNativeLogs": 1
+      },
+      "sender": {
+        "before18": "621442134475808000",
+        "beforeToken6": "621442",
+        "after18": "610463374419431424",
+        "afterToken6": "610463",
+        "afterSubMicro18": "374419431424"
+      },
+      "result": "verified",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "verified",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T09:28:52.206Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "native-batch",
+      "label": "Atomic native batch to three recipients via LastDollarSplitter",
+      "evidenceType": "mainnet",
+      "kind": "batch",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0x36e3472439ba7259523c97fe40a365959239c712adff461b50d1568ce90dcf55",
+      "blockNumber": "25560616",
+      "blockTimestamp": "1791797335",
+      "from": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+      "to": "0xfff3427e2e3c9ceac64ebeb3f34e48485d434944",
+      "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944",
+      "intended": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        },
+        {
+          "recipient": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+          "amount18": "20000000000000000"
+        },
+        {
+          "recipient": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+          "amount18": "30000000000000000"
+        }
+      ],
+      "delivered": [
+        {
+          "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
+          "amount18": "10000000000000000"
+        },
+        {
+          "recipient": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+          "amount18": "20000000000000000"
+        },
+        {
+          "recipient": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+          "amount18": "30000000000000000"
+        }
+      ],
+      "quote": {
+        "blockNumber": "25560609",
+        "balance18": "610463374419431424",
+        "token6": "610463",
+        "gasEstimate": "120161",
+        "gasLimit": "134178",
+        "maxFeePerGas": "25000001041",
+        "maxPriorityFeePerGas": "1041",
+        "estimatedFee18": "2403220125087601",
+        "maxFeeBudget18": "3354450139679298",
+        "maxDebit18": "63354450139679298",
+        "iterations": 1,
+        "feePolicy": {
+          "gasMarginBps": "1000",
+          "gasMarginFixed": "2000",
+          "baseFeeHeadroomBps": "12500",
+          "minPriorityFeePerGas": "0",
+          "maxPriorityFeePerGas": "2000000000"
+        }
+      },
+      "actual": {
+        "gasUsed": "114909",
+        "effectiveGasPrice": "20000001041",
+        "fee18": "2298180119620269",
+        "feeWithinBudget": true,
+        "walletModifiedParameters": false,
+        "mirroredNativeLogs": 0
+      },
+      "sender": {
+        "before18": "610463374419431424",
+        "beforeToken6": "610463",
+        "after18": "548165194299811155",
+        "afterToken6": "548165",
+        "afterSubMicro18": "194299811155"
+      },
+      "result": "verified",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "verified",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T09:28:57.903Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "baseline-naive-erc20",
+      "label": "Naive ERC-20 send-max: transfer(balanceOf()) under the same fee caps",
+      "evidenceType": "simulation",
+      "mode": "erc20",
+      "chainId": 5042,
+      "blockNumber": "25560623",
+      "from": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+      "attemptedAmount18": "20000000000000000",
+      "balance18": "20000000000000000",
+      "token6": "20000",
+      "feeCaps": {
+        "gasLimit": "56259",
+        "maxFeePerGas": "25000001041"
+      },
+      "outcome": {
+        "simulated": "success",
+        "message": "The node accepted the naive transfer in simulation."
+      },
+      "method": "eth_call with the same gas limit and fee caps LastDollar quoted for send-max",
+      "recordedAt": "2026-10-12T09:28:59.811Z",
+      "note": "eth_call accepted this naive transfer. A simulation therefore does not demonstrate failure on Arc; see the broadcast rejection entry for real node behaviour."
+    },
+    {
+      "id": "baseline-competent-erc20",
+      "label": "Competent fee-aware baseline (erc20) written with plain viem",
+      "evidenceType": "computation",
+      "mode": "erc20",
+      "chainId": 5042,
+      "blockNumber": "25560624",
+      "from": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+      "baseline": {
+        "gasEstimate": "49314",
+        "maxFeePerGas": "40000000000",
+        "budget18": "1972560000000000",
+        "amount18": "18027000000000000"
+      },
+      "lastDollar": {
+        "gasLimit": "56259",
+        "maxFeePerGas": "25000001041",
+        "budget18": "1406475058565619",
+        "amount18": "18593000000000000"
+      },
+      "note": "Both approaches are fee-aware and both produce a valid amount. They differ only in fee policy; LastDollar adds the bounded estimate loop, final simulation with exact caps, revalidation and receipt reconciliation.",
+      "recordedAt": "2026-10-12T09:28:59.955Z"
+    },
+    {
+      "id": "erc20-max",
+      "label": "ERC-20 send-max from wallet C",
+      "evidenceType": "mainnet",
+      "kind": "max",
+      "mode": "erc20",
+      "chainId": 5042,
+      "hash": "0xa687a1904a6739e7acd8fb708dce4c364bfb1b48df9b6c6b00c7f315848322db",
+      "blockNumber": "25560633",
+      "blockTimestamp": "1791797343",
+      "from": "0x2401f72D90E19daD3d0c3e45b906C760507791E8",
+      "to": "0x3600000000000000000000000000000000000000",
+      "intended": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "18593000000000000"
+        }
+      ],
+      "delivered": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "18593000000000000"
+        }
+      ],
+      "tokenAmount6": "18593",
+      "quote": {
+        "blockNumber": "25560624",
+        "balance18": "20000000000000000",
+        "token6": "20000",
+        "gasEstimate": "49326",
+        "gasLimit": "56259",
+        "maxFeePerGas": "25000001041",
+        "maxPriorityFeePerGas": "1041",
+        "estimatedFee18": "986520051348366",
+        "maxFeeBudget18": "1406475058565619",
+        "maxDebit18": "19999475058565619",
+        "iterations": 2,
+        "feePolicy": {
+          "gasMarginBps": "1000",
+          "gasMarginFixed": "2000",
+          "baseFeeHeadroomBps": "12500",
+          "minPriorityFeePerGas": "0",
+          "maxPriorityFeePerGas": "2000000000"
+        }
+      },
+      "actual": {
+        "gasUsed": "48938",
+        "effectiveGasPrice": "20000001041",
+        "fee18": "978760050944458",
+        "feeWithinBudget": true,
+        "walletModifiedParameters": false,
+        "mirroredNativeLogs": 1
+      },
+      "sender": {
+        "before18": "20000000000000000",
+        "beforeToken6": "20000",
+        "after18": "428239949055542",
+        "afterToken6": "428",
+        "afterSubMicro18": "239949055542"
+      },
+      "result": "verified",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "verified",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T09:29:06.808Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "baseline-naive-native",
+      "label": "Naive native send-max: value = full balance under the same fee caps",
+      "evidenceType": "simulation",
+      "mode": "native",
+      "chainId": 5042,
+      "blockNumber": "25560640",
+      "from": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+      "attemptedAmount18": "30000000000000000",
+      "balance18": "30000000000000000",
+      "token6": "30000",
+      "feeCaps": {
+        "gasLimit": "25100",
+        "maxFeePerGas": "25000001041"
+      },
+      "outcome": {
+        "simulated": "success",
+        "message": "The node accepted the naive transfer in simulation."
+      },
+      "method": "eth_call with the same gas limit and fee caps LastDollar quoted for send-max",
+      "recordedAt": "2026-10-12T09:29:08.816Z",
+      "note": "eth_call accepted this naive transfer. A simulation therefore does not demonstrate failure on Arc; see the broadcast rejection entry for real node behaviour."
+    },
+    {
+      "id": "baseline-competent-native",
+      "label": "Competent fee-aware baseline (native) written with plain viem",
+      "evidenceType": "computation",
+      "mode": "native",
+      "chainId": 5042,
+      "blockNumber": "25560642",
+      "from": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+      "baseline": {
+        "gasEstimate": "21000",
+        "maxFeePerGas": "40000000000",
+        "budget18": "840000000000000",
+        "amount18": "29160000000000000"
+      },
+      "lastDollar": {
+        "gasLimit": "25100",
+        "maxFeePerGas": "25000001041",
+        "budget18": "627500026129100",
+        "amount18": "29372499973870900"
+      },
+      "note": "Both approaches are fee-aware and both produce a valid amount. They differ only in fee policy; LastDollar adds the bounded estimate loop, final simulation with exact caps, revalidation and receipt reconciliation.",
+      "recordedAt": "2026-10-12T09:29:08.982Z"
+    },
+    {
+      "id": "native-max",
+      "label": "Native send-max from wallet D",
+      "evidenceType": "mainnet",
+      "kind": "max",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0x11be46c80f9c2f7405f5a4257b4f31027d35720c69e24f699f309b8579196a14",
+      "blockNumber": "25560649",
+      "blockTimestamp": "1791797351",
+      "from": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+      "to": "0xe306b8ae6e958f7c8e3401f1f12d550e5daecab6",
+      "intended": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "29372499973870900"
+        }
+      ],
+      "delivered": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "29372499973870900"
+        }
+      ],
+      "quote": {
+        "blockNumber": "25560642",
+        "balance18": "30000000000000000",
+        "token6": "30000",
+        "gasEstimate": "21000",
+        "gasLimit": "25100",
+        "maxFeePerGas": "25000001041",
+        "maxPriorityFeePerGas": "1041",
+        "estimatedFee18": "420000021861000",
+        "maxFeeBudget18": "627500026129100",
+        "maxDebit18": "30000000000000000",
+        "iterations": 2,
+        "feePolicy": {
+          "gasMarginBps": "1000",
+          "gasMarginFixed": "2000",
+          "baseFeeHeadroomBps": "12500",
+          "minPriorityFeePerGas": "0",
+          "maxPriorityFeePerGas": "2000000000"
+        }
+      },
+      "actual": {
+        "gasUsed": "21000",
+        "effectiveGasPrice": "20000001041",
+        "fee18": "420000021861000",
+        "feeWithinBudget": true,
+        "walletModifiedParameters": false,
+        "mirroredNativeLogs": 0
+      },
+      "sender": {
+        "before18": "30000000000000000",
+        "beforeToken6": "30000",
+        "after18": "207500004268100",
+        "afterToken6": "207",
+        "afterSubMicro18": "500004268100"
+      },
+      "result": "verified",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "verified",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-12T09:29:18.576Z"
+      },
+      "sdkVersion": "0.1.0"
+    },
+    {
+      "id": "baseline-naive-native-broadcast",
+      "label": "Naive native send-max broadcast: value = full balance",
+      "evidenceType": "rejection",
+      "mode": "native",
+      "chainId": 5042,
+      "blockNumber": "25560717",
+      "from": "0x2548636761e3dE9dA24FD6165B4fdb66d3aA08AA",
+      "attemptedAmount18": "207500004268100",
+      "balance18": "207500004268100",
+      "feeCaps": {
+        "gasLimit": "21000",
+        "maxFeePerGas": "25000000000"
+      },
+      "outcome": {
+        "rejected": true,
+        "message": "insufficient funds for gas * price + value: have 207500004268100 want 732500004268100"
+      },
+      "method": "Signed EIP-1559 transaction submitted with eth_sendRawTransaction to rpc.mainnet.arc.io. The node rejected it before inclusion: no transaction hash, no fee, balance and nonce unchanged.",
+      "recordedAt": "2026-10-12T09:30:02.252582+00:00"
+    }
+  ],
+  "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944"
+}
