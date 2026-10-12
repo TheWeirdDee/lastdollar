@@ -81,6 +81,8 @@ pnpm verify:network          # re-run Arc mainnet validation gates
 pnpm verify:evidence         # re-check every mainnet proof on two RPCs
 ```
 
+Operational scripts: `pnpm deploy:browser` (deploy the splitter with MetaMask), `pnpm deploy:record`, `pnpm proof:run` (plan, or `--execute`), `pnpm proof:record <id> <hash>` (record a payment made in the app), `pnpm test:record`.
+
 ## Limitations
 
 - Not audited. Internal tests only.
@@ -90,6 +92,9 @@ pnpm verify:evidence         # re-check every mainnet proof on two RPCs
 - Browser wallets via EIP-6963 and injected providers. No WalletConnect or smart-account batching yet.
 - 0x addresses only; no name resolution.
 - Wallets that rewrite gas parameters are detected and reported, not prevented.
+- MetaMask currently shows a "Continue at your own risk" warning for `lastdollar.vercel.app` (a false-positive report is pending), and its balance-change preview on Arc misstates amounts by offsetting the fee; LastDollar's review screen and receipts show the real figures.
+- Chain reads use a same-origin, read-only relay (`/api/rpc`) when the browser cannot reach Arc's RPCs directly. It cannot send or sign anything.
+- The splitter's source is not yet verified on the explorer (its API blocks scripted clients); its bytecode is verified against this repository on two RPC providers.
 
 ## License
 
