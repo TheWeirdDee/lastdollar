@@ -61,7 +61,7 @@ function EntryCard({ e }: { e: MainnetEntry }) {
           <Badge tone="success" icon={<BadgeCheck className="size-3" aria-hidden />}>
             Mainnet · {e.result}
           </Badge>
-          {e.signer ? <Badge tone="accent">Signed in MetaMask, live app</Badge> : null}
+          {e.signer ? <Badge tone="accent">{e.signer}</Badge> : <Badge tone="warning">Origin not recorded</Badge>}
           {e.verification.rpcsAgree ? <Badge tone="neutral">2 RPCs agree</Badge> : <Badge tone="danger">RPCs disagree</Badge>}
         </div>
       </div>
@@ -356,6 +356,7 @@ export default function ProofPage() {
           <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
             {[erc20Max, nativeMax].map((e) => {
               const unused = BigInt(e.quote.maxFeeBudget18) - BigInt(e.actual.fee18)
+              const rounding = e.mode === 'erc20' ? BigInt(e.sender.after18) - unused : 0n
               return (
                 <Card key={e.id} className="p-5">
                   <p className="font-semibold">{e.mode === 'erc20' ? 'ERC-20 send-max' : 'Native send-max'}</p>
@@ -369,14 +370,14 @@ export default function ProofPage() {
                       <dd className="tabular">{usdExact(unused)}</dd>
                     </div>
                     <div className="flex justify-between gap-3 py-2">
-                      <dt className="text-muted">Below one micro-USDC</dt>
-                      <dd className="tabular">{usdExact(e.sender.afterSubMicro18)}</dd>
+                      <dt className="text-muted">Token-rounding remainder</dt>
+                      <dd className="tabular">{usdExact(rounding)}</dd>
                     </div>
                   </dl>
                   <p className="mt-3 text-xs text-muted">
                     {e.mode === 'erc20'
-                      ? 'The ERC-20 interface moves whole micro-USDC only, so the remainder includes the unused budget plus sub-micro dust.'
-                      : 'Native value keeps 18-decimal precision, so the remainder is exactly the unused part of the fee budget.'}
+                      ? 'Remaining balance equals unused fee budget plus this additive token-rounding remainder. The final balance’s sub-micro portion alone is not necessarily the rounding remainder.'
+                      : 'Native value keeps 18-decimal precision, so token-rounding remainder is zero and the remainder is the unused fee budget.'}
                   </p>
                 </Card>
               )
