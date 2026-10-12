@@ -2,23 +2,31 @@
 
 The proof page shows only transactions that exist on Arc mainnet and reconcile cleanly. This document explains how they are produced and how anyone can re-check them.
 
-## Plan
+## What was run (2026-10-12)
 
-`tools/run-mainnet-proof.mjs` runs these steps through the same SDK functions the web app uses (`quote*` → `preparePayment` → `executePayment` → `verifyPaymentReceipt`):
+`tools/run-mainnet-proof.mjs` executed every step through the same SDK functions the web app uses (`quote*` → `preparePayment` → `executePayment` → `verifyPaymentReceipt`). The payer was the user's own funded Account 1 (`0xE306…cab6`), signing locally from a key file outside the repository. Account 2 (`0x97f3…dE8d`) belongs to the user; C and D are small wallets generated for the send-max proofs, which returned their funds to Account 1.
 
-| Id | Operation | From → to | Amount |
-|---|---|---|---|
-| `native-exact` | Exact native payment | payer → B | 0.010000 USDC |
-| `erc20-exact` | Exact ERC-20 payment | payer → B | 0.010000 USDC |
-| `native-batch` | Atomic batch through LastDollarSplitter | payer → B, C, D | 0.01, 0.02, 0.03 USDC |
-| `baseline-naive-erc20` | **Simulation:** `transfer(balanceOf())` from C with the same caps LastDollar quoted | — | full token view |
-| `baseline-competent-erc20` | **Computation:** fee-aware max written with plain viem | — | — |
-| `erc20-max` | ERC-20 send-max | C → payer | computed |
-| `baseline-naive-native` | **Simulation:** value = full balance from D with the same caps | — | full balance |
-| `baseline-competent-native` | **Computation:** plain viem equivalent | — | — |
-| `native-max` | Native send-max | D → payer | computed |
+| Id | Operation | From → to | Amount | Result |
+|---|---|---|---|---|
+| `native-exact` | Exact native payment | Account 1 → Account 2 | 0.010000 | verified |
+| `erc20-exact` | Exact ERC-20 payment | Account 1 → Account 2 | 0.010000 | verified |
+| `native-batch` | Atomic batch through LastDollarSplitter | Account 1 → Account 2, C, D | 0.01, 0.02, 0.03 | verified |
+| `baseline-naive-erc20` | Simulation: `transfer(balanceOf())` from C under the same caps | — | full token view | **accepted by `eth_call`** |
+| `baseline-competent-erc20` | Computation: fee-aware max with plain viem | — | 0.018027 vs LastDollar 0.018593 | both valid |
+| `erc20-max` | ERC-20 send-max | C → Account 1 | 0.018593 | verified |
+| `baseline-naive-native` | Simulation: value = full balance from D under the same caps | — | full balance | **accepted by `eth_call`** |
+| `baseline-competent-native` | Computation: plain viem equivalent | — | 0.02916 vs LastDollar 0.02937 | both valid |
+| `native-max` | Native send-max | D → Account 1 | 0.0293724999738709 | verified |
+| `baseline-naive-native-broadcast` | Signed naive full-balance native send, submitted | D → Account 1 | full balance | **rejected by the node before inclusion, no fee** |
 
-Wallets B, C and D were generated for the proof, so transferred value stays recoverable; only network fees are spent. The send-max proofs run from C and D, which hold only what the batch delivered, which exercises realistic small balances.
+Total network fees for the five proofs: 0.005095 USDC. The splitter deployment (signed in MetaMask through `pnpm deploy:browser`) cost 0.0094 USDC; an identical duplicate deployment was broadcast by mistake (0.0087 USDC) and is recorded as unused.
+
+### What the baselines showed
+
+- On Arc, `eth_call` with the final gas limit and fee caps **accepted** naive full-balance transfers. Simulation alone therefore does not demonstrate the naive failure, and the evidence does not claim it does.
+- A real signed naive native send was rejected by the node with `insufficient funds for gas * price + value`, before inclusion, at no cost.
+- A naive ERC-20 full-balance transfer was not broadcast: if it were included it would revert and still charge gas. That outcome is therefore not demonstrated on mainnet.
+- A competent fee-aware approach with plain viem also produces a valid amount. LastDollar's value is the complete lifecycle (bounded estimate loop, exact-cap simulation, pre-signing recheck, reconciliation), not a unique formula.
 
 ## Safeguards
 
@@ -57,6 +65,6 @@ The proof page's **Re-verify live** button performs the same reconciliation from
 
 ## Limits
 
-- Proof transactions are signed by local keys through the SDK, not by a browser wallet extension. The browser path is covered by end-to-end tests against a local chain.
+- Proof payments were signed by a local key through the SDK, not by a browser wallet extension. The splitter deployment was signed in MetaMask. The browser payment path is covered by end-to-end tests against a local chain and by manual payments in the live app.
 - Two RPC providers are operated independently, but both read the same chain. They guard against a faulty or dishonest endpoint, not against the chain itself.
-- Value moved between wallets controlled for the proof, so this shows that the mechanics work, not that anyone has adopted the tool.
+- Value moved between the user's own accounts and helper wallets, so this shows that the mechanics work, not that anyone has adopted the tool.
