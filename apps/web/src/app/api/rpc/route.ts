@@ -64,9 +64,11 @@ export async function POST(request: Request) {
   }
   const calls = Array.isArray(payload) ? payload : [payload]
   if (calls.length === 0 || calls.length > 20) return Response.json(rpcError(null, -32600, 'Invalid batch size'), { status: 400 })
-  const blocked = calls.find((c) => !c || typeof c !== 'object' || typeof c.method !== 'string' || !READ_METHODS.has(c.method))
-  if (blocked) {
-    const invalid = blocked as RpcRequest
+  // Do not use `find()` as the condition: null, false and 0 are all invalid
+  // JSON-RPC entries but are themselves falsy and would otherwise be relayed.
+  const blockedIndex = calls.findIndex((c) => !c || typeof c !== 'object' || typeof c.method !== 'string' || !READ_METHODS.has(c.method))
+  if (blockedIndex !== -1) {
+    const invalid = calls[blockedIndex] as RpcRequest | null
     return Response.json(rpcError(invalid?.id, -32601, `Method not allowed through this read-only relay: ${String(invalid?.method)}`), { status: 403 })
   }
 
