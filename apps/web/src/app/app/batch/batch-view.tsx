@@ -71,11 +71,13 @@ export function BatchView() {
   const tooMany = rows.length > SPLITTER_MAX_RECIPIENTS
 
   function update(id: number, patch: Partial<Row>) {
+    flow.invalidate()
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)))
     setAckDuplicates(false)
   }
 
   async function importCsv(file: File) {
+    flow.invalidate()
     const text = await file.text()
     const parsed = parseBatchCsv(text)
     setCsvReport({ fileName: file.name, errors: parsed.errors, rows: parsed.rows.filter((r) => r.errors.length > 0) })
@@ -281,7 +283,7 @@ export function BatchView() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => setRows((rs) => (rs.length > 1 ? rs.filter((x) => x.id !== r.id) : [blank()]))}
+                        onClick={() => { flow.invalidate(); setRows((rs) => (rs.length > 1 ? rs.filter((x) => x.id !== r.id) : [blank()])) }}
                         className="col-start-3 row-start-1 inline-flex size-10 items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-danger md:col-start-auto md:row-start-auto"
                         aria-label={`Remove recipient ${i + 1}`}
                       >
@@ -293,7 +295,7 @@ export function BatchView() {
               })}
             </ol>
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 sm:px-5">
-              <Button size="sm" variant="ghost" onClick={() => setRows((rs) => [...rs, blank()])} disabled={rows.length >= SPLITTER_MAX_RECIPIENTS}>
+              <Button size="sm" variant="ghost" onClick={() => { flow.invalidate(); setRows((rs) => [...rs, blank()]) }} disabled={rows.length >= SPLITTER_MAX_RECIPIENTS}>
                 <Plus className="size-4" aria-hidden /> Add recipient
               </Button>
               <p className="text-sm">

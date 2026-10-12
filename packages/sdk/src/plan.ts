@@ -84,7 +84,12 @@ export async function revalidatePlan(input: {
   // The reviewed request may keep its original caps if they still cover current fees.
   const capsStillCover =
     old.maxFeePerGas >= (fresh.fee?.nextBaseFeePerGas ?? 0n) + neu.maxPriorityFeePerGas && old.gas >= (fresh.fee?.gasEstimate ?? 0n)
-  const stillAffordable = old.value + old.gas * old.maxFeePerGas <= fresh.balance.native18
+  // ERC-20 calls carry zero `value`, but Arc's native and ERC-20 views draw from
+  // the same underlying USDC balance.  `value` is therefore not the economic
+  // payment amount for an ERC-20 request.  Always use the reviewed recipient
+  // total, plus the *reviewed* retained fee budget.
+  const reviewedMaximumDebit = plan.quote.recipientTotal18 + old.gas * old.maxFeePerGas
+  const stillAffordable = reviewedMaximumDebit <= fresh.balance.native18
 
   if (sameTerms && capsStillCover && stillAffordable) {
     // Final simulation of the exact reviewed request with its own caps.

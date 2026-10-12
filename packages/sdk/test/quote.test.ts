@@ -259,4 +259,17 @@ describe('preparePayment and revalidatePlan', () => {
     const r = await revalidatePlan({ publicClient: client(), plan, config })
     expect(r.status).toBe('blocked')
   })
+
+  it('rejects an ERC-20 retained-cap plan when its transfer plus reviewed fee budget no longer fits', async () => {
+    const plan = preparePayment(
+      await quoteExactPayment({ publicClient: client(), account: PAYER, recipient: BOB, amount18: parseUsdc('1'), mode: 'erc20', config }),
+    )
+    // A lower fresh fee suggestion makes a fresh quote affordable.  The old
+    // request still authorizes its original fee cap and must not be signed.
+    state.priorityFee = 0n
+    const retainedDebit = plan.quote.recipientTotal18 + plan.request.gas * plan.request.maxFeePerGas
+    setBalance(state, PAYER, retainedDebit - 1n)
+    const result = await revalidatePlan({ publicClient: client(), plan, config })
+    expect(result.status).not.toBe('valid')
+  })
 })

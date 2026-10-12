@@ -1,7 +1,7 @@
 import { ArrowDownRight, CircleAlert, CircleCheck, Info, ShieldCheck } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Badge, cx } from './ui'
-import { shortAddress, usd, usdExact } from '@/lib/format'
+import { usd, usdExact } from '@/lib/format'
 
 export interface QuoteView {
   kind: 'exact' | 'max' | 'batch'
@@ -55,9 +55,9 @@ export function QuoteSummary({ view, sampleLabel, footer, className }: { view: Q
           <span className="text-sm font-medium text-muted">USDC</span>
         </p>
         {single ? (
-          <p className="mt-2 flex items-center gap-1.5 text-sm text-muted">
+          <p className="mt-2 flex items-start gap-1.5 text-sm text-muted">
             <ArrowDownRight className="size-4" aria-hidden />
-            to <span className="font-mono text-text">{shortAddress(single.address, 6)}</span>
+            to <span className="break-all font-mono text-text" aria-label={`Full recipient address ${single.address}`}>{single.address}</span>
           </p>
         ) : null}
         {view.kind === 'max' && view.recipientTotal18 % 1_000_000_000_000n !== 0n ? (
@@ -68,12 +68,12 @@ export function QuoteSummary({ view, sampleLabel, footer, className }: { view: Q
       {view.kind === 'batch' ? (
         <ol className="mx-5 mt-4 max-h-56 divide-y divide-border overflow-y-auto rounded-xl border border-border">
           {view.recipients.map((r, i) => (
-            <li key={`${r.address}-${i}`} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+            <li key={`${r.address}-${i}`} className="flex items-start justify-between gap-3 px-3 py-2 text-sm">
               <span className="flex min-w-0 items-center gap-2">
                 <span className="w-5 shrink-0 text-xs text-muted tabular">{i + 1}</span>
-                <span className="truncate font-mono text-xs">{shortAddress(r.address, 6)}</span>
+                <span className="break-all font-mono text-xs" aria-label={`Full recipient ${i + 1} address ${r.address}`}>{r.address}</span>
               </span>
-              <span className="tabular shrink-0">{usd(r.amount18)}</span>
+              <span className="tabular shrink-0 text-right">{usdExact(r.amount18)}<span className="block text-xs text-muted">USDC</span></span>
             </li>
           ))}
         </ol>

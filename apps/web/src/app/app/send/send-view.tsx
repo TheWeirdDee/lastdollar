@@ -1,6 +1,6 @@
 'use client'
 
-import { isLastDollarError, parseUsdc, quoteExactPayment, quoteMaxPayment, type PaymentMode } from '@lastdollar/arc'
+import { isLastDollarError, parseNativeUsdc, parseUsdc, quoteExactPayment, quoteMaxPayment, type PaymentMode } from '@lastdollar/arc'
 import { AlertTriangle, Info } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { getAddress, isAddress, zeroAddress } from 'viem'
@@ -46,7 +46,7 @@ export function SendView() {
     else to = getAddress(r)
     if (intent === 'exact') {
       try {
-        amount18 = parseUsdc(amount)
+        amount18 = mode === 'native' ? parseNativeUsdc(amount) : parseUsdc(amount)
         if (amount18 <= 0n) next.amount = 'Enter an amount greater than zero.'
       } catch (err) {
         next.amount = isLastDollarError(err) ? err.message : 'Enter a valid amount.'
@@ -135,7 +135,7 @@ export function SendView() {
                     spellCheck={false}
                     autoCapitalize="off"
                     value={recipient}
-                    onChange={(e) => setRecipient(e.target.value)}
+                    onChange={(e) => { flow.invalidate(); setRecipient(e.target.value) }}
                     aria-invalid={!!errors.recipient}
                     aria-describedby={errors.recipient ? 'recipient-error' : 'recipient-hint'}
                   />
@@ -146,6 +146,7 @@ export function SendView() {
                   name="intent"
                   value={intent}
                   onChange={(v) => {
+                    flow.invalidate()
                     setIntent(v)
                     setErrors((e) => ({ ...e, amount: undefined }))
                   }}
@@ -156,7 +157,7 @@ export function SendView() {
                 />
 
                 {intent === 'exact' ? (
-                  <Field id="amount" label="Amount the recipient receives" error={errors.amount} hint="Up to 6 decimal places. Never rounded.">
+                  <Field id="amount" label="Amount the recipient receives" error={errors.amount} hint={mode === 'native' ? 'Up to 18 decimal places. Never rounded.' : 'Up to 6 decimal places. Never rounded.'}>
                     <div className="relative">
                       <input
                         id="amount"
@@ -166,7 +167,7 @@ export function SendView() {
                         placeholder="0.00"
                         autoComplete="off"
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => { flow.invalidate(); setAmount(e.target.value) }}
                         aria-invalid={!!errors.amount}
                         aria-describedby={errors.amount ? 'amount-error' : 'amount-hint'}
                       />
@@ -185,7 +186,7 @@ export function SendView() {
                   label="Transfer method"
                   name="mode"
                   value={mode}
-                  onChange={setMode}
+                  onChange={(nextMode) => { flow.invalidate(); setMode(nextMode); setErrors((e) => ({ ...e, amount: undefined })) }}
                   options={[
                     { value: 'erc20', label: 'ERC-20' },
                     { value: 'native', label: 'Native' },

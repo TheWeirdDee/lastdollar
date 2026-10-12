@@ -26,6 +26,14 @@ export interface TxRecord {
   total18: string
   estimatedFee18?: string | undefined
   maxFeeBudget18?: string | undefined
+  /** Immutable public terms captured before the wallet request, when this app observed them. */
+  reviewed?: {
+    observedAt: number
+    snapshotBlock?: string | undefined
+    quoteId: `0x${string}`
+    request: { to: `0x${string}`; data: `0x${string}`; value: string; gas: string; maxFeePerGas: string; maxPriorityFeePerGas: string; nonce: number }
+    maxDebit18: string
+  } | undefined
   actualFee18?: string | undefined
   blockNumber?: string | undefined
   replacementHash?: `0x${string}` | undefined

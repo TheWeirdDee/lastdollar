@@ -37,6 +37,7 @@ export function usePaymentFlow() {
   const { data: walletClient } = useWalletClient({ chainId: appNetwork.chainId })
   const queryClient = useQueryClient()
   const inFlight = useRef(false)
+  const quoteGeneration = useRef(0)
 
   // Any account or chain change invalidates a quote or review that was built for the old state.
   const identity = `${address ?? ''}:${walletChainId ?? ''}`
@@ -44,6 +45,7 @@ export function usePaymentFlow() {
   useEffect(() => {
     if (lastIdentity.current === identity) return
     lastIdentity.current = identity
+    quoteGeneration.current += 1
     setState((s) =>
       s.step === 'quoted' || s.step === 'review' || s.step === 'changed' || s.step === 'quote-error'
         ? { step: 'idle', notice: 'Your wallet account or network changed, so the previous quote was discarded. Quote again to continue.' }
@@ -52,14 +54,20 @@ export function usePaymentFlow() {
   }, [identity])
 
   const quote = useCallback(async (fn: () => Promise<PaymentQuote>) => {
+    const generation = ++quoteGeneration.current
+    const quotedIdentity = identity
     setState({ step: 'quoting' })
     try {
       const q = await fn()
+      // Do not let an old request republish terms after an edit, competing
+      // request, account/chain change, or navigation away from the flow.
+      if (generation !== quoteGeneration.current || quotedIdentity !== `${address ?? ''}:${walletChainId ?? ''}`) return
       setState({ step: 'quoted', quote: q })
     } catch (err) {
+      if (generation !== quoteGeneration.current || quotedIdentity !== `${address ?? ''}:${walletChainId ?? ''}`) return
       setState({ step: 'quote-error', error: classifyError(err) })
     }
-  }, [])
+  }, [address, identity, walletChainId])
 
   const review = useCallback(() => {
     setState((s) => {
@@ -80,7 +88,15 @@ export function usePaymentFlow() {
     })
   }, [])
 
-  const backToEdit = useCallback(() => setState({ step: 'idle' }), [])
+  const backToEdit = useCallback(() => {
+    quoteGeneration.current += 1
+    setState({ step: 'idle' })
+  }, [])
+
+  const invalidate = useCallback(() => {
+    quoteGeneration.current += 1
+    setState((s) => (s.step === 'idle' ? s : { step: 'idle', notice: 'Payment details changed, so the previous quote was discarded. Quote again to continue.' }))
+  }, [])
 
   const sign = useCallback(
     async (plan: PreparedPayment) => {
@@ -125,6 +141,11 @@ export function usePaymentFlow() {
               total18: q.recipientTotal18.toString(),
               estimatedFee18: q.fee?.estimatedFee18.toString(),
               maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
+              reviewed: {
+                observedAt: Date.now(), snapshotBlock: q.balance.blockNumber.toString(), quoteId: q.id,
+                request: { to: plan.request.to, data: plan.request.data, value: plan.request.value.toString(), gas: plan.request.gas.toString(), maxFeePerGas: plan.request.maxFeePerGas.toString(), maxPriorityFeePerGas: plan.request.maxPriorityFeePerGas.toString(), nonce: plan.request.nonce },
+                maxDebit18: q.maxDebit18.toString(),
+              },
             })
           },
           onUpdate: (u) => setState({ step: 'executing', plan, status: u.status, hash: u.hash ?? broadcastHash }),
@@ -147,6 +168,11 @@ export function usePaymentFlow() {
             total18: q.recipientTotal18.toString(),
             estimatedFee18: q.fee?.estimatedFee18.toString(),
             maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
+            reviewed: {
+              observedAt: Date.now(), snapshotBlock: q.balance.blockNumber.toString(), quoteId: q.id,
+              request: { to: plan.request.to, data: plan.request.data, value: plan.request.value.toString(), gas: plan.request.gas.toString(), maxFeePerGas: plan.request.maxFeePerGas.toString(), maxPriorityFeePerGas: plan.request.maxPriorityFeePerGas.toString(), nonce: plan.request.nonce },
+              maxDebit18: q.maxDebit18.toString(),
+            },
             note: `Sped up by the wallet; replaces ${broadcastHash}.`,
           })
         }
@@ -178,7 +204,7 @@ export function usePaymentFlow() {
     [address, walletClient, onAppChain, publicClient, queryClient],
   )
 
-  return { state, quote, review, sign, acceptChanges, backToEdit, reset: () => setState({ step: 'idle' }) }
+  return { state, quote, review, sign, acceptChanges, backToEdit, invalidate, reset: backToEdit }
 }
 
 export const statusCopy: Record<ExecutionStatus, string> = {
