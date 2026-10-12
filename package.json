@@ -1,0 +1,32 @@
+{
+  "name": "lastdollar",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Arc-aware USDC payment preparation, execution and settlement verification.",
+  "license": "MIT",
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "node": ">=20.18"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @lastdollar/web dev",
+    "build": "pnpm sdk:build && pnpm --filter @lastdollar/web build",
+    "sdk:build": "pnpm --filter @lastdollar/arc build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm sdk:build && pnpm -r --if-present typecheck",
+    "test": "pnpm --filter @lastdollar/arc test",
+    "test:contracts": "node tools/forge.mjs test",
+    "test:integration": "pnpm --filter @lastdollar/arc test:integration",
+    "test:pack": "node tools/verify-pack.mjs",
+    "e2e": "pnpm --filter @lastdollar/web e2e",
+    "verify:network": "node tools/verify-network.mjs",
+    "verify:evidence": "node tools/verify-evidence.mjs",
+    "proof:run": "node tools/run-mainnet-proof.mjs",
+    "proof:record": "node tools/record-proof.mjs",
+    "deploy:splitter": "node tools/deploy-splitter.mjs",
+    "deploy:browser": "node tools/deploy-browser.mjs",
+    "deploy:record": "node tools/record-deployment.mjs",
+    "test:record": "node tools/collect-test-results.mjs",
+    "ci": "pnpm typecheck && pnpm lint && pnpm test && pnpm test:contracts && pnpm build"
+  }
+}
