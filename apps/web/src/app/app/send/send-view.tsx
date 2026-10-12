@@ -32,6 +32,7 @@ export function SendView() {
   const [errors, setErrors] = useState<Errors>({})
   const [connectOpen, setConnectOpen] = useState(false)
   const summaryRef = useRef<HTMLDivElement>(null)
+  const connectRef = useRef<HTMLButtonElement>(null)
 
   const locked = flow.state.step === 'review' || flow.state.step === 'executing' || flow.state.step === 'changed' || flow.state.step === 'quoting'
 
@@ -199,7 +200,7 @@ export function SendView() {
                 </p>
 
                 {!isConnected ? (
-                  <Button className="w-full" size="lg" onClick={() => setConnectOpen(true)}>
+                  <Button ref={connectRef} className="w-full" size="lg" onClick={() => setConnectOpen(true)}>
                     Connect wallet to quote
                   </Button>
                 ) : !onAppChain ? (
@@ -230,7 +231,7 @@ export function SendView() {
           </>
         }
       />
-      <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} />
+      <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} returnFocusRef={connectRef} />
     </div>
   )
 }

@@ -52,6 +52,7 @@ export function BatchView() {
   const [ackDuplicates, setAckDuplicates] = useState(false)
   const [csvReport, setCsvReport] = useState<{ fileName: string; errors: string[]; rows: CsvRow[] } | null>(null)
   const [connectOpen, setConnectOpen] = useState(false)
+  const connectRef = useRef<HTMLButtonElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const fileId = useId()
   const splitterReady = !!appNetwork.splitter
@@ -335,7 +336,7 @@ export function BatchView() {
                 CSV format: <span className="font-mono">recipient,amount,reference</span>. Amounts in USDC with up to 6 decimals.
               </p>
               {!isConnected ? (
-                <Button className="w-full" size="lg" onClick={() => setConnectOpen(true)}>
+                <Button ref={connectRef} className="w-full" size="lg" onClick={() => setConnectOpen(true)}>
                   Connect wallet to quote
                 </Button>
               ) : (
@@ -370,7 +371,7 @@ export function BatchView() {
           </>
         }
       />
-      <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} />
+      <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} returnFocusRef={connectRef} />
     </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { AlertTriangle, ChevronDown, Copy, ExternalLink, LogOut, Wallet as WalletIcon, X } from 'lucide-react'
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from 'react'
 import { useConnect, useConnectors, useDisconnect, useSwitchChain } from 'wagmi'
 import { classifyError } from '@lastdollar/arc'
 import { Button, Callout, cx } from './ui'
@@ -17,7 +17,7 @@ function useConnectorList() {
   return announced.length > 0 ? announced : connectors
 }
 
-export function ConnectDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
+export function ConnectDialog({ open, onOpenChange, returnFocusRef }: { open: boolean; onOpenChange: (o: boolean) => void; returnFocusRef?: RefObject<HTMLElement | null> }) {
   const connectors = useConnectorList()
   const connect = useConnect()
   const [error, setError] = useState<string>()
@@ -28,6 +28,11 @@ export function ConnectDialog({ open, onOpenChange }: { open: boolean; onOpenCha
     () => true,
   )
   const hasProvider = hasInjected || connectors.some((c) => c.id !== 'injected')
+  const wasOpen = useRef(open)
+  useEffect(() => {
+    if (wasOpen.current && !open) requestAnimationFrame(() => returnFocusRef?.current?.focus())
+    wasOpen.current = open
+  }, [open, returnFocusRef])
 
   return (
     <Dialog.Root open={open} onOpenChange={(o) => { setError(undefined); onOpenChange(o) }}>
@@ -61,7 +66,7 @@ export function ConnectDialog({ open, onOpenChange }: { open: boolean; onOpenCha
                       onOpenChange(false)
                     } catch (err) {
                       const e = classifyError(err)
-                      setError(e.code === 'USER_REJECTED' ? 'The connection request was declined in your wallet.' : e.message)
+                      setError(e.code === 'USER_REJECTED' ? 'The connection request was declined in your wallet.' : 'Could not connect to this wallet. Check that it is unlocked, then try again.')
                     } finally {
                       setPendingId(undefined)
                     }
@@ -105,6 +110,7 @@ export function WalletButton({ className }: { className?: string }) {
   const [open, setOpen] = useState(false)
   const [menu, setMenu] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const connectRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!menu) return
@@ -123,11 +129,11 @@ export function WalletButton({ className }: { className?: string }) {
   if (!isConnected) {
     return (
       <>
-        <Button size="sm" className={className} aria-label="Connect wallet" onClick={() => setOpen(true)} loading={status === 'reconnecting' || status === 'connecting'} loadingText="Connecting">
+        <Button ref={connectRef} size="sm" className={className} aria-label="Connect wallet" onClick={() => setOpen(true)} loading={status === 'reconnecting' || status === 'connecting'} loadingText="Connecting">
           <WalletIcon className="size-4" aria-hidden />
           Connect<span className="hidden sm:inline"> wallet</span>
         </Button>
-        <ConnectDialog open={open} onOpenChange={setOpen} />
+        <ConnectDialog open={open} onOpenChange={setOpen} returnFocusRef={connectRef} />
       </>
     )
   }
