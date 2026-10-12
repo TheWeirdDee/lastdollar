@@ -1,0 +1,20 @@
+{
+  "name": "@lastdollar/example-node",
+  "private": true,
+  "type": "module",
+  "description": "Minimal LastDollar SDK usage from plain Node.js, independent of the web app.",
+  "scripts": {
+    "exact": "node exact-transfer.mjs",
+    "max": "node max-transfer.mjs",
+    "batch": "node batch-payout.mjs",
+    "receipt": "node verify-receipt.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lastdollar/arc": "workspace:*",
+    "viem": "2.57.4"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
