@@ -12,3 +12,5 @@ evidence/test-results/*.json
 !evidence/test-results/summary.json
 *.tgz
 .secrets
+.env
+.env.*
