@@ -1,0 +1,43 @@
+{
+  "name": "@lastdollar/arc",
+  "version": "0.1.0",
+  "description": "Arc-aware USDC payment quoting, preparation, execution and receipt verification for viem.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": ["arc", "usdc", "viem", "payments", "gas", "circle"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheWeirdDee/lastdollar",
+    "directory": "packages/sdk"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
+  },
+  "peerDependencies": {
+    "viem": "^2.30.0"
+  },
+  "devDependencies": {
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "viem": "2.57.4",
+    "vitest": "4.1.11",
+    "@types/node": "24.19.2"
+  }
+}
