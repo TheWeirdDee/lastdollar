@@ -11,8 +11,9 @@
 | Arc RPC | Chain state and receipts | Being honest or available: chain id is checked on every quote, failures fail closed, and evidence is verified on a second provider |
 | LastDollarSplitter | Forwarding exactly the authorised payouts within one call | Holding value (it holds none) |
 | Browser storage | Convenience history and preferences | Settlement truth (status is always re-read from chain) |
+| Read-only RPC relay (`/api/rpc`) | Forwarding allow-listed read methods to Arc's official RPCs when the browser cannot reach them | Sending, signing or broadcasting (those methods are refused with 403), or storing anything |
 
-There is no LastDollar server. Nothing off-chain can authorise spending.
+The only server code is the read-only relay. Nothing off-chain can authorise spending.
 
 ## Threats and mitigations
 
@@ -32,7 +33,8 @@ There is no LastDollar server. Nothing off-chain can authorise spending.
 | Malicious batch recipient | Splitter uses a reentrancy lock, forwards all gas (no 2300-stipend failures), and reverts the whole batch on any failed payout |
 | Excess or retained batch value | `msg.value` must equal the sum exactly; no receive function; the contract never reads its own balance |
 | Unlimited token approvals | None: batches use native value, so no approval exists |
-| Frontend supply chain | Pinned dependency versions with a lockfile; strict CSP (`connect-src` limited to `*.arc.io`); no analytics or third-party scripts |
+| Frontend supply chain | Pinned dependency versions with a lockfile; strict CSP (`connect-src` limited to the app's own origin and `*.arc.io`); no analytics or third-party scripts |
+| Relay abuse | Method allow-list (reads only), 64 KB body limit, batches of at most 20, fixed upstream list, no caching; a relay response is still checked by the SDK (chain id per quote) |
 
 ## Splitter contract properties
 
