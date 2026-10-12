@@ -8,13 +8,10 @@
     "max": "node max-transfer.mjs",
     "batch": "node batch-payout.mjs",
     "receipt": "node verify-receipt.mjs",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "node --check shared.mjs && node --check exact-transfer.mjs && node --check max-transfer.mjs && node --check batch-payout.mjs && node --check verify-receipt.mjs"
   },
   "dependencies": {
     "@lastdollar/arc": "workspace:*",
     "viem": "2.57.4"
-  },
-  "devDependencies": {
-    "typescript": "5.9.3"
   }
 }
