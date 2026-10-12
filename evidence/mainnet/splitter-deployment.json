@@ -28,7 +28,7 @@
   "runtimeMatches": true,
   "independentRpcRuntimeMatches": true,
   "explorer": "https://explorer.arc.io/address/0xfff3427e2e3c9ceac64ebeb3f34e48485d434944",
-  "explorerVerification": "pending",
+  "explorerVerification": "not verified: explorer.arc.io API returns a Cloudflare challenge to scripted clients (forge verify-contract, 2026-10-12). Standard JSON input for manual verification: evidence/mainnet/splitter-standard-input.json",
   "recordedAt": "2026-10-12T09:08:26.036Z",
   "unusedDuplicate": {
     "note": "An identical second deployment was broadcast by mistake during wallet signing. It is not used by the app.",
