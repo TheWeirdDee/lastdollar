@@ -10,8 +10,8 @@ Program facts, rechecked on 2026-10-11 at <https://community.arc.io/public/event
 |---|---|
 | Live app | https://lastdollar.vercel.app |
 | Mainnet proof | https://lastdollar.vercel.app/proof |
-| Public repository | **[fill in after the user publishes the repository]** |
-| Splitter contract | see `evidence/mainnet/splitter-deployment.json` |
+| Public repository | https://github.com/TheWeirdDee/lastdollar |
+| Splitter contract | [0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944](https://explorer.arc.io/address/0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944) |
 | Builder profile | **[fill in: GitHub, X or Farcaster]** |
 
 ## Short description (about 50 words)
@@ -37,7 +37,18 @@ The product exists because of Arc's design: USDC as native gas, the dual 18/6-de
 
 ## Evidence
 
-**[fill in from evidence/mainnet/proofs.json after the proof run]**: one line per proof with operation, explorer link and actual fee. Expected set: native exact, ERC-20 exact, native batch, ERC-20 send-max, native send-max, plus simulated naive baselines and computed competent baselines.
+All verified by the SDK and re-verified on a second RPC provider (`pnpm verify:evidence`):
+
+| Proof | Transaction | Actual fee (USDC) |
+|---|---|---|
+| Splitter deployment | [0xebe95494…0fe9](https://explorer.arc.io/tx/0xebe9549472f9f8607560a8f34fc92827b240b5a0b69830fb090ce07c74750fe9) | 0.0094 |
+| Exact native, 0.01 USDC | [0x2a73bfe1…611c](https://explorer.arc.io/tx/0x2a73bfe16ae49a560ad6e0b8888f677228e06bdec2082c1eae8394c3cc03611c) | 0.00042 |
+| Exact ERC-20, 0.01 USDC | [0x20097e74…42fb](https://explorer.arc.io/tx/0x20097e74da7563afdbc22760a313c8ea2950e0614ff568fe2db34ce8e6fd42fb) | 0.000978 |
+| Atomic native batch, 3 recipients | [0x36e34724…cf55](https://explorer.arc.io/tx/0x36e3472439ba7259523c97fe40a365959239c712adff461b50d1568ce90dcf55) | 0.002298 |
+| ERC-20 send-max | [0xa687a190…22db](https://explorer.arc.io/tx/0xa687a1904a6739e7acd8fb708dce4c364bfb1b48df9b6c6b00c7f315848322db) | 0.000978 |
+| Native send-max | [0x11be46c8…6a14](https://explorer.arc.io/tx/0x11be46c80f9c2f7405f5a4257b4f31027d35720c69e24f699f309b8579196a14) | 0.00042 |
+
+A naive full-balance native send was submitted to mainnet and rejected by the node before inclusion ("insufficient funds for gas * price + value"), at no cost. Naive sends simulated with `eth_call` were accepted, and the proof page says so.
 
 Tests (local, labelled as such): 71 SDK unit and property tests, 8 SDK integration tests on a local chain, 22 contract tests including fuzzing and invariants, and 26 browser tests including responsive and accessibility checks.
 
