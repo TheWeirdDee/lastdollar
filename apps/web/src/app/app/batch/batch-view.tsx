@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useId, useMemo, useRef, useState } from 'react'
 import { getAddress, isAddress, zeroAddress } from 'viem'
 import { FlowPanel } from '@/components/flow-panel'
+import { SplitColumns } from '@/components/split-columns'
 import { Badge, Button, Callout, Card, cx, inputClass } from '@/components/ui'
 import { ConnectDialog } from '@/components/wallet'
 import { addressUrl, shortAddress, usd } from '@/lib/format'
@@ -140,7 +141,10 @@ export function BatchView() {
         </Callout>
       ) : null}
 
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
+      <SplitColumns
+        breakpoint="xl"
+        className="xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]"
+        left={
         <Card className="overflow-hidden">
           <fieldset disabled={locked}>
             <legend className="sr-only">Recipients</legend>
@@ -342,8 +346,10 @@ export function BatchView() {
             </div>
           </fieldset>
         </Card>
+        }
 
-        <div className="xl:sticky xl:top-24">
+        right={
+          <>
           {flow.state.step === 'idle' ? (
             <Card className="p-6 text-sm text-muted">
               <p className="font-medium text-text">Your batch quote appears here</p>
@@ -354,8 +360,9 @@ export function BatchView() {
           ) : (
             <FlowPanel flow={flow} onRefreshQuote={runQuote} editLabel="Edit batch" />
           )}
-        </div>
-      </div>
+          </>
+        }
+      />
       <ConnectDialog open={connectOpen} onOpenChange={setConnectOpen} />
     </div>
   )
