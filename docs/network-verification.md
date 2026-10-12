@@ -86,7 +86,7 @@ Reconciliation therefore prefers the token log for ERC-20 transfers and counts a
 
 The deploy-contracts tutorial covers Circle's template-based deployment and does not document explorer verification. Arc also offers an "Arc Foundry" fork; standard Foundry 1.5.1 was used to compile, and deployment uses viem from `tools/deploy-splitter.mjs`. `eth_estimateGas` for the splitter's creation code on mainnet returned 441,693 gas.
 
-The explorer's API is behind a Cloudflare challenge for scripted clients, so automated source verification may not be possible. LastDollar records the runtime bytecode hash from two RPC providers and compares it with the local build (`pnpm verify:evidence`). Whether explorer verification succeeded is recorded in `evidence/mainnet/splitter-deployment.json`.
+The explorer's API is behind a Cloudflare challenge for scripted clients, so automated source verification may not be possible. LastDollar records the runtime bytecode hash from two RPC providers and compares it with the local build (`pnpm verify:evidence`). On 2026-10-12, `forge verify-contract --verifier blockscout` received a Cloudflare challenge page instead of an API response, so source verification is not automated. The exact compiler input is published at `evidence/mainnet/splitter-standard-input.json` for manual verification in the explorer's web interface; the bytecode match on two RPCs is the verifiable claim in the meantime.
 
 ## Wallet configuration
 
@@ -99,3 +99,18 @@ pnpm verify:network   # chain id on all RPCs, block freshness, fees, token metad
 ```
 
 The script exits non-zero if any gate fails. The app also enforces chain identity at runtime: every quote calls `eth_chainId` on its RPC and refuses anything other than the configured chain, and execution refuses a wallet on another chain.
+
+## Observed during the mainnet proofs (2026-10-12)
+
+| Observation | Detail |
+|---|---|
+| Gas, native transfer to an EOA | 21,000 used |
+| Gas, ERC-20 `transfer` | 48,938 used (fee 0.000978 USDC at 20 gwei) |
+| Gas, 3-recipient splitter batch | 114,909 used (fee 0.002298 USDC) |
+| Splitter deployment | 0.0094 USDC |
+| `eth_call` with final caps, naive full-balance transfer | **Accepted** for both native and ERC-20, so simulation does not reveal the naive failure on Arc |
+| `eth_sendRawTransaction`, naive full-balance native transfer | Rejected before inclusion: `insufficient funds for gas * price + value: have 207500004268100 want 732500004268100` |
+| MetaMask balance-change preview on Arc | Offsets the network fee: a 0.001 USDC send previewed as "−0.000557"; a contract deployment previewed as "+0.00932 USDC". LastDollar's own review screen and the receipt show the real amounts |
+| MetaMask with `maxPriorityFeePerGas = 0` | Shows a blocking fee alert ("~NaN min"); letting the wallet choose the fee avoids it |
+| MetaMask domain warning | `lastdollar.vercel.app` triggers "Continue at your own risk" although it is not on the public eth-phishing-detect blocklist; a false-positive report is pending |
+| Direct browser access to Arc RPCs | Failed from at least one user's browser while MetaMask worked; the app now reads through a same-origin read-only relay first, falling back to direct RPCs |
