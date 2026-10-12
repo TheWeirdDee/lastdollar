@@ -71,6 +71,6 @@ test.describe('marketing site', () => {
     await page.goto('/proof')
     await expect(page.getByText(/Read-only RPC checks/)).toBeVisible()
     await expect(page.getByText('Local runs, not chain evidence')).toBeVisible()
-    await expect(page.getByText('Simulation and computation, not transactions')).toBeVisible()
+    await expect(page.getByText('Dry runs and computations: free checks, not payments')).toBeVisible()
   })
 })
