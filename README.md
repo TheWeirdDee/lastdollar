@@ -60,7 +60,7 @@ docs              Documentation rendered on the site
 
 ## Quickstart
 
-Requirements: Node 20.18+, pnpm 11, and [Foundry](https://getfoundry.sh) for contracts.
+Requirements: Node 22.13+, pnpm 11.5.0, and [Foundry](https://getfoundry.sh) for contracts.
 
 ```sh
 pnpm install

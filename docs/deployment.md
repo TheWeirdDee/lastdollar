@@ -14,7 +14,7 @@ Project settings:
 | Install command | `pnpm install --frozen-lockfile` (run from the repository root) |
 | Build command | `pnpm --filter @lastdollar/arc build && pnpm --filter @lastdollar/web build` |
 | Output | Next.js default |
-| Node | 20.18 or later |
+| Node | 22.13 or later (matches pinned pnpm 11.5.0) |
 
 Environment variables (all optional, all public):
 
