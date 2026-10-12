@@ -61,6 +61,7 @@ function EntryCard({ e }: { e: MainnetEntry }) {
           <Badge tone="success" icon={<BadgeCheck className="size-3" aria-hidden />}>
             Mainnet · {e.result}
           </Badge>
+          {e.signer ? <Badge tone="accent">Signed in MetaMask, live app</Badge> : null}
           {e.verification.rpcsAgree ? <Badge tone="neutral">2 RPCs agree</Badge> : <Badge tone="danger">RPCs disagree</Badge>}
         </div>
       </div>
@@ -140,7 +141,7 @@ export default function ProofPage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-2">
           <Badge tone={hasMainnetEvidence ? 'success' : 'warning'}>{mainnetEntries.length} mainnet transactions</Badge>
-          <Badge tone="neutral">{simulationEntries.length} simulations</Badge>
+          <Badge tone="neutral">{simulationEntries.length} dry runs</Badge>
           <Badge tone="neutral">{rejectionEntries.length} node rejections</Badge>
           <Badge tone="neutral">{computationEntries.length} computations</Badge>
           <Badge tone="neutral">Build {APP_VERSION}</Badge>
@@ -282,7 +283,7 @@ export default function ProofPage() {
         )}
       </Section>
 
-      <Section id="baselines" icon={<Calculator />} title="Baselines" kind={<Badge tone="neutral">Simulation and computation, not transactions</Badge>}>
+      <Section id="baselines" icon={<Calculator />} title="Baselines" kind={<Badge tone="neutral">Dry runs and computations: free checks, not payments</Badge>}>
         <p className="mb-5 max-w-3xl text-sm text-muted">
           A naive full-balance send was simulated with the same gas limit and fee caps LastDollar used. On Arc, <code>eth_call</code> accepted it, so simulation alone does not show the
           failure. A real signed naive native send was then submitted to mainnet: the node rejected it before inclusion, at no cost. A competent fee-aware approach written with plain viem is
@@ -310,7 +311,7 @@ export default function ProofPage() {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-semibold">{s.label}</p>
                   <Badge tone="warning" icon={<FlaskConical className="size-3" aria-hidden />}>
-                    Simulation · {s.outcome.simulated}
+                    Dry run, nothing sent · {s.outcome.simulated === 'success' ? 'accepted' : 'rejected'}
                   </Badge>
                 </div>
                 <p className="mt-2 text-sm text-muted">
