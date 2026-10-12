@@ -1,0 +1,10 @@
+{
+  "name": "@lastdollar/tools",
+  "private": true,
+  "type": "module",
+  "description": "Network verification, deployment, mainnet proof and evidence verification scripts.",
+  "dependencies": {
+    "@lastdollar/arc": "workspace:*",
+    "viem": "2.57.4"
+  }
+}
