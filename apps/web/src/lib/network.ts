@@ -26,9 +26,19 @@ export const appNetwork: ArcNetworkConfig = defineArcNetwork(arcMainnet, {
 
 export const appChain = toViemChain(appNetwork)
 
-/** A wallet-independent read client over every configured RPC, used by public pages. */
+/**
+ * Read transport: the app's own same-origin relay first (works where browsers or extensions block
+ * direct RPC hosts), then every official Arc endpoint directly. Test mode talks to its local chain only.
+ */
+export function readTransport() {
+  const direct = appNetwork.rpcUrls.map((u) => http(u, { retryCount: 1, timeout: 12_000 }))
+  if (isTestMode || typeof window === 'undefined') return fallback(direct)
+  return fallback([http(`${window.location.origin}/api/rpc`, { retryCount: 1, timeout: 15_000 }), ...direct])
+}
+
+/** A wallet-independent read client, used by public pages. */
 export function createAppReadClient(): PublicClient {
-  return createPublicClient({ chain: appChain, transport: fallback(appNetwork.rpcUrls.map((u) => http(u, { retryCount: 1, timeout: 12_000 }))) }) as PublicClient
+  return createPublicClient({ chain: appChain, transport: readTransport() }) as PublicClient
 }
 
 export const splitterDeployment = deployment as {
