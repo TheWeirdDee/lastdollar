@@ -1,0 +1,76 @@
+{
+  "checkedAt": "2026-10-11T15:53:50.824Z",
+  "rpcs": [
+    {
+      "url": "https://rpc.mainnet.arc.io",
+      "chainId": 5042,
+      "latestBlock": "25435849",
+      "ageSeconds": 1,
+      "baseFeePerGas": "20000000000",
+      "nextBaseFeeFromExtraData": "20000000000"
+    },
+    {
+      "url": "https://rpc.drpc.mainnet.arc.io",
+      "chainId": 5042,
+      "latestBlock": "25435850",
+      "ageSeconds": 0,
+      "baseFeePerGas": "20000000000",
+      "nextBaseFeeFromExtraData": "20000000000"
+    },
+    {
+      "url": "https://rpc.blockdaemon.mainnet.arc.io",
+      "chainId": 5042,
+      "latestBlock": "25435852",
+      "ageSeconds": 0,
+      "baseFeePerGas": "20000000000",
+      "nextBaseFeeFromExtraData": "20000000000"
+    },
+    {
+      "url": "https://rpc.quicknode.mainnet.arc.io",
+      "chainId": 5042,
+      "latestBlock": "25435853",
+      "ageSeconds": 1,
+      "baseFeePerGas": "20000000000",
+      "nextBaseFeeFromExtraData": "20000000000"
+    }
+  ],
+  "token": {
+    "address": "0x3600000000000000000000000000000000000000",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USDC",
+    "hasCode": true
+  },
+  "balanceViews": [
+    {
+      "address": "0xcf81a5b4d6b205b6ba805b418388e388513ef9c2",
+      "blockNumber": "25435853",
+      "native18": "1635832916707859154",
+      "token6": "1635832",
+      "truncationHolds": true,
+      "subMicro18": "916707859154"
+    },
+    {
+      "address": "0xf5e2371c3c616db157da0d27d2091f027838761d",
+      "blockNumber": "25435853",
+      "native18": "1078900062090695",
+      "token6": "1078",
+      "truncationHolds": true,
+      "subMicro18": "900062090695"
+    },
+    {
+      "address": "0x341bb8851ff8fd9eae20ea083c2f779e646b8488",
+      "blockNumber": "25435853",
+      "native18": "103116567336508006696",
+      "token6": "103116567",
+      "truncationHolds": true,
+      "subMicro18": "336508006696"
+    }
+  ],
+  "restrictions": {
+    "zeroAddressValueTransfer": "reverted: execution reverted: Zero address not allowed",
+    "nativeTransferGasToEoa": "21000"
+  },
+  "passed": true,
+  "notes": []
+}
