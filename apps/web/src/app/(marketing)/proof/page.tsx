@@ -64,8 +64,8 @@ function EntryCard({ e }: { e: MainnetEntry }) {
           {e.verification.rpcsAgree ? <Badge tone="neutral">2 RPCs agree</Badge> : <Badge tone="danger">RPCs disagree</Badge>}
         </div>
       </div>
-      <a href={txUrl(e.hash)} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-accent underline underline-offset-4">
-        {e.hash} <ExternalLink className="size-3" aria-hidden />
+      <a href={txUrl(e.hash)} target="_blank" rel="noreferrer" className="mt-3 flex max-w-full items-start gap-1 font-mono text-xs text-accent underline underline-offset-4">
+        <span className="min-w-0 break-all">{e.hash}</span> <ExternalLink className="mt-0.5 size-3 shrink-0" aria-hidden />
       </a>
       <div className="mt-4 overflow-x-auto rounded-xl border border-border">
         <table className="w-full min-w-[480px] text-sm">
