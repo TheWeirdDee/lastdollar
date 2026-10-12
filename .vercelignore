@@ -1,0 +1,14 @@
+**/node_modules
+**/.next
+**/.next-e2e
+**/test-results
+**/playwright-report
+apps/web/src/generated
+contracts/lib
+contracts/out
+contracts/cache
+evidence/test-results/screens
+evidence/test-results/*.json
+!evidence/test-results/summary.json
+*.tgz
+.secrets
