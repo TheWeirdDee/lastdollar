@@ -90,7 +90,7 @@ export function SendView() {
             <BalanceCard
               balance={balance.data}
               loading={balance.isLoading}
-              error={balance.error ? `The balance could not be read from Arc (${(balance.error as Error).message}).` : undefined}
+              error={balance.error ? `The balance could not be read from Arc (${(balance.error as Error).message} ${String(((balance.error as Error).cause as { shortMessage?: string; message?: string } | undefined)?.shortMessage ?? ((balance.error as Error).cause as Error | undefined)?.message ?? '')}).` : undefined}
               onRefresh={() => void balance.refetch()}
               refreshing={balance.isFetching}
             />
