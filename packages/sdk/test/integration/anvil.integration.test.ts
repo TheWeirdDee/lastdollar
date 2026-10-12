@@ -161,7 +161,7 @@ describe('safety checks before signing', () => {
     await publicClient.waitForTransactionReceipt({ hash: await otherWallet.sendTransaction({ to: payer.address, value: parseEther('1') }) })
     const nonce = await publicClient.getTransactionCount({ address: payer.address })
     await expect(executePayment({ walletClient: wallet, publicClient, plan, config })).rejects.toSatisfy(
-      (e: unknown) => isLastDollarError(e, 'STALE_QUOTE') && Array.isArray((e as { details: { changes: unknown[] } }).details.changes),
+      (e: unknown) => isLastDollarError(e, 'STALE_QUOTE') && Array.isArray((e as unknown as { details: { changes: unknown[] } }).details.changes),
     )
     expect(await publicClient.getTransactionCount({ address: payer.address })).toBe(nonce)
   })
