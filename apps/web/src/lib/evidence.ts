@@ -62,6 +62,23 @@ export interface SimulationEntry {
   feeCaps: { gasLimit: string; maxFeePerGas: string }
   outcome: { simulated: 'success' | 'failure'; message: string }
   method: string
+  note?: string
+  recordedAt: string
+}
+
+/** A signed transaction submitted to mainnet and rejected by the node before inclusion (no fee). */
+export interface RejectionEntry {
+  id: string
+  label: string
+  evidenceType: 'rejection'
+  mode: 'native' | 'erc20'
+  blockNumber: string
+  from: `0x${string}`
+  attemptedAmount18: string
+  balance18: string
+  feeCaps: { gasLimit: string; maxFeePerGas: string }
+  outcome: { rejected: boolean; message: string }
+  method: string
   recordedAt: string
 }
 
@@ -77,7 +94,7 @@ export interface ComputationEntry {
   recordedAt: string
 }
 
-export type EvidenceEntry = MainnetEntry | SimulationEntry | ComputationEntry
+export type EvidenceEntry = MainnetEntry | SimulationEntry | ComputationEntry | RejectionEntry
 
 interface ProofsFile {
   schema: number
@@ -89,5 +106,6 @@ interface ProofsFile {
 export const evidence = proofs as unknown as ProofsFile
 export const mainnetEntries = evidence.entries.filter((e): e is MainnetEntry => e.evidenceType === 'mainnet')
 export const simulationEntries = evidence.entries.filter((e): e is SimulationEntry => e.evidenceType === 'simulation')
+export const rejectionEntries = evidence.entries.filter((e): e is RejectionEntry => e.evidenceType === 'rejection')
 export const computationEntries = evidence.entries.filter((e): e is ComputationEntry => e.evidenceType === 'computation')
 export const hasMainnetEvidence = mainnetEntries.length > 0
