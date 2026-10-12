@@ -36,7 +36,8 @@ await assertMainnet(secondary, 'verification RPC')
 const w = loadWallets()
 const acct = {
   payer: privateKeyToAccount(w.PAYER_PRIVATE_KEY),
-  b: privateKeyToAccount(w.RECIPIENT_B_PRIVATE_KEY),
+  // Recipient B only receives, so its address is enough.
+  b: w.RECIPIENT_B_PRIVATE_KEY ? privateKeyToAccount(w.RECIPIENT_B_PRIVATE_KEY) : { address: w.RECIPIENT_B_ADDRESS },
   c: privateKeyToAccount(w.RECIPIENT_C_PRIVATE_KEY),
   d: privateKeyToAccount(w.RECIPIENT_D_PRIVATE_KEY),
 }
