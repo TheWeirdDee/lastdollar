@@ -7,23 +7,13 @@ Only actions that genuinely need the user. Everything else is done or automated.
 - Proof wallet funded by the user (Account 1, `0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6`); signing happens in the user's MetaMask, and no key is shared.
 - `LastDollarSplitter` deployed to Arc mainnet at `0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944`, with runtime bytecode verified on two RPC providers (`evidence/mainnet/splitter-deployment.json`). An identical duplicate at `0xFE2555916e0311dc58A9bf98cfc1B8A7497F062C` was broadcast by mistake and is recorded as unused.
 
-## 1. Proof payments (in the live app, signed with MetaMask)
+## 1. Proof payments
 
-Make each payment at https://lastdollar.vercel.app/app and record its hash with `pnpm proof:record <id> <hash> "<label>" --intended <recipient>=<amount>`:
+Done: all five proofs executed and verified on 2026-10-12 (`evidence/mainnet/proofs.json`). Afterwards, move remaining funds from Account 1 to a fresh account, since its key was shared in a chat session.
 
-| Id | Where | From → to | Amount |
-|---|---|---|---|
-| `native-exact` | Send, Exact amount, Native | Account 1 → Account 2 | 0.01 |
-| `erc20-exact` | Send, Exact amount, ERC-20 | Account 1 → Account 2 | 0.01 |
-| `native-batch` | Batch | Account 1 → Account 2 (0.02) and Account 3 (0.01) | 0.03 total, one transaction |
-| `erc20-max` | Send, Send maximum, ERC-20 | Account 2 → Account 1 | computed |
-| `native-max` | Send, Send maximum, Native | Account 3 → Account 1 | computed |
+## 2. Vercel and GitHub
 
-Account 3 is a third MetaMask account created only for the native send-max proof.
-
-## 2. Connect Vercel to GitHub
-
-After the repository is pushed, run `vercel git connect https://github.com/TheWeirdDee/lastdollar` (or in the Vercel dashboard: project → Settings → Git → connect the repository). If Vercel cannot see the repository, grant the Vercel GitHub app access to it.
+Done: the Vercel project deploys automatically from `main` on GitHub.
 
 ## 3. MetaMask phishing warning
 
