@@ -10,9 +10,10 @@ export default function PrivacyPage() {
       <p>
         This page describes what the LastDollar web app actually does with data, as implemented in the public source. It has not been reviewed by a lawyer and is not a contract.
       </p>
-      <h2>No accounts, no backend</h2>
+      <h2>No accounts, no database</h2>
       <p>
-        LastDollar has no user accounts, no login, no database and no application server that receives your data. The pages are served as static files and run in your browser.
+        LastDollar has no user accounts, no login and no database. Pages run in your browser. The only server code is a read-only relay at <code>/api/rpc</code> that forwards chain reads
+        (balances, fee data, receipts) to Arc&apos;s official RPC endpoints when your browser cannot reach them directly. It cannot send or sign anything, and it stores nothing.
       </p>
       <h2>What is stored in your browser</h2>
       <ul>
@@ -34,8 +35,8 @@ export default function PrivacyPage() {
       <h2>Who else sees requests</h2>
       <ul>
         <li>
-          <strong>Arc RPC providers.</strong> To read balances, estimate fees and fetch receipts, your browser sends requests containing public addresses and transaction hashes to the Arc RPC
-          endpoint (by default <code>rpc.mainnet.arc.io</code>). That provider can see your IP address and those requests.
+          <strong>Arc RPC providers and the relay.</strong> To read balances, estimate fees and fetch receipts, requests containing public addresses and transaction hashes go through the
+          app&apos;s relay (hosted on Vercel) or directly from your browser to Arc&apos;s official RPC endpoints. The host and the RPC provider can see those requests; the relay does not log or keep them.
         </li>
         <li>
           <strong>Your wallet.</strong> Your wallet extension sees the transactions you are asked to sign and follows its own privacy policy.
