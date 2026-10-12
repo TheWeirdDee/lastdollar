@@ -193,7 +193,7 @@ export default function LandingPage() {
       {/* Lifecycle */}
       <section id="how-it-works" className="scroll-mt-20 border-y border-border bg-surface">
         <Reveal className="mx-auto grid max-w-[1200px] gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-24">
-          <div>
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <p className="eyebrow">How it works</p>
             <h2 className="mt-2 text-[clamp(1.75rem,3.4vw,2.5rem)] font-semibold leading-tight tracking-[-0.03em]">Quote, recheck, sign, verify.</h2>
             <p className="mt-4 max-w-md text-muted">Every payment follows the same four steps, in the app and in the SDK. A payment is only shown as complete when the chain receipt says so.</p>
@@ -225,7 +225,7 @@ export default function LandingPage() {
       {/* Developers */}
       <section id="developers" className="scroll-mt-20">
         <Reveal className="mx-auto grid max-w-[1200px] items-start gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8 lg:py-24">
-          <div>
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <p className="eyebrow">For developers</p>
             <h2 className="mt-2 text-[clamp(1.75rem,3.4vw,2.5rem)] font-semibold leading-tight tracking-[-0.03em]">The same engine, as a TypeScript SDK.</h2>
             <p className="mt-4 text-muted">
@@ -298,7 +298,7 @@ export default function LandingPage() {
       {/* Ownership */}
       <section>
         <Reveal className="mx-auto grid max-w-[1200px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
-          <div>
+          <div className="lg:sticky lg:top-24 lg:self-start">
             <p className="eyebrow">Your keys, your signature</p>
             <h2 className="mt-2 text-[clamp(1.75rem,3.4vw,2.5rem)] font-semibold leading-tight tracking-[-0.03em]">LastDollar prepares. Your wallet decides.</h2>
           </div>
