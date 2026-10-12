@@ -35,6 +35,8 @@ export interface MockState {
   revertTo: Map<string, string>
   calls: { method: string; params: unknown[] }[]
   rpcDown: boolean
+  /** Models Arc eth_call behaviour that does not apply signed-request balance admission. */
+  callIgnoresAffordability: boolean
 }
 
 export const SPLITTER: Address = getAddress('0x00000000000000000000000000000000005911e7')
@@ -59,6 +61,7 @@ export function createMockState(partial: Partial<MockState> = {}): MockState {
     revertTo: new Map(),
     calls: [],
     rpcDown: false,
+    callIgnoresAffordability: false,
     ...partial,
   }
 }
@@ -140,10 +143,12 @@ function checkExecution(state: MockState, tx: TxLike, cfg: ArcNetworkConfig, wit
   const bal = balanceOf(state, r.from)
   const feeCap = withFees && tx.gas && tx.maxFeePerGas ? BigInt(tx.gas) * BigInt(tx.maxFeePerGas) : 0n
   if (tx.gas && BigInt(tx.gas) < r.gas) throw new RpcError(-32000, 'out of gas')
-  if (r.value + feeCap > bal) throw new RpcError(-32003, 'insufficient funds for gas * price + value')
+  if (!state.callIgnoresAffordability || !withFees) {
+    if (r.value + feeCap > bal) throw new RpcError(-32003, 'insufficient funds for gas * price + value')
+  }
   if (r.token !== undefined) {
     if (r.token > token6(state, r.from)) throw new RpcError(3, 'execution reverted: ERC20: transfer amount exceeds balance')
-    if (r.debit + feeCap > bal) throw new RpcError(3, 'execution reverted: ERC20: transfer amount exceeds balance')
+    if ((!state.callIgnoresAffordability || !withFees) && r.debit + feeCap > bal) throw new RpcError(3, 'execution reverted: ERC20: transfer amount exceeds balance')
   }
   return r.gas
 }

@@ -51,9 +51,10 @@ export function QuoteSummary({ view, sampleLabel, footer, className }: { view: Q
       <div className="px-5 pt-5">
         <p className="text-xs font-medium uppercase tracking-wide text-muted">{view.kind === 'batch' ? `${view.recipients.length} recipients receive` : 'Recipient receives'}</p>
         <p className="mt-1 flex items-baseline gap-2">
-          <span className="tabular text-[2.25rem] font-semibold leading-none tracking-[-0.03em]">{usd(view.recipientTotal18)}</span>
+          <span className="tabular text-[2.25rem] font-semibold leading-none tracking-[-0.03em]">{view.mode === 'native' ? usdExact(view.recipientTotal18) : usd(view.recipientTotal18)}</span>
           <span className="text-sm font-medium text-muted">USDC</span>
         </p>
+        {view.mode === 'native' ? <p className="mt-1 text-xs text-muted">Exact native amount: {usdExact(view.recipientTotal18)} USDC</p> : null}
         {single ? (
           <p className="mt-2 flex items-start gap-1.5 text-sm text-muted">
             <ArrowDownRight className="size-4" aria-hidden />

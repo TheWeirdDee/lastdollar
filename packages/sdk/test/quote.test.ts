@@ -267,8 +267,11 @@ describe('preparePayment and revalidatePlan', () => {
     // A lower fresh fee suggestion makes a fresh quote affordable.  The old
     // request still authorizes its original fee cap and must not be signed.
     state.priorityFee = 0n
+    state.callIgnoresAffordability = true
     const retainedDebit = plan.quote.recipientTotal18 + plan.request.gas * plan.request.maxFeePerGas
     setBalance(state, PAYER, retainedDebit - 1n)
+    const fresh = await quoteExactPayment({ publicClient: client(), account: PAYER, recipient: BOB, amount18: parseUsdc('1'), mode: 'erc20', config })
+    expect(fresh.status).toBe('ready')
     const result = await revalidatePlan({ publicClient: client(), plan, config })
     expect(result.status).not.toBe('valid')
   })

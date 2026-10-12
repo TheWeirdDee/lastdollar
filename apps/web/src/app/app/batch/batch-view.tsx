@@ -81,8 +81,9 @@ export function BatchView() {
     const text = await file.text()
     const parsed = parseBatchCsv(text)
     setCsvReport({ fileName: file.name, errors: parsed.errors, rows: parsed.rows.filter((r) => r.errors.length > 0) })
-    if (parsed.errors.length === 0 && parsed.rows.length > 0) {
-      // Rows are loaded exactly as written, including invalid ones, so they can be fixed in place.
+    if (parsed.rows.length > 0) {
+      // Rows are loaded exactly as written, including invalid ones, so CSV-only
+      // errors are actionable in the same editable list used for quoting.
       setRows(parsed.rows.map((r) => ({ id: nextId++, recipient: r.recipient, amount: r.amount, reference: r.reference })))
       setTouched(true)
       setAckDuplicates(false)

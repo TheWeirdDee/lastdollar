@@ -64,8 +64,11 @@ export async function POST(request: Request) {
   }
   const calls = Array.isArray(payload) ? payload : [payload]
   if (calls.length === 0 || calls.length > 20) return Response.json(rpcError(null, -32600, 'Invalid batch size'), { status: 400 })
-  const blocked = calls.find((c) => typeof c.method !== 'string' || !READ_METHODS.has(c.method))
-  if (blocked) return Response.json(rpcError(blocked.id, -32601, `Method not allowed through this read-only relay: ${String(blocked.method)}`), { status: 403 })
+  const blocked = calls.find((c) => !c || typeof c !== 'object' || typeof c.method !== 'string' || !READ_METHODS.has(c.method))
+  if (blocked) {
+    const invalid = blocked as RpcRequest
+    return Response.json(rpcError(invalid?.id, -32601, `Method not allowed through this read-only relay: ${String(invalid?.method)}`), { status: 403 })
+  }
 
   const upstream = await forward(text)
   if (!upstream) return Response.json(rpcError(calls[0]?.id, -32603, 'All Arc RPC endpoints are unreachable right now'), { status: 502 })

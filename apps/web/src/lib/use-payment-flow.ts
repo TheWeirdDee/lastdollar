@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { WalletClient } from 'viem'
 import { useWalletClient } from 'wagmi'
-import { acquireSubmissionLock, patchRecord, releaseSubmissionLock, upsertRecord } from './history'
+import { acquireSubmissionLock, patchRecord, releaseSubmissionLock, saveReviewSnapshot, takeReviewSnapshot, upsertRecord } from './history'
 import { appNetwork } from './network'
 import { statusFromReceipt, useArcPublicClient, useWallet } from './use-arc'
 
@@ -47,7 +47,7 @@ export function usePaymentFlow() {
     lastIdentity.current = identity
     quoteGeneration.current += 1
     setState((s) =>
-      s.step === 'quoted' || s.step === 'review' || s.step === 'changed' || s.step === 'quote-error'
+      s.step === 'quoting' || s.step === 'quoted' || s.step === 'review' || s.step === 'changed' || s.step === 'quote-error'
         ? { step: 'idle', notice: 'Your wallet account or network changed, so the previous quote was discarded. Quote again to continue.' }
         : s,
     )
@@ -114,6 +114,16 @@ export function usePaymentFlow() {
         return
       }
       inFlight.current = true
+      // Persist this immutable public review before opening the wallet.  The
+      // transaction hash is unavailable until broadcast, so the callback below
+      // attaches this already-recorded snapshot to the hash rather than making
+      // a new post-signing “review”.
+      saveReviewSnapshot({
+        chainId: plan.quote.chainId, account: plan.quote.account, quoteId: plan.quote.id,
+        observedAt: Date.now(), snapshotBlock: plan.quote.balance.blockNumber.toString(),
+        request: { to: plan.request.to, data: plan.request.data, value: plan.request.value.toString(), gas: plan.request.gas.toString(), maxFeePerGas: plan.request.maxFeePerGas.toString(), maxPriorityFeePerGas: plan.request.maxPriorityFeePerGas.toString(), nonce: plan.request.nonce },
+        maxDebit18: plan.quote.maxDebit18.toString(),
+      })
       let broadcastHash: `0x${string}` | undefined
       setState({ step: 'executing', plan, status: 'revalidating' })
       try {
@@ -141,11 +151,7 @@ export function usePaymentFlow() {
               total18: q.recipientTotal18.toString(),
               estimatedFee18: q.fee?.estimatedFee18.toString(),
               maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
-              reviewed: {
-                observedAt: Date.now(), snapshotBlock: q.balance.blockNumber.toString(), quoteId: q.id,
-                request: { to: plan.request.to, data: plan.request.data, value: plan.request.value.toString(), gas: plan.request.gas.toString(), maxFeePerGas: plan.request.maxFeePerGas.toString(), maxPriorityFeePerGas: plan.request.maxPriorityFeePerGas.toString(), nonce: plan.request.nonce },
-                maxDebit18: q.maxDebit18.toString(),
-              },
+              reviewed: takeReviewSnapshot(q.chainId, q.account, q.id),
             })
           },
           onUpdate: (u) => setState({ step: 'executing', plan, status: u.status, hash: u.hash ?? broadcastHash }),
@@ -168,11 +174,7 @@ export function usePaymentFlow() {
             total18: q.recipientTotal18.toString(),
             estimatedFee18: q.fee?.estimatedFee18.toString(),
             maxFeeBudget18: q.fee?.maxFeeBudget18.toString(),
-            reviewed: {
-              observedAt: Date.now(), snapshotBlock: q.balance.blockNumber.toString(), quoteId: q.id,
-              request: { to: plan.request.to, data: plan.request.data, value: plan.request.value.toString(), gas: plan.request.gas.toString(), maxFeePerGas: plan.request.maxFeePerGas.toString(), maxPriorityFeePerGas: plan.request.maxPriorityFeePerGas.toString(), nonce: plan.request.nonce },
-              maxDebit18: q.maxDebit18.toString(),
-            },
+            reviewed: takeReviewSnapshot(q.chainId, q.account, q.id),
             note: `Sped up by the wallet; replaces ${broadcastHash}.`,
           })
         }

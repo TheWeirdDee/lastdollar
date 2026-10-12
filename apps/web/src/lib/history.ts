@@ -41,9 +41,31 @@ export interface TxRecord {
   note?: string | undefined
 }
 
+export type ReviewSnapshot = NonNullable<TxRecord['reviewed']>
+type StoredReviewSnapshot = ReviewSnapshot & { chainId: number; account: `0x${string}` }
+
 const PREFIX = 'lastdollar:v1:history'
+const REVIEW_PREFIX = 'lastdollar:v1:review'
 const EVENT = 'lastdollar-history'
 const keyFor = (chainId: number, account: string) => `${PREFIX}:${chainId}:${account.toLowerCase()}`
+const reviewKeyFor = (chainId: number, account: string, quoteId: string) => `${REVIEW_PREFIX}:${chainId}:${account.toLowerCase()}:${quoteId}`
+
+/** Stores public reviewed terms before the wallet is asked to sign. */
+export function saveReviewSnapshot(snapshot: StoredReviewSnapshot) {
+  try { window.localStorage.setItem(reviewKeyFor(snapshot.chainId, snapshot.account, snapshot.quoteId), JSON.stringify(snapshot)) } catch { /* best effort */ }
+}
+
+/** Attaches and removes the pre-signing snapshot once a hash exists. */
+export function takeReviewSnapshot(chainId: number, account: string, quoteId: string): ReviewSnapshot | undefined {
+  const key = reviewKeyFor(chainId, account, quoteId)
+  try {
+    const raw = window.localStorage.getItem(key)
+    window.localStorage.removeItem(key)
+    if (!raw) return undefined
+    const value = JSON.parse(raw) as StoredReviewSnapshot
+    return value.quoteId === quoteId ? value : undefined
+  } catch { return undefined }
+}
 
 function safeRead(key: string): TxRecord[] {
   try {
