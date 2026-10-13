@@ -50,7 +50,7 @@ All verified by the SDK and re-verified on a second RPC provider (`pnpm verify:e
 
 A naive full-balance native send was submitted to mainnet and rejected by the node before inclusion ("insufficient funds for gas * price + value"), at no cost. Naive sends simulated with `eth_call` were accepted, and the proof page says so.
 
-Tests (local, labelled as such): 71 SDK unit and property tests, 8 SDK integration tests on a local chain, 22 contract tests including fuzzing and invariants, and 26 browser tests including responsive and accessibility checks.
+Tests (local, labelled as such): 72 SDK unit and property tests, 8 SDK integration tests on a local chain, 22 contract tests including fuzzing and invariants, and 26 browser tests including responsive and accessibility checks.
 
 ## What we do not claim
 
@@ -60,7 +60,7 @@ No external audit; no zero fees; no guarantee that send-max empties a wallet; no
 
 1. Landing page: the problem in one sentence, then the review card ("Illustrative sample").
 2. `/proof` without a wallet: network checks, then a mainnet send-max with intended and delivered amounts, estimated, maximum and actual fee, and **Re-verify live**.
-3. Point to the naive baseline simulation failing with the same caps, and the competent viem baseline also working. The value is the lifecycle, not a secret formula.
+3. Point to the baselines: Arc's `eth_call` accepted the naive full-balance sends, while the real signed naive native send was rejected by the node before inclusion, at no cost. A competent viem baseline also works. The value is the lifecycle, not a secret formula.
 4. `/app/send`: connect, enter a recipient, choose **Send maximum**, quote, review the remainder explanation, then cancel (or sign a tiny amount).
 5. `/app/batch`: import a CSV with one bad row and show the row-level error. Fix it and quote: one transaction, no approval.
 6. `/developers`: the quickstart, then `pnpm verify:evidence` in a terminal.
