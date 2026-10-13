@@ -24,6 +24,8 @@ const csp = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Lets the proof page name the exact commit it was built from (set by Vercel's git integration).
+  env: { NEXT_PUBLIC_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA ?? '' },
   distDir: process.env.NEXT_DIST_DIR || '.next',
   poweredByHeader: false,
   turbopack: { root: workspaceRoot },
