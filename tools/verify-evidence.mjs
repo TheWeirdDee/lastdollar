@@ -11,6 +11,18 @@ const config = networkConfig()
 const proofs = readJson(PROOFS_FILE)
 const deployment = readJson(DEPLOYMENT_FILE)
 let failures = 0
+
+/** Public RPCs occasionally rate-limit; retry transient read failures before reporting them. */
+async function withRetry(fn, attempts = 3) {
+  for (let i = 1; ; i++) {
+    try {
+      return await fn()
+    } catch (err) {
+      if (i >= attempts || err?.code !== 'RPC_UNAVAILABLE') throw err
+      await new Promise((r) => setTimeout(r, 1500 * i))
+    }
+  }
+}
 const fail = (m) => {
   failures++
   console.log(`  FAIL ${m}`)
@@ -36,7 +48,13 @@ for (const url of rpcs) {
 
   for (const e of proofs?.entries ?? []) {
     if (e.evidenceType !== 'mainnet') continue
-    const r = await verifyPaymentReceipt({ publicClient: client, hash: e.hash, config })
+    let r
+    try {
+      r = await withRetry(() => verifyPaymentReceipt({ publicClient: client, hash: e.hash, config }))
+    } catch (err) {
+      fail(`${e.id} could not be read from ${url}: ${err.code ?? ''} ${err.message}`)
+      continue
+    }
     const delivered = r.delivered.map((d) => ({ recipient: d.recipient, amount18: d.amount18.toString() }))
     const expectedOperation = e.kind === 'batch' ? 'splitter-batch' : e.mode === 'erc20' ? 'erc20-transfer' : 'native-transfer'
     const ok =
