@@ -9,7 +9,7 @@ import { HistoryList } from '@/components/history-list'
 import { Button, Card, Segmented, cx, inputClass } from '@/components/ui'
 import { clearRecords, useRecords, type RecordStatus } from '@/lib/history'
 import { appNetwork } from '@/lib/network'
-import { useWallet } from '@/lib/use-arc'
+import { useSettledRecheck, useWallet } from '@/lib/use-arc'
 
 type Filter = 'all' | 'pending' | 'verified' | 'problem'
 type Kind = 'all' | 'exact' | 'max' | 'batch'
@@ -25,6 +25,7 @@ export function HistoryView() {
   const [lookupError, setLookupError] = useState<string>()
   const [confirmClear, setConfirmClear] = useState(false)
   const router = useRouter()
+  useSettledRecheck()
 
   const shown = useMemo(
     () =>
@@ -41,7 +42,7 @@ export function HistoryView() {
       <div>
         <h1 className="text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">History</h1>
         <p className="mt-1 max-w-2xl text-sm text-muted">
-          Payments made with this app from this browser, for the connected account. This is not your full wallet history. Each status is re-read from chain data.
+          Payments made with this app from this browser, for the connected account. This is not your full wallet history. Statuses are re-read from chain data when this page opens; each row shows when it was last checked.
         </p>
       </div>
 
