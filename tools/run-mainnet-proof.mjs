@@ -1,11 +1,12 @@
-// Executes the LastDollar mainnet proof plan with locally generated proof wallets, through the
-// same SDK functions the web app uses, then verifies every receipt on a second RPC operator.
+// Executes the LastDollar mainnet proof plan through the same SDK functions the web app uses,
+// then verifies every receipt on a second RPC operator.
 //
 // Usage: pnpm proof:run              (plan only: prints every step and the projected cost)
 //        pnpm proof:run --execute    (broadcasts the remaining steps; resumable)
 //
-// Every transfer goes between wallets generated for this proof, so transferred value stays
-// recoverable; only network fees are spent. A fee cap stops the run before it is exceeded.
+// The payer, recipient B and helper wallets C and D come from the proof wallet file outside the
+// repository. C and D send their balances back to the payer in the send-max steps, so only network
+// fees are spent. A fee cap stops the run before it is exceeded.
 import { createWalletClient, encodeFunctionData, http, parseAbi } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import {
