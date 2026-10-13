@@ -283,7 +283,7 @@ export default function ProofPage() {
         )}
       </Section>
 
-      <Section id="baselines" icon={<Calculator />} title="Baselines" kind={<Badge tone="neutral">Dry runs and computations: free checks, not payments</Badge>}>
+      <Section id="baselines" icon={<Calculator />} title="Baselines" kind={<Badge tone="neutral">Free checks, not payments</Badge>}>
         <p className="mb-5 max-w-3xl text-sm text-muted">
           A naive full-balance send was simulated with the same gas limit and fee caps LastDollar used. On Arc, <code>eth_call</code> accepted it, so simulation alone does not show the
           failure. A real signed naive native send was then submitted to mainnet: the node rejected it before inclusion, at no cost. A competent fee-aware approach written with plain viem is
