@@ -9,7 +9,7 @@ import networkCheck from '@/generated/network-check.json'
 import testSummary from '@/generated/test-summary.json'
 import { computationEntries, hasMainnetEvidence, mainnetEntries, rejectionEntries, simulationEntries, type MainnetEntry } from '@/lib/evidence'
 import { addressUrl, formatTime, gweiString, shortAddress, shortHash, txUrl, usd, usdExact } from '@/lib/format'
-import { APP_VERSION, REPO_URL, splitterDeployment } from '@/lib/network'
+import { APP_VERSION, COMMIT_SHA, REPO_URL, splitterDeployment } from '@/lib/network'
 
 export const metadata: Metadata = {
   title: 'Mainnet proof',
@@ -144,7 +144,14 @@ export default function ProofPage() {
           <Badge tone="neutral">{simulationEntries.length} dry runs</Badge>
           <Badge tone="neutral">{rejectionEntries.length} node rejections</Badge>
           <Badge tone="neutral">{computationEntries.length} computations</Badge>
-          <Badge tone="neutral">Build {APP_VERSION}</Badge>
+          <Badge tone="neutral">
+            Build {APP_VERSION}
+            {COMMIT_SHA ? (
+              <a href={`${REPO_URL}/commit/${COMMIT_SHA}`} className="ml-1 font-mono underline underline-offset-2">
+                {COMMIT_SHA.slice(0, 7)}
+              </a>
+            ) : null}
+          </Badge>
         </div>
         <nav aria-label="On this page" className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm">
           {[
