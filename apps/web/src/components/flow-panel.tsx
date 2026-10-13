@@ -205,12 +205,22 @@ export function FlowPanel({
   if (state.step === 'done') {
     const r = state.result.receipt
     const ok = r.status === 'verified'
+    const budget = r.comparison?.maxFeeBudget18
+    const overBudget = r.comparison?.feeWithinBudget === false && budget !== undefined && r.actualFee18 !== undefined
     return (
       <Card className="space-y-4 p-5" aria-live="polite">
         <div className="flex items-start gap-3">
-          {ok ? <CheckCircle2 className="mt-0.5 size-6 shrink-0 text-success" aria-hidden /> : <XCircle className="mt-0.5 size-6 shrink-0 text-danger" aria-hidden />}
+          {ok && overBudget ? (
+            <AlertTriangle className="mt-0.5 size-6 shrink-0 text-warning" aria-hidden />
+          ) : ok ? (
+            <CheckCircle2 className="mt-0.5 size-6 shrink-0 text-success" aria-hidden />
+          ) : (
+            <XCircle className="mt-0.5 size-6 shrink-0 text-danger" aria-hidden />
+          )}
           <div>
-            <h2 className="text-lg font-semibold">{ok ? 'Payment verified' : r.status === 'reverted' ? 'Transaction reverted' : 'Receipt needs attention'}</h2>
+            <h2 className="text-lg font-semibold">
+              {ok ? (overBudget ? 'Delivered, but the fee exceeded the reviewed maximum' : 'Payment verified') : r.status === 'reverted' ? 'Transaction reverted' : 'Receipt needs attention'}
+            </h2>
             <p className="mt-1 text-sm text-muted">
               {ok
                 ? 'The receipt shows every recipient received exactly the reviewed amount.'
@@ -233,6 +243,11 @@ export function FlowPanel({
             <dt className="text-muted">Quoted maximum fee</dt>
             <dd className="tabular">{usd(r.comparison?.maxFeeBudget18)} USDC</dd>
           </div>
+          {overBudget ? (
+            <div className="py-2.5 text-sm text-danger" role="alert">
+              The network fee was {usd(r.actualFee18! - budget!)} USDC above the maximum you reviewed. This usually means the wallet changed the gas settings.
+            </div>
+          ) : null}
           {r.comparison?.walletModifiedParameters ? (
             <div className="py-2.5 text-sm text-warning">Your wallet changed: {r.comparison.modifiedFields.join(', ')}.</div>
           ) : null}
