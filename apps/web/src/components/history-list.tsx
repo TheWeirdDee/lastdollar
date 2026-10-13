@@ -24,6 +24,7 @@ export function HistoryList({ records }: { records: TxRecord[] }) {
               <p className="mt-0.5 truncate text-xs text-muted">
                 {r.recipients.length === 1 ? `To ${shortAddress(r.recipients[0]!.recipient)}` : `${r.recipients.length} recipients`} · {formatTime(r.createdAt)} ·{' '}
                 <span className="font-mono">{shortHash(r.hash)}</span>
+                {r.lastCheckedAt ? ` · checked ${formatTime(r.lastCheckedAt)}` : ' · not yet checked'}
               </p>
             </div>
             <div className="text-right">
