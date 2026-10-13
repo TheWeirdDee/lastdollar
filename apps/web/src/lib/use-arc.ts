@@ -2,7 +2,7 @@
 
 import { readArcBalance, verifyPaymentReceipt, type ReconciledPayment } from '@lastdollar/arc'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import type { PublicClient } from 'viem'
 import { useConnection, usePublicClient } from 'wagmi'
 import { patchRecord, useRecords, type TxRecord } from './history'
@@ -98,6 +98,42 @@ export function usePendingWatcher() {
     return () => {
       stopped = true
       clearInterval(id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, publicClient, key])
+}
+
+/**
+ * Re-reads every settled record once when History opens, so a displayed status is chain-derived
+ * rather than whatever this browser stored earlier. An unreachable RPC leaves the last known
+ * status and its check time in place; it never turns into a failure.
+ */
+export function useSettledRecheck() {
+  const { address } = useWallet()
+  const publicClient = useArcPublicClient()
+  const records = useRecords(appNetwork.chainId, address)
+  const settled = records.filter((r) => r.status === 'verified' || r.status === 'mismatch' || r.status === 'reverted')
+  const key = settled.map((r) => r.hash).join(',')
+  const done = useRef(new Set<string>())
+
+  useEffect(() => {
+    if (!address || !publicClient) return
+    let stopped = false
+    void (async () => {
+      for (const rec of settled) {
+        if (stopped || done.current.has(rec.hash)) continue
+        done.current.add(rec.hash)
+        try {
+          const r = await verifyPaymentReceipt({ publicClient, hash: rec.hash, config: appNetwork })
+          if (r.status === 'pending' || r.status === 'not-found') continue
+          patchRecord(appNetwork.chainId, address, rec.hash, statusFromReceipt(rec, r))
+        } catch {
+          /* keep the last known status and check time */
+        }
+      }
+    })()
+    return () => {
+      stopped = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, publicClient, key])
