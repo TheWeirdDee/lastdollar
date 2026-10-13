@@ -1,4 +1,5 @@
-// Deploys LastDollarSplitter to Arc mainnet from the local proof payer wallet.
+// Deploys LastDollarSplitter to Arc mainnet, signing with the payer key in the local proof wallet file.
+// The production splitter was deployed with MetaMask instead (tools/deploy-browser.mjs).
 // Usage: pnpm deploy:splitter            (dry run: estimate and print the cost)
 //        pnpm deploy:splitter --execute  (broadcast; requires a funded payer)
 import { createWalletClient, http, keccak256 } from 'viem'
