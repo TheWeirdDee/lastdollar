@@ -38,7 +38,7 @@ export function clientFor(url, config = networkConfig()) {
   return createPublicClient({ chain: toViemChain(config), transport: http(url, { retryCount: 3, timeout: 20_000 }) })
 }
 
-/** Loads the locally generated proof wallets from outside the repository. */
+/** Loads the proof wallet file (payer key and helper wallets), which lives outside the repository. */
 export function loadWallets() {
   const path = process.env.LASTDOLLAR_WALLETS ?? join(homedir(), '.lastdollar', 'proof-wallets.env')
   if (!existsSync(path)) throw new Error(`Proof wallet file not found at ${path}`)
