@@ -53,3 +53,5 @@ export const splitterDeployment = deployment as {
 
 export const REPO_URL = 'https://github.com/TheWeirdDee/lastdollar'
 export const APP_VERSION = '0.1.0'
+/** Git commit of this build, when built by Vercel from the repository. */
+export const COMMIT_SHA = process.env.NEXT_PUBLIC_COMMIT_SHA ?? ''
