@@ -500,7 +500,10 @@
       "id": "browser-native-exact",
       "label": "Historical exact native payment, 0.001 USDC (execution channel unknown)",
       "evidenceType": "mainnet",
-      "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
+      "provenance": {
+        "channel": "unknown",
+        "source": "historical receipt; browser/wallet origin was not independently recorded"
+      },
       "kind": "exact",
       "mode": "native",
       "chainId": 5042,
@@ -515,7 +518,7 @@
           "amount18": "1000000000000000"
         }
       ],
-      "intendedSource": "stated before signing",
+      "intendedSource": "asserted at recording time, after execution",
       "delivered": [
         {
           "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
@@ -525,19 +528,16 @@
       "submitted": {
         "gasLimit": "25100",
         "maxFeePerGas": "25000000000",
+        "maxFeeBudget18": "627500000000000",
         "maxPriorityFeePerGas": "0"
       },
-      "quote": {
-        "gasLimit": "25100",
-        "maxFeePerGas": "25000000000",
-        "maxFeeBudget18": "627500000000000"
-      },
+      "quote": null,
       "actual": {
         "gasUsed": "21000",
         "effectiveGasPrice": "20000000000",
         "fee18": "420000000000000",
-        "feeWithinBudget": true,
-        "mirroredNativeLogs": 0
+        "mirroredNativeLogs": 0,
+        "feeWithinSubmittedCap": true
       },
       "sender": {
         "before18": "596130694273682055",
@@ -556,13 +556,17 @@
         "rpcsAgree": true,
         "verifiedAt": "2026-10-12T10:11:22.388Z"
       },
-      "sdkVersion": "0.1.0"
+      "sdkVersion": "0.1.0",
+      "reviewedQuote": "not recorded: no pre-signing review was exported for this hash; the figures under \"submitted\" are the caps in the broadcast transaction"
     },
     {
       "id": "browser-erc20-exact",
       "label": "Historical exact ERC-20 payment, 0.001 USDC (execution channel unknown)",
       "evidenceType": "mainnet",
-      "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
+      "provenance": {
+        "channel": "unknown",
+        "source": "historical receipt; browser/wallet origin was not independently recorded"
+      },
       "kind": "exact",
       "mode": "erc20",
       "chainId": 5042,
@@ -577,7 +581,7 @@
           "amount18": "1000000000000000"
         }
       ],
-      "intendedSource": "stated before signing",
+      "intendedSource": "asserted at recording time, after execution",
       "delivered": [
         {
           "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
@@ -587,19 +591,16 @@
       "submitted": {
         "gasLimit": "49326",
         "maxFeePerGas": "25000001041",
+        "maxFeeBudget18": "1233150051348366",
         "maxPriorityFeePerGas": "1041"
       },
-      "quote": {
-        "gasLimit": "49326",
-        "maxFeePerGas": "25000001041",
-        "maxFeeBudget18": "1233150051348366"
-      },
+      "quote": null,
       "actual": {
         "gasUsed": "48938",
         "effectiveGasPrice": "20000001041",
         "fee18": "978760050944458",
-        "feeWithinBudget": true,
-        "mirroredNativeLogs": 1
+        "mirroredNativeLogs": 1,
+        "feeWithinSubmittedCap": true
       },
       "sender": {
         "before18": "594710694273682055",
@@ -618,13 +619,17 @@
         "rpcsAgree": true,
         "verifiedAt": "2026-10-12T10:21:40.009Z"
       },
-      "sdkVersion": "0.1.0"
+      "sdkVersion": "0.1.0",
+      "reviewedQuote": "not recorded: no pre-signing review was exported for this hash; the figures under \"submitted\" are the caps in the broadcast transaction"
     },
     {
       "id": "browser-native-batch",
       "label": "Historical atomic batch, 2 recipients (execution channel unknown)",
       "evidenceType": "mainnet",
-      "provenance": { "channel": "unknown", "source": "historical receipt; browser/wallet origin was not independently recorded" },
+      "provenance": {
+        "channel": "unknown",
+        "source": "historical receipt; browser/wallet origin was not independently recorded"
+      },
       "kind": "batch",
       "mode": "native",
       "chainId": 5042,
@@ -644,7 +649,7 @@
           "amount18": "1000000000000000"
         }
       ],
-      "intendedSource": "stated before signing",
+      "intendedSource": "asserted at recording time, after execution",
       "delivered": [
         {
           "recipient": "0x97f32Ba0b4DD5c274DFD9C2A7e6Aa403a9B7dE8d",
@@ -658,19 +663,16 @@
       "submitted": {
         "gasLimit": "92999",
         "maxFeePerGas": "25000001041",
+        "maxFeeBudget18": "2324975096811959",
         "maxPriorityFeePerGas": "1041"
       },
-      "quote": {
-        "gasLimit": "92999",
-        "maxFeePerGas": "25000001041",
-        "maxFeeBudget18": "2324975096811959"
-      },
+      "quote": null,
       "actual": {
         "gasUsed": "77122",
         "effectiveGasPrice": "20000001041",
         "fee18": "1542440080284002",
-        "feeWithinBudget": true,
-        "mirroredNativeLogs": 0
+        "mirroredNativeLogs": 0,
+        "feeWithinSubmittedCap": true
       },
       "sender": {
         "before18": "592731934222737597",
@@ -689,7 +691,8 @@
         "rpcsAgree": true,
         "verifiedAt": "2026-10-12T10:21:44.782Z"
       },
-      "sdkVersion": "0.1.0"
+      "sdkVersion": "0.1.0",
+      "reviewedQuote": "not recorded: no pre-signing review was exported for this hash; the figures under \"submitted\" are the caps in the broadcast transaction"
     }
   ],
   "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944"
