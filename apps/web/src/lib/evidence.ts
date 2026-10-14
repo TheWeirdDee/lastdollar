@@ -21,6 +21,7 @@ export interface MainnetEntry {
   intended: EvidenceLine[]
   delivered: EvidenceLine[]
   tokenAmount6?: string
+  /** The reviewed quote. Null when no pre-signing review was recorded for this hash. */
   quote: {
     blockNumber: string
     balance18: string
@@ -33,12 +34,17 @@ export interface MainnetEntry {
     maxFeeBudget18: string
     maxDebit18: string
     iterations: number
-  }
+  } | null
+  /** Caps in the broadcast transaction (recorded when the reviewed quote is unknown). */
+  submitted?: { gasLimit: string; maxFeePerGas: string; maxPriorityFeePerGas?: string; maxFeeBudget18: string }
+  reviewedQuote?: string
+  intendedSource?: string
   actual: {
     gasUsed: string
     effectiveGasPrice: string
     fee18: string
     feeWithinBudget?: boolean
+    feeWithinSubmittedCap?: boolean
     walletModifiedParameters?: boolean
     mirroredNativeLogs?: number
   }
