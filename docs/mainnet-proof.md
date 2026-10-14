@@ -21,6 +21,16 @@ The proof page shows only transactions that exist on Arc mainnet and reconcile c
 
 Total network fees for the five proofs: 0.005095 USDC. The splitter deployment (signed in MetaMask through `pnpm deploy:browser`) cost 0.0094 USDC; an identical duplicate deployment was broadcast by mistake (0.0087 USDC) and is recorded as unused.
 
+### Later payments made in the live app (owner-reported)
+
+| Id | Operation | From → to | Amount | Actual fee | Result |
+|---|---|---|---|---|---|
+| `browser-native-exact` | Native transfer | Account 1 → Account 2 | 0.001 | 0.00042 | verified |
+| `browser-erc20-exact` | ERC-20 transfer | Account 1 → Account 2 | 0.001 | 0.000978760050944458 | verified |
+| `browser-native-batch` | Splitter batch | Account 1 → Account 2, Account 3 | 0.001 each | 0.001542440080284002 | verified |
+
+These were recorded after the fact with `pnpm proof:record`. Their payouts, fees, blocks and operations are chain facts checked on two RPC providers. Their reviewed quotes were not exported before signing, so the evidence stores only the caps in the broadcast transaction and labels the reviewed quote as not recorded.
+
 ### What the baselines showed
 
 - On Arc, `eth_call` with the final gas limit and fee caps **accepted** naive full-balance transfers. Simulation alone therefore does not demonstrate the naive failure, and the evidence does not claim it does.
@@ -34,7 +44,7 @@ Total network fees for the five proofs: 0.005095 USDC. The splitter deployment (
 - A fee cap (default 0.05 USDC, `LASTDOLLAR_FEE_CAP`) stops the run before the summed maximum fee budgets would exceed it.
 - Each step is resumable: verified steps are skipped on re-run.
 - A step that does not reconcile as `verified`, or whose independent check disagrees, stops the run.
-- Failing baselines are simulated with `eth_call`, never broadcast. If a naive baseline succeeds in simulation, that result is recorded as-is.
+- Naive baselines are first dry-run with `eth_call`, and the outcome is recorded as-is (on Arc both were accepted). One naive native send was then signed and submitted; the node rejected it before inclusion, so nothing was included and no fee was charged. A naive transfer that would be included and revert (charging gas) is never broadcast.
 - Private keys live outside the repository (`~/.lastdollar/proof-wallets.env`) and are never printed or written to evidence.
 
 ## What is recorded
@@ -65,6 +75,6 @@ The proof page's **Re-verify live** button performs the same reconciliation from
 
 ## Limits
 
-- Proof payments were signed by a local key through the SDK, not by a browser wallet extension. The splitter deployment was signed in MetaMask. The browser payment path is covered by end-to-end tests against a local chain and by manual payments in the live app.
+- The five scripted proofs (`native-exact`, `erc20-exact`, `native-batch`, `erc20-max`, `native-max`) were signed by a local key through the SDK. The three `browser-*` entries were reported by the owner as payments made in the live app with MetaMask; a receipt cannot prove which interface created it, so the proof page labels their execution channel unknown and records their reviewed quote as not recorded. The splitter deployment was signed in MetaMask.
 - Two RPC providers are operated independently, but both read the same chain. They guard against a faulty or dishonest endpoint, not against the chain itself.
 - Value moved between the user's own accounts and helper wallets, so this shows that the mechanics work, not that anyone has adopted the tool.
