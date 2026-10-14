@@ -1,5 +1,7 @@
 {
-  "recordedAt": "2026-10-13T09:16:05.158Z",
+  "recordedAt": "2026-10-14T00:47:34.370Z",
+  "testedCommit": "b516b2844ca81eea7a04b43700e75b1da66d964e",
+  "workingTreeClean": true,
   "suites": [
     {
       "name": "SDK unit and property tests",
