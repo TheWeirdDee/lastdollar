@@ -1,0 +1,745 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "segments": [
+    {
+      "id": "s01-hook",
+      "start": 0,
+      "dur": 6.502000000000001,
+      "audio": {
+        "src": "audio/vo/s01-hook.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k01-balance.mp4",
+          "from": 0.5,
+          "start": 0,
+          "dur": 6.502000000000001,
+          "rate": 1
+        }
+      ],
+      "zoom": {
+        "x": 380,
+        "y": 330,
+        "scale": 1.45,
+        "at": 0.3,
+        "out": null
+      },
+      "highlights": [
+        {
+          "at": 0.9,
+          "x": 120,
+          "y": 305,
+          "w": 270,
+          "h": 110,
+          "label": "Available balance",
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s02-problem",
+      "start": 6.502000000000001,
+      "dur": 15.525999999999998,
+      "audio": {
+        "src": "audio/vo/s02-problem.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k02-problem.mp4",
+          "from": 8.5,
+          "start": 0,
+          "dur": 15.525999999999998,
+          "rate": 0.5474687620765168
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 0.7,
+          "x": 84,
+          "y": 305,
+          "w": 960,
+          "h": 155,
+          "label": "Fee and payment: one balance",
+          "until": null
+        },
+        {
+          "at": 10.485999999999999,
+          "x": 84,
+          "y": 478,
+          "w": 990,
+          "h": 40,
+          "kind": "underline",
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s03-promise",
+      "start": 22.028,
+      "dur": 9.117999999999999,
+      "audio": {
+        "src": "audio/vo/s03-promise.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k03-hero.mp4",
+          "from": 0,
+          "start": 0,
+          "dur": 9.117999999999999,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 0.8,
+          "x": 84,
+          "y": 280,
+          "w": 870,
+          "h": 410,
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s04-app",
+      "start": 31.145999999999997,
+      "dur": 14.637999999999998,
+      "audio": {
+        "src": "audio/vo/s04-app.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k04-recipient.mp4",
+          "from": 1,
+          "start": 0,
+          "dur": 14.637999999999998,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 0.9,
+          "x": 1264,
+          "y": 12,
+          "w": 166,
+          "h": 60,
+          "label": "Arc mainnet · real USDC",
+          "labelBelow": true,
+          "until": null
+        },
+        {
+          "at": 5.541,
+          "x": 1580,
+          "y": 12,
+          "w": 228,
+          "h": 60,
+          "label": "Connected with MetaMask",
+          "labelBelow": true,
+          "until": null
+        },
+        {
+          "at": 7.441000000000001,
+          "x": 120,
+          "y": 305,
+          "w": 270,
+          "h": 110,
+          "label": "About three cents",
+          "until": null
+        },
+        {
+          "at": 11.169999999999998,
+          "x": 126,
+          "y": 620,
+          "w": 754,
+          "h": 80,
+          "label": "My other wallet",
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s05-quote",
+      "start": 45.78399999999999,
+      "dur": 19.029999999999998,
+      "audio": {
+        "src": "audio/vo/s05-quote.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k05a-maxnative.mp4",
+          "from": 2.5,
+          "start": 0,
+          "dur": 3.2,
+          "rate": 1
+        },
+        {
+          "src": "clips/k05a-maxnative.mp4",
+          "from": 23,
+          "start": 3.2,
+          "dur": 3,
+          "rate": 1
+        },
+        {
+          "src": "clips/k05b-quoting.mp4",
+          "from": 3,
+          "start": 6.2,
+          "dur": 5.5,
+          "rate": 1
+        },
+        {
+          "src": "clips/k05c-quote.mp4",
+          "from": 0,
+          "start": 11.7,
+          "dur": 7.329999999999998,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 12.009999999999998,
+          "x": 966,
+          "y": 222,
+          "w": 820,
+          "h": 190,
+          "label": "Offered: everything except the fee budget",
+          "until": null
+        },
+        {
+          "at": 13.909999999999998,
+          "x": 966,
+          "y": 445,
+          "w": 820,
+          "h": 44,
+          "label": "Probably costs",
+          "labelOut": true,
+          "until": null
+        },
+        {
+          "at": 15.876999999999999,
+          "x": 966,
+          "y": 505,
+          "w": 820,
+          "h": 62,
+          "label": "At most",
+          "labelOut": true,
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s06-remaining",
+      "start": 64.814,
+      "dur": 12.405999999999999,
+      "audio": {
+        "src": "audio/vo/s06-remaining.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k06-remaining.mp4",
+          "from": 0,
+          "start": 0,
+          "dur": 12.405999999999999,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 1.1,
+          "x": 966,
+          "y": 232,
+          "w": 820,
+          "h": 62,
+          "label": "Stays behind",
+          "labelOut": true,
+          "until": null
+        },
+        {
+          "at": 6.468,
+          "x": 966,
+          "y": 328,
+          "w": 820,
+          "h": 62,
+          "kind": "underline",
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s07-review",
+      "start": 77.22,
+      "dur": 15.357999999999999,
+      "audio": {
+        "src": "audio/vo/s07-review.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k07-review.mp4",
+          "from": 4,
+          "start": 0,
+          "dur": 15.357999999999999,
+          "rate": 1.35
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 0.8,
+          "x": 126,
+          "y": 140,
+          "w": 754,
+          "h": 80,
+          "label": "Full recipient address",
+          "until": null
+        },
+        {
+          "at": 2.5,
+          "x": 966,
+          "y": 290,
+          "w": 820,
+          "h": 44,
+          "label": "Total",
+          "labelOut": true,
+          "until": null
+        },
+        {
+          "at": 5.635000000000001,
+          "x": 966,
+          "y": 600,
+          "w": 820,
+          "h": 80,
+          "label": "Reviewed and acknowledged",
+          "labelOut": true,
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s08-wallet",
+      "start": 92.578,
+      "dur": 4.15,
+      "audio": {
+        "src": "audio/vo/s08-wallet.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k08a-wallet.mp4",
+          "from": 0.5,
+          "start": 0,
+          "dur": 2.6,
+          "rate": 1
+        },
+        {
+          "src": "clips/k08b-confirm.mp4",
+          "from": 0,
+          "start": 2.6,
+          "dur": 1.5500000000000003,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [],
+      "badges": [
+        {
+          "at": 0.2,
+          "text": "MetaMask · approved by the wallet owner"
+        }
+      ]
+    },
+    {
+      "id": "s09-result",
+      "start": 96.72800000000001,
+      "dur": 18.261999999999997,
+      "audio": {
+        "src": "audio/vo/s09-result.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k09a-verified.mp4",
+          "from": 0,
+          "start": 0,
+          "dur": 5,
+          "rate": 1
+        },
+        {
+          "src": "clips/k09b-receipt.mp4",
+          "from": 3,
+          "start": 5,
+          "dur": 2.6,
+          "rate": 1
+        },
+        {
+          "src": "clips/k09c-fees.mp4",
+          "from": 13,
+          "start": 7.6,
+          "dur": 10.661999999999997,
+          "rate": 0.6565372350403303
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 0.6,
+          "until": 4.5,
+          "x": 970,
+          "y": 170,
+          "w": 836,
+          "h": 300,
+          "label": "Read from the chain receipt"
+        },
+        {
+          "at": 8.031,
+          "x": 110,
+          "y": 160,
+          "w": 880,
+          "h": 148,
+          "label": "Exactly the reviewed amount",
+          "until": null
+        },
+        {
+          "at": 10.031,
+          "x": 1058,
+          "y": 532,
+          "w": 728,
+          "h": 44,
+          "label": "Actual fee",
+          "labelOut": true,
+          "until": null
+        },
+        {
+          "at": 11.831,
+          "x": 1058,
+          "y": 642,
+          "w": 728,
+          "h": 44,
+          "label": "Inside the budget",
+          "labelOut": true,
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s10-verify",
+      "start": 114.99000000000001,
+      "dur": 11.613999999999999,
+      "audio": {
+        "src": "audio/vo/s10-verify.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k10a-explorer.mp4",
+          "from": 0,
+          "start": 0,
+          "dur": 5,
+          "rate": 1
+        },
+        {
+          "src": "clips/k10b-reverify.mp4",
+          "from": 3.5,
+          "start": 5,
+          "dur": 6.613999999999999,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 1,
+          "x": 200,
+          "y": 270,
+          "w": 610,
+          "h": 50,
+          "label": "Arc explorer",
+          "until": null
+        },
+        {
+          "at": 2.2,
+          "until": 4.5,
+          "x": 570,
+          "y": 560,
+          "w": 140,
+          "h": 46,
+          "label": "Success",
+          "labelRight": true
+        },
+        {
+          "at": 8.8,
+          "x": 120,
+          "y": 535,
+          "w": 668,
+          "h": 42,
+          "label": "Re-verified live, in the browser",
+          "until": null
+        }
+      ],
+      "badges": []
+    },
+    {
+      "id": "s11-close",
+      "start": 126.60400000000001,
+      "dur": 11.589999999999998,
+      "audio": {
+        "src": "audio/vo/s11-close.mp3",
+        "at": 0.45
+      },
+      "clips": [
+        {
+          "src": "clips/k11-developers.mp4",
+          "from": 0,
+          "start": 0,
+          "dur": 11.589999999999998,
+          "rate": 1
+        }
+      ],
+      "zoom": null,
+      "highlights": [
+        {
+          "at": 1.4,
+          "x": 336,
+          "y": 696,
+          "w": 166,
+          "h": 68,
+          "label": "Open source",
+          "labelBelow": true,
+          "until": null
+        },
+        {
+          "at": 3.1,
+          "until": 9,
+          "x": 88,
+          "y": 492,
+          "w": 830,
+          "h": 170,
+          "label": "TypeScript SDK"
+        }
+      ],
+      "badges": []
+    }
+  ],
+  "captions": [
+    {
+      "start": 0.5,
+      "end": 2.1159999999999997,
+      "text": "You press send max."
+    },
+    {
+      "start": 2.116,
+      "end": 5.747,
+      "text": "But what happens when the fee comes from that same balance?"
+    },
+    {
+      "start": 7.002000000000001,
+      "end": 11.193000000000001,
+      "text": "On Arc, the money and the gas are the same USDC."
+    },
+    {
+      "start": 11.193000000000001,
+      "end": 14.027800000000001,
+      "text": "Every transaction needs a network fee,"
+    },
+    {
+      "start": 14.0278,
+      "end": 16.788,
+      "text": "paid from the balance you're sending."
+    },
+    {
+      "start": 16.788,
+      "end": 21.252000000000002,
+      "text": "Try to send every cent, and nothing is left to pay for it."
+    },
+    {
+      "start": 22.528,
+      "end": 25.612321428571427,
+      "text": "LastDollar shows what you can actually send,"
+    },
+    {
+      "start": 25.612321428571427,
+      "end": 27.15448214285714,
+      "text": "what the fee may cost,"
+    },
+    {
+      "start": 27.15448214285714,
+      "end": 30.378999999999998,
+      "text": "and what remains, before you approve anything."
+    },
+    {
+      "start": 31.645999999999997,
+      "end": 36.387,
+      "text": "This is the live app on Arc mainnet, with real USDC."
+    },
+    {
+      "start": 36.387,
+      "end": 38.49005063291139,
+      "text": "I am connected with MetaMask,"
+    },
+    {
+      "start": 38.49005063291139,
+      "end": 42.116,
+      "text": "using a small wallet that holds about three cents."
+    },
+    {
+      "start": 42.116,
+      "end": 45.018,
+      "text": "I will send its maximum to my other wallet."
+    },
+    {
+      "start": 46.28399999999999,
+      "end": 49.74499999999999,
+      "text": "I choose Send maximum, and native USDC."
+    },
+    {
+      "start": 49.745,
+      "end": 53.18282352941176,
+      "text": "LastDollar estimates the real transaction,"
+    },
+    {
+      "start": 53.18282352941176,
+      "end": 58.094,
+      "text": "sets aside a maximum fee budget, and offers everything else."
+    },
+    {
+      "start": 58.093999999999994,
+      "end": 61.56099999999999,
+      "text": "The estimated fee is what it will probably cost."
+    },
+    {
+      "start": 61.56099999999999,
+      "end": 64.06099999999999,
+      "text": "The budget is the most it can cost."
+    },
+    {
+      "start": 65.314,
+      "end": 69.03284210526316,
+      "text": "Because the real fee is usually below the budget,"
+    },
+    {
+      "start": 69.03284210526316,
+      "end": 71.082,
+      "text": "a tiny amount stays behind."
+    },
+    {
+      "start": 71.082,
+      "end": 73.3960923076923,
+      "text": "LastDollar says so up front,"
+    },
+    {
+      "start": 73.3960923076923,
+      "end": 76.454,
+      "text": "instead of promising an empty wallet."
+    },
+    {
+      "start": 77.72,
+      "end": 79.694,
+      "text": "Before anything is signed,"
+    },
+    {
+      "start": 79.694,
+      "end": 82.655,
+      "text": "I confirm the recipient and the amount."
+    },
+    {
+      "start": 82.655,
+      "end": 88.012,
+      "text": "When I continue, LastDollar rechecks my balance, nonce and fees."
+    },
+    {
+      "start": 88.012,
+      "end": 91.806,
+      "text": "If anything changed, it would ask me to review again."
+    },
+    {
+      "start": 93.078,
+      "end": 95.959,
+      "text": "Then I approve the payment in MetaMask."
+    },
+    {
+      "start": 97.22800000000001,
+      "end": 98.32300000000001,
+      "text": "Confirmed."
+    },
+    {
+      "start": 98.32300000000001,
+      "end": 101.35900000000001,
+      "text": "LastDollar reads the receipt from the chain."
+    },
+    {
+      "start": 101.35900000000001,
+      "end": 104.6758617886179,
+      "text": "The recipient got exactly the reviewed amount,"
+    },
+    {
+      "start": 104.6758617886179,
+      "end": 106.0458699186992,
+      "text": "and the actual fee,"
+    },
+    {
+      "start": 106.0458699186992,
+      "end": 110.22800000000001,
+      "text": "less than a twentieth of a cent, stayed inside the budget."
+    },
+    {
+      "start": 110.22800000000001,
+      "end": 114.21600000000001,
+      "text": "What is left in the wallet is the unused part of that budget."
+    },
+    {
+      "start": 115.49000000000001,
+      "end": 118.10300000000001,
+      "text": "Anyone can check it on the Arc explorer."
+    },
+    {
+      "start": 118.10300000000001,
+      "end": 121.22796153846154,
+      "text": "The proof page lists the mainnet payments,"
+    },
+    {
+      "start": 121.22796153846156,
+      "end": 125.84100000000002,
+      "text": "and re-verifies each one live from the chain, in your browser."
+    },
+    {
+      "start": 127.10400000000001,
+      "end": 129.24755555555558,
+      "text": "LastDollar is open source,"
+    },
+    {
+      "start": 129.24755555555558,
+      "end": 134.52400000000003,
+      "text": "with a TypeScript SDK so other Arc apps can use the same checks."
+    },
+    {
+      "start": 134.52400000000003,
+      "end": 137.42600000000002,
+      "text": "Try it at lastdollar dot vercel dot app."
+    }
+  ],
+  "endCard": {
+    "start": 138.19400000000002,
+    "dur": 5
+  },
+  "duration": 143.19400000000002
+}
