@@ -1,0 +1,155 @@
+1
+00:00:00,500 --> 00:00:02,116
+You press send max.
+
+2
+00:00:02,116 --> 00:00:05,747
+But what happens when the fee comes from that same balance?
+
+3
+00:00:07,002 --> 00:00:11,193
+On Arc, the money and the gas are the same USDC.
+
+4
+00:00:11,193 --> 00:00:14,028
+Every transaction needs a network fee,
+
+5
+00:00:14,028 --> 00:00:16,788
+paid from the balance you're sending.
+
+6
+00:00:16,788 --> 00:00:21,252
+Try to send every cent, and nothing is left to pay for it.
+
+7
+00:00:22,528 --> 00:00:25,612
+LastDollar shows what you can actually send,
+
+8
+00:00:25,612 --> 00:00:27,154
+what the fee may cost,
+
+9
+00:00:27,154 --> 00:00:30,379
+and what remains, before you approve anything.
+
+10
+00:00:31,646 --> 00:00:36,387
+This is the live app on Arc mainnet, with real USDC.
+
+11
+00:00:36,387 --> 00:00:38,490
+I am connected with MetaMask,
+
+12
+00:00:38,490 --> 00:00:42,116
+using a small wallet that holds about three cents.
+
+13
+00:00:42,116 --> 00:00:45,018
+I will send its maximum to my other wallet.
+
+14
+00:00:46,284 --> 00:00:49,745
+I choose Send maximum, and native USDC.
+
+15
+00:00:49,745 --> 00:00:53,183
+LastDollar estimates the real transaction,
+
+16
+00:00:53,183 --> 00:00:58,094
+sets aside a maximum fee budget, and offers everything else.
+
+17
+00:00:58,094 --> 00:01:01,561
+The estimated fee is what it will probably cost.
+
+18
+00:01:01,561 --> 00:01:04,061
+The budget is the most it can cost.
+
+19
+00:01:05,314 --> 00:01:09,033
+Because the real fee is usually below the budget,
+
+20
+00:01:09,033 --> 00:01:11,082
+a tiny amount stays behind.
+
+21
+00:01:11,082 --> 00:01:13,396
+LastDollar says so up front,
+
+22
+00:01:13,396 --> 00:01:16,454
+instead of promising an empty wallet.
+
+23
+00:01:17,720 --> 00:01:19,694
+Before anything is signed,
+
+24
+00:01:19,694 --> 00:01:22,655
+I confirm the recipient and the amount.
+
+25
+00:01:22,655 --> 00:01:28,012
+When I continue, LastDollar rechecks my balance, nonce and fees.
+
+26
+00:01:28,012 --> 00:01:31,806
+If anything changed, it would ask me to review again.
+
+27
+00:01:33,078 --> 00:01:35,959
+Then I approve the payment in MetaMask.
+
+28
+00:01:37,228 --> 00:01:38,323
+Confirmed.
+
+29
+00:01:38,323 --> 00:01:41,359
+LastDollar reads the receipt from the chain.
+
+30
+00:01:41,359 --> 00:01:44,676
+The recipient got exactly the reviewed amount,
+
+31
+00:01:44,676 --> 00:01:46,046
+and the actual fee,
+
+32
+00:01:46,046 --> 00:01:50,228
+less than a twentieth of a cent, stayed inside the budget.
+
+33
+00:01:50,228 --> 00:01:54,216
+What is left in the wallet is the unused part of that budget.
+
+34
+00:01:55,490 --> 00:01:58,103
+Anyone can check it on the Arc explorer.
+
+35
+00:01:58,103 --> 00:02:01,228
+The proof page lists the mainnet payments,
+
+36
+00:02:01,228 --> 00:02:05,841
+and re-verifies each one live from the chain, in your browser.
+
+37
+00:02:07,104 --> 00:02:09,248
+LastDollar is open source,
+
+38
+00:02:09,248 --> 00:02:14,524
+with a TypeScript SDK so other Arc apps can use the same checks.
+
+39
+00:02:14,524 --> 00:02:17,426
+Try it at lastdollar dot vercel dot app.
