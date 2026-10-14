@@ -1,0 +1,5 @@
+node_modules/
+# Raw screen takes: large, and they include uncut wallet screens.
+footage/
+# Rendered deliverables are committed (the root .gitignore ignores out/ for build output).
+!out/
