@@ -1,0 +1,21 @@
+{
+  "name": "lastdollar-demo-video",
+  "private": true,
+  "description": "Remotion project for the LastDollar demo video. Not part of the pnpm workspace.",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render LastDollarDemo out/lastdollar-demo.mp4",
+    "render:clean": "remotion render LastDollarDemoClean out/lastdollar-demo-clean.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.535",
+    "@remotion/media-utils": "4.0.535",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "4.0.535"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.3.0"
+  }
+}
