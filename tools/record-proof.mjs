@@ -35,9 +35,12 @@ const a = await verifyPaymentReceipt({ publicClient: primary, hash, config })
 const b = await verifyPaymentReceipt({ publicClient: secondary, hash, config })
 const str = (x) => JSON.stringify(x, (_k, v) => (typeof v === 'bigint' ? v.toString() : v))
 const lines = (r) => r.delivered.map((d) => ({ recipient: d.recipient, amount18: d.amount18 }))
-const agree = a.status === b.status && a.actualFee18 === b.actualFee18 && str(lines(a)) === str(lines(b))
+// Both providers must report the same chain facts, not just the same payouts and fee.
+const facts = (r) => str({ status: r.status, operation: r.operation, block: r.blockNumber, fee: r.actualFee18, from: r.from, to: r.to, lines: lines(r), issues: r.issues })
+const agree = facts(a) === facts(b)
 
-const issues = [...a.issues]
+const issues = [...new Set([...a.issues, ...b.issues])]
+if (!agree) issues.push('Primary and independent RPC providers reported different chain facts')
 if (a.status !== 'observed') issues.push(`Receipt status ${a.status}`)
 if (intended && str(intended) !== str(lines(a))) issues.push('Delivered payouts differ from the intended payouts')
 if (a.operation === 'unknown') issues.push('Transaction is not a recognised USDC payment')
