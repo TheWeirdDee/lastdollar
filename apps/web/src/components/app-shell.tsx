@@ -3,11 +3,12 @@
 import { FlaskConical, History, LayoutGrid, Layers, Send } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Logo } from './brand'
 import { ThemeSwitch } from './theme'
 import { cx } from './ui'
 import { NetworkPill, WalletButton, WrongNetworkBanner } from './wallet'
+import { pruneReviewSnapshots } from '@/lib/history'
 import { isTestMode } from '@/lib/network'
 import { usePendingWatcher } from '@/lib/use-arc'
 
@@ -26,6 +27,14 @@ function useActive() {
 export function AppShell({ children }: { children: ReactNode }) {
   const isActive = useActive()
   usePendingWatcher()
+  // Enforce the 30-day review snapshot expiry whenever the app opens.
+  useEffect(() => {
+    try {
+      pruneReviewSnapshots()
+    } catch {
+      /* storage unavailable */
+    }
+  }, [])
   return (
     <div className="flex min-h-dvh flex-col">
       {isTestMode ? (
