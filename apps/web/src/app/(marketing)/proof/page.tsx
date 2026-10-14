@@ -10,11 +10,13 @@ import testSummary from '@/generated/test-summary.json'
 import { computationEntries, hasMainnetEvidence, mainnetEntries, rejectionEntries, simulationEntries, type MainnetEntry } from '@/lib/evidence'
 import { addressUrl, formatTime, gweiString, shortAddress, shortHash, txUrl, usd, usdExact } from '@/lib/format'
 import { APP_VERSION, COMMIT_SHA, REPO_URL, splitterDeployment } from '@/lib/network'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Mainnet proof',
   description: 'Real Arc mainnet transactions, verified on two RPC providers, with simulations and tests labelled separately.',
-}
+  path: '/proof',
+})
 
 type NetworkCheck = {
   checkedAt?: string
@@ -64,7 +66,9 @@ function EntryCard({ e }: { e: MainnetEntry }) {
           <Badge tone="success" icon={<BadgeCheck className="size-3" aria-hidden />}>
             Mainnet · {e.result}
           </Badge>
-          <Badge tone={e.provenance?.channel === 'sdk-script' ? 'accent' : 'warning'}>{e.provenance?.channel === 'sdk-script' ? 'SDK script evidence' : 'Execution channel unknown'}</Badge>
+          <Badge tone={e.provenance?.channel === 'unknown' || !e.provenance ? 'warning' : 'accent'}>
+            {e.provenance?.channel === 'sdk-script' ? 'SDK script evidence' : e.provenance?.channel === 'browser-wallet' ? 'Browser wallet, filmed' : 'Execution channel unknown'}
+          </Badge>
           {e.verification.rpcsAgree ? <Badge tone="neutral">2 RPCs agree</Badge> : <Badge tone="danger">RPCs disagree</Badge>}
         </div>
       </div>
