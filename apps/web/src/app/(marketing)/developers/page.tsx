@@ -6,11 +6,13 @@ import { GitHubMark } from '@/components/site'
 import { ButtonLink, Card } from '@/components/ui'
 import { REPO_URL, splitterDeployment } from '@/lib/network'
 import { batchSnippet, maxSnippet, quickstartSnippet, receiptSnippet } from '@/lib/snippets'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Developers',
   description: 'The @lastdollar/arc SDK: quote, prepare, execute and verify USDC payments on Arc with viem.',
-}
+  path: '/developers',
+})
 
 const api = [
   ['readArcBalance', 'Native and ERC-20 views of one USDC holding at a single block'],
