@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { WalletClient } from 'viem'
 import { useWalletClient } from 'wagmi'
-import { acquireSubmissionLock, getReviewSnapshot, patchRecord, releaseSubmissionLock, saveReviewSnapshot, upsertRecord } from './history'
+import { acquireSubmissionLock, getReviewSnapshot, patchRecord, releaseSubmissionLock, saveReviewSnapshot, upsertRecord, type TxRecord } from './history'
 import { appNetwork } from './network'
 import { statusFromReceipt, useArcPublicClient, useWallet } from './use-arc'
 
@@ -178,12 +178,13 @@ export function usePaymentFlow() {
             note: `Sped up by the wallet; replaces ${broadcastHash}.`,
           })
         }
-        const record = {
+        const record: Pick<TxRecord, 'recipients' | 'kind' | 'mode' | 'maxFeeBudget18'> = {
           recipients: plan.quote.lines.map((l) => ({ recipient: l.recipient, amount18: l.amount18.toString() })),
           kind: plan.quote.kind,
           mode: plan.quote.mode,
+          maxFeeBudget18: (plan.request.gas * plan.request.maxFeePerGas).toString(),
         }
-        patchRecord(appNetwork.chainId, address, result.finalHash, statusFromReceipt(record as never, result.receipt))
+        patchRecord(appNetwork.chainId, address, result.finalHash, statusFromReceipt(record, result.receipt))
         setState({ step: 'done', plan, result })
       } catch (err) {
         const e = classifyError(err)
