@@ -26,15 +26,56 @@ All at Arc's 20 gwei base-fee floor (priority tip 1,337 wei).
 | Splitter batch, 2 recipients | 77,122 | 0.001542 | `browser-native-batch` |
 | Splitter batch, 3 recipients | 114,909 | 0.002298 | `native-batch` |
 
-### Batches are about atomicity, not lower fees
+### Batches: measured, estimated and calculated
 
-| 3 recipients | Gas | Source |
+Three kinds of figure appear below. Keep them apart:
+
+- **Measured**: `gasUsed` from a mainnet receipt.
+- **Estimated**: `eth_estimateGas` results. Nothing was sent.
+- **Calculated**: arithmetic from a measured single transfer.
+
+**Measured batches**
+
+| Batch | Gas used | Recipient account state just before the batch |
 |---|---|---|
-| One splitter batch | 114,909 | measured |
-| Three native transfers | 63,000 | computed: 3 × measured 21,000 |
-| Three ERC-20 transfers | 146,814 | computed: 3 × measured 48,938 |
+| `native-batch`, 3 recipients | 114,909 | 1 funded (balance > 0, nonce 0); 2 empty (balance 0, nonce 0, no code) |
+| `browser-native-batch`, 2 recipients | 77,122 | 1 funded (balance > 0, nonce 0); 1 empty |
 
-A splitter batch costs **more** gas than separate native transfers and less than separate ERC-20 transfers. What it adds is one signature and all-or-nothing execution: either every recipient is paid or none is. The three-transfer figures are computed from single measured transfers, not from a measured three-transaction run.
+**Gas estimates for this configuration—not executed benchmarks**
+
+| Recipients | Batch, non-empty recipients | Batch, empty recipients | Separate native transfers (calculated, 21,000 each) |
+|---|---|---|---|
+| 1 | 44,316 | 69,457 | 21,000 |
+| 2 | 57,257 | 106,700 | 42,000 |
+| 3 | 70,196 | 144,719 | 63,000 |
+| 4 | 83,137 | — | 84,000 |
+| 5 | 96,078 | — | 105,000 |
+| 6 | 108,177 | — | 126,000 |
+| 8 | 134,008 | — | 168,000 |
+| 10 | 159,838 | 407,980 | 210,000 |
+
+In these estimates, batching used less gas from four recipients onward for the tested existing addresses. Here "existing" means non-empty accounts. That is a result for these accounts at this block, not a general break-even point.
+
+How the estimates were made:
+
+| | |
+|---|---|
+| Network | Arc mainnet, chain 5042, `https://rpc.mainnet.arc.io` |
+| Block | 25910201 (2026-10-14 10:47:52 UTC, base fee 20 gwei); every call was estimated at this block |
+| Procedure | `eth_estimateGas` for `LastDollarSplitter.pay(recipients, amounts)` at `0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944` |
+| Parameters | `from` `0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6`; each amount 1 wei; `value` = number of recipients in wei; no gas limit or fee fields, because gas used does not depend on the fee price |
+| Non-empty recipients | 10 accounts taken from transaction senders in the preceding blocks, each confirmed at that block to have nonce > 0, balance > 0 and no code. A funded account with nonce 0 gave the same 1-recipient figure (44,316). |
+| Empty recipients | Synthetic addresses, each confirmed at that block to have nonce 0, balance 0 and no code |
+| Separate-transfer baseline | 21,000 × recipients, calculated. A top-level native transfer was also estimated at exactly 21,000 to both an empty and a non-empty account. |
+| Not covered | Larger amounts add a little calldata gas (non-zero bytes cost more). Contract recipients, recipients repeated within a batch, recipient counts other than those listed, and other blocks were not tested. |
+
+**What decides the extra cost.** On Arc, as in the EVM rule of EIP-161, a value transfer made from inside a contract to an *empty* account pays an extra 25,000 gas. Empty means nonce 0, balance 0 and no code. In these estimates each empty recipient added about 25,140 gas to a batch. A top-level native transfer to an empty account did not pay this (21,000). Whether an account has ever sent a transaction does not matter: a funded account with nonce 0 cost the same as an active one.
+
+**Gas is not the whole cost.** The USDC fee is gas used × the effective gas price when each transaction is included. A batch pays one price. Separate transfers each pay the price at their own inclusion. Under different fee conditions, lower gas does not automatically mean a lower USDC cost. All the figures here are at Arc's 20 gwei base-fee floor.
+
+What a batch also gives you, whatever the gas: one signature, and all-or-nothing execution. Either every recipient is paid or none is.
+
+**Possible optimisations, not measured.** The splitter emits its own `Payout` event for each recipient, alongside the native transfer log that Arc emits anyway. It also checks the inputs in a separate loop before paying. Dropping the event or merging the loops might lower the per-recipient cost. Neither has been implemented or measured, and either would need a new contract deployment.
 
 ## Why send-max leaves something behind
 
@@ -55,6 +96,6 @@ A careful developer can compute a fee-aware amount with plain viem too; the proo
 These would need new evidence before any claim is made:
 
 - A direct-wallet transfer and a LastDollar transfer of the same amount under the same fee conditions.
-- Splitter batches at larger recipient counts (only 2 and 3 are measured).
+- Executed batches at larger recipient counts and to non-empty recipients (only 2 and 3, mostly to empty accounts, are measured; the rest are estimates).
 - How often the pre-signing recheck catches a real change (stale fees, balance moved, wallet-modified parameters) outside tests.
 - Time-to-complete and error rates with real users.
