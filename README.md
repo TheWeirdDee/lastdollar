@@ -60,14 +60,31 @@ Some wallets do parts of this too. This is not a claim that wallets get it wrong
 
 ## Fee economics, in short
 
-| | Native transfer | ERC-20 transfer | Splitter batch (3) |
+Measured on mainnet (receipts):
+
+| | Native transfer | ERC-20 transfer | Splitter batch, 3 recipients (1 funded, 2 empty accounts) |
 |---|---|---|---|
-| Gas used (measured) | 21,000 | 48,938 | 114,909 |
+| Gas used | 21,000 | 48,938 | 114,909 |
 | Fee at Arc's 20 gwei floor | 0.00042 USDC | 0.000979 USDC | 0.002298 USDC |
 
 - LastDollar adds no fee of its own.
 - **Send-max leaves the unused fee budget behind.** It has to reserve the most the transaction could cost, and the network usually charges less. In the filmed run, exactly that unused budget remained: 0.0006275 − 0.00042 = 0.0002075 USDC.
-- **A batch is not cheaper than separate native transfers.** Three native transfers would use 63,000 gas, computed from the measured single transfer. A batch gives you one signature and all-or-nothing execution. It is cheaper than three ERC-20 transfers (146,814 gas).
+
+**Batches. Gas estimates for this configuration—not executed benchmarks.** `eth_estimateGas` at Arc block 25910201 (2026-10-14), from `0xE306…cab6` to the splitter, 1 wei per recipient:
+
+| Recipients | Batch, non-empty recipient accounts | Batch, empty recipient accounts | Separate native transfers (calculated, 21,000 each) |
+|---|---|---|---|
+| 1 | 44,316 | 69,457 | 21,000 |
+| 3 | 70,196 | 144,719 | 63,000 |
+| 4 | 83,137 | — | 84,000 |
+| 10 | 159,838 | 407,980 | 210,000 |
+
+In these estimates, batching used less gas from four recipients onward for the tested existing addresses. "Existing" here means non-empty accounts. This is not a general break-even point.
+
+- The extra cost comes from *empty* recipient accounts (nonce 0, balance 0, no code). On Arc, as under the EVM's EIP-161 rule, a value transfer from inside a contract to an empty account costs about 25,000 more gas. A normal top-level transfer to the same account still costs 21,000. That is why the measured 3-recipient batch, with two empty recipients, used more gas than three separate transfers would have.
+- Gas is not the whole cost. The fee is gas × the price at inclusion, so under different fee conditions lower gas doesn't automatically mean fewer USDC spent.
+- Whatever the gas, a batch gives one signature and all-or-nothing execution.
+- Ideas to lower batch gas (dropping the splitter's duplicate `Payout` event, merging its two loops) are unmeasured and would need a redeployment.
 
 Full breakdown, and what has not been measured yet: [docs/economics.md](docs/economics.md).
 
@@ -141,7 +158,7 @@ Two RPCs agreeing proves the chain facts. It does not prove which interface crea
 | How it was made | Entries | What backs that |
 |---|---|---|
 | **Signed in MetaMask in the live app, on film** | `browser-native-max` | The [demo video](video/out/lastdollar-demo.mp4) shows the quote, review, MetaMask confirmation and result. The proof page labels it *Browser wallet, filmed*. |
-| **Signed by the SDK with a local key** (proof runner script) | `native-exact`, `erc20-exact`, `native-batch`, `erc20-max`, `native-max` | The project's own record ([docs/mainnet-proof.md](docs/mainnet-proof.md)). No separate provenance is stored in the file, so the proof page shows *Execution channel unknown*. |
+| **Signed by the SDK with a local key** (`tools/run-mainnet-proof.mjs --execute`) | `native-exact`, `erc20-exact`, `native-batch`, `erc20-max`, `native-max` | The recorded session log of that run (2026-10-12, 09:28:37–09:29:20 UTC): its captured output shows four of the hashes submitted or verified, and all five entries were written inside that window. The runner also stored the pre-signing quote, which only it records. Labelled *SDK script evidence*; this label was **added retrospectively on 2026-10-14**, and each entry records the basis. |
 | **Reported by the owner as made in the live app** | `browser-native-exact`, `browser-erc20-exact`, `browser-native-batch` | The owner's report only. Labelled *Execution channel unknown*, with the reviewed quote marked as not recorded. |
 
 The proof page also lists baselines: a naive full-balance native send **rejected by the node** before inclusion, `eth_call` simulations that **accepted** naive transfers (so simulation alone doesn't show the problem), and a fee-aware plain-viem calculation for comparison.
