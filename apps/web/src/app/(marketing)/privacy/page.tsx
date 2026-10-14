@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 export const metadata: Metadata = { title: 'Privacy', description: 'What LastDollar stores, where, and what it never collects.' }
 
@@ -23,6 +22,11 @@ export default function PrivacyPage() {
         <li>
           <strong>App-tracked payments</strong>: for payments you make with this app, the transaction hash, chain, your public address, recipients, amounts, quoted fees and status, under keys
           beginning <code>lastdollar:v1:history</code>. You can clear them on the History page.
+        </li>
+        <li>
+          <strong>Review snapshots</strong>: just before your wallet opens, the exact public terms you reviewed (recipients, amounts, gas limit and fee caps) are saved under keys
+          beginning <code>lastdollar:v1:review</code>, so a later receipt can be compared with what you approved. They expire after 30 days and are removed when you clear history for that
+          account.
         </li>
         <li>
           <strong>A short-lived signing lock</strong> (<code>lastdollar:v1:lock</code>) that stops the same account signing two payments at once from different tabs.
@@ -59,7 +63,7 @@ export default function PrivacyPage() {
         Transactions on Arc are public and permanent. Anyone can see the sender, recipients, amounts and fees of a payment once it is on chain. Clearing local history does not change that.
       </p>
       <p>
-        Questions or corrections: open an issue in the <Link href="https://github.com/TheWeirdDee/lastdollar" target="_blank" rel="noreferrer">public repository</Link>.
+        Questions or corrections: open an issue in the <a href="https://github.com/TheWeirdDee/lastdollar/issues" target="_blank" rel="noreferrer">public repository</a>.
       </p>
     </article>
   )
