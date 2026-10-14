@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { splitterDeployment } from '@/lib/network'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = { title: 'Security', description: 'LastDollar security model, review status and limitations.' }
+export const metadata: Metadata = pageMetadata({ title: 'Security', description: 'LastDollar security model, review status and limitations.', path: '/security' })
 
 export default function SecurityPage() {
   return (
