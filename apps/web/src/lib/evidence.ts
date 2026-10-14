@@ -54,7 +54,13 @@ export interface MainnetEntry {
   verification: { primaryRpc: string; independentRpc: string; independentStatus: string; rpcsAgree: boolean; verifiedAt: string }
   sdkVersion: string
   /** Chain data alone cannot establish execution channel or wallet identity. */
-  provenance?: { channel: 'unknown' | 'sdk-script' | 'browser-wallet'; source: string; reviewedEvidence?: string }
+  provenance?: {
+    channel: 'unknown' | 'sdk-script' | 'browser-wallet'
+    source: string
+    reviewedEvidence?: string
+    /** Set when provenance was added after the entry was recorded, with the date it was added. */
+    addedRetrospectively?: { on: string; basis: string }
+  }
 }
 
 export interface SimulationEntry {
