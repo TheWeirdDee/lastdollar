@@ -65,11 +65,15 @@ These were recorded after the fact with `pnpm proof:record`. Their payouts, fees
 ## Re-checking
 
 ```sh
+pnpm install && pnpm sdk:build
+pnpm contracts:build                         # Foundry required; the bytecode check needs this build
 pnpm verify:evidence                         # both default RPCs
 pnpm verify:evidence --rpc https://rpc.quicknode.mainnet.arc.io
 ```
 
-The verifier re-reads each transaction and receipt, re-runs reconciliation, and requires the delivered payouts, actual fee and block to match the record, and the delivered payouts to equal the intended ones. It also compares the splitter's on-chain runtime bytecode with the record and the local build. Any difference exits non-zero.
+The verifier re-reads each transaction and receipt and re-runs reconciliation. For every entry it requires an observed successful receipt with no reconciliation issues, the recorded operation, block, sender, destination and actual fee, and delivered payouts equal to both the record and the intended payouts. It also requires the splitter's on-chain runtime bytecode to equal the recorded hash and the local build; a missing or different local build fails. Any difference exits non-zero, and transient RPC errors are retried before they count as failures.
+
+`pnpm proof:record` stores an entry only after comparing all of those chain facts, plus reconciliation issues, across the primary and independent RPC providers.
 
 The proof page's **Re-verify live** button performs the same reconciliation from the visitor's browser.
 
