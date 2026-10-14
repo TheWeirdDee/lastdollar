@@ -1,27 +1,30 @@
 # Fix status
 
-Baseline inspected: `e072f94be19827be5e4b2f28e1cbc6562ab2a8b3` on `main`, 2026-10-12 (Africa/Lagos). This ledger deliberately distinguishes a code fix from hosted-wallet observation.
+Ledger for the external audit findings (LD-001 to LD-022), updated 2026-10-14 after the re-audit of `f1efdc7`. "Fixed" means the code and its checks changed in this repository. "Not wallet-verified" means no new funded browser-wallet run exercised the path afterwards.
 
-| ID | Current disposition | Evidence / remaining action |
+| ID | Status | What changed / how it is checked |
 | --- | --- | --- |
-| LD-001 | VERIFIED_FIXED (local) | `revalidatePlan` now includes `recipientTotal18` plus retained cap for ERC-20. The regression's final call explicitly models Arc-style `eth_call` without signed-request balance admission, so the old implementation fails it. |
-| LD-002 | IMPLEMENTED_NOT_VERIFIED | Account/chain identity changes now also clear an in-flight `quoting` state; edits and late quote responses are invalidated. Browser race test remains required. |
-| LD-003 | IMPLEMENTED_NOT_VERIFIED | Review exposes full, wrapping recipient addresses, exact batch values, and the exact native total (up to 18 decimals). Keyboard/mobile inspection remains required. |
-| LD-004 | VERIFIED_FIXED (local) | Send view uses `parseNativeUsdc` for native, `parseUsdc` for ERC-20, with mode-specific help. |
-| LD-005 | IMPLEMENTED_NOT_VERIFIED | Receipt comparison now treats an actual fee above the reviewed maximum as a mismatch, and the receipt UI explicitly distinguishes delivered settlement from fee-budget compliance. Fixture/browser acceptance remains required. |
-| LD-006 | IMPLEMENTED_NOT_VERIFIED | New immutable public review snapshots are written to browser storage before opening the wallet, then attached to the broadcast hash. Legacy records remain unknown. |
-| LD-007 | OPEN | Evidence recorder/verifier not reworked. |
-| LD-008 | OPEN | Public proof-count/origin copy not re-audited. |
-| LD-009 | OPEN | Narrative not re-audited. |
-| LD-010 | OPEN | Residual presentation not re-audited. |
-| LD-011 | OPEN | SDK setup/package work not re-audited. |
-| LD-012 | IMPLEMENTED_NOT_VERIFIED | Root Node engine is `>=22.13`, matching pnpm 11.5; docs/CI consistency and frozen install remain to verify. |
-| LD-013 | OPEN | Latest E2E CI failure has not been diagnosed in this local branch. |
-| LD-014 | IMPLEMENTED_NOT_VERIFIED | CSV importer retains editable rows despite row errors; full acceptance matrix remains to verify. |
-| LD-015 | IMPLEMENTED_NOT_VERIFIED | Relay rejects null/primitives through index-based validation; request-shape/upstream test coverage remains to add. |
-| LD-016 | OPEN | Finalized history reread behavior not audited. |
-| LD-017 | OPEN | Privacy/contact routing not audited. |
-| LD-018 | OPEN | Focus restoration/provider-error work not completed. |
-| LD-019 | OPEN | Release provenance/content verification not completed. |
+| LD-001 | Fixed | `revalidatePlan` checks the reviewed recipient total plus the retained fee budget in both modes; SDK regression tests cover it. |
+| LD-002 | Fixed, not wallet-verified | Any draft edit, account change or chain change invalidates the quote; late quote results are discarded. |
+| LD-003 | Fixed, not wallet-verified | Review shows full recipient addresses and exact amounts. |
+| LD-004 | Fixed | Native input accepts 18 decimals; ERC-20 input 6. |
+| LD-005 | Fixed, not wallet-verified | The result card warns when the fee exceeded the reviewed maximum. History recovery now compares the actual fee with the reviewed budget (pre-signing snapshot, else quoted budget) and marks an over-budget payment as a mismatch with the overage shown. |
+| LD-006 | Fixed | `proof:record` derives mode and kind from the decoded operation, records the reviewed quote as not recorded, stores the broadcast caps separately as `submitted`, compares the fee with the submitted cap, and labels `--intended` as asserted after execution. The three existing browser entries were migrated to this format. |
+| LD-007 | Fixed | `verify:evidence` checks operation, status, block, fee and payouts; the public Re-verify button now applies the same status, operation, block and issues checks. |
+| LD-008 | Fixed | Proof page labels each entry's provenance; the methodology distinguishes the five scripted proofs from the three owner-reported browser payments. |
+| LD-009 | Fixed | Payment math, submission demo and methodology describe accepted `eth_call` baselines and the one free node rejection accurately. |
+| LD-010 | Fixed | Residual panel shows unused budget plus the additive token-rounding remainder. |
+| LD-011 | Fixed | SDK README documents the source build and packed tarball; registry publication is not claimed. |
+| LD-012 | Fixed | Node engine `>=22.13` matches pnpm 11.5; CI runs Node 22. |
+| LD-013 | Fixed | CI on `main` is green including browser tests. |
+| LD-014 | Fixed, not wallet-verified | CSV references are validated live; each import has a generation guard and invalidates the quote again when rows change; editing or removing a row clears its stale import message. |
+| LD-015 | Fixed | Relay rejects null, primitives and malformed batches without forwarding. |
+| LD-016 | Fixed | Settled history records are re-read when History opens. A not-found, pending or failed check keeps the last confirmed status but labels it as uncorroborated; failed checks are retried on the next visit. |
+| LD-017 | Fixed | Privacy page discloses review snapshots, their 30-day expiry and their removal with history; repository contact link corrected. |
+| LD-018 | Fixed | Wallet dialog restores focus to its trigger; missing-provider errors show guidance instead of library text. |
+| LD-019 | Fixed | Proof page shows the build commit; the test summary records the tested commit; `.vercelignore` no longer hides the summary from deployments. |
+| LD-020 | Fixed | Clearing history also removes the account's review snapshots; snapshots older than 30 days are pruned. |
+| LD-021 | Fixed | Relay enforces the 64 KB limit in UTF-8 bytes (declared `Content-Length` and actual body). A 23,068-character, 69,068-byte request returns 413. |
+| LD-022 | Fixed | `verify:evidence` fails when the local splitter build differs from the deployed runtime or cannot be read. Tested: corrupted artifact exits 1, real artifact exits 0. |
 
-No hosted paid flow was observed or submitted. No mainnet transaction, contract deployment, remote push, or deployment was attempted.
+Not performed in this pass: a new funded browser-wallet payment, an external security review, or explorer source verification (the explorer API blocks scripted clients; see `docs/deployment.md`).
