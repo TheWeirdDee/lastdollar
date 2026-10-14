@@ -51,7 +51,10 @@ if (existsSync(e2eFile)) {
   })
 }
 
-const summary = { recordedAt: new Date().toISOString(), suites }
+// The commit the suites ran against, plus whether the working tree had uncommitted changes.
+const testedCommit = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim()
+const dirty = execSync('git status --porcelain', { cwd: ROOT, encoding: 'utf8' }).trim().length > 0
+const summary = { recordedAt: new Date().toISOString(), testedCommit, workingTreeClean: !dirty, suites }
 writeJson(join(out, 'summary.json'), summary)
 console.table(suites.map(({ name, passed, failed }) => ({ name, passed, failed })))
 process.exit(suites.some((s) => s.failed) ? 1 : 0)
