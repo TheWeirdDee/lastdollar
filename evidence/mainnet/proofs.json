@@ -18,6 +18,15 @@
       "id": "native-exact",
       "label": "Exact native payment, 0.010000 USDC",
       "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "sdk-script",
+        "source": "tools/run-mainnet-proof.mjs --execute, signing with a local key through the @lastdollar/arc SDK (no browser or wallet extension)",
+        "reviewedEvidence": "pre-signing quote recorded by the runner in the quote field",
+        "addedRetrospectively": {
+          "on": "2026-10-14",
+          "basis": "Recorded agent session log: the command `node tools/run-mainnet-proof.mjs --execute` started 2026-10-12T09:28:37Z and returned at 09:29:20Z; its output was captured only as the last 45 lines, which do not include this step; the entry was written by the runner inside that window (verifiedAt 09:28:46Z) and holds the runner-only pre-signing quote."
+        }
+      },
       "kind": "exact",
       "mode": "native",
       "chainId": 5042,
@@ -88,6 +97,15 @@
       "id": "erc20-exact",
       "label": "Exact ERC-20 payment, 0.010000 USDC",
       "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "sdk-script",
+        "source": "tools/run-mainnet-proof.mjs --execute, signing with a local key through the @lastdollar/arc SDK (no browser or wallet extension)",
+        "reviewedEvidence": "pre-signing quote recorded by the runner in the quote field",
+        "addedRetrospectively": {
+          "on": "2026-10-14",
+          "basis": "Recorded agent session log: the command `node tools/run-mainnet-proof.mjs --execute` started 2026-10-12T09:28:37Z and returned at 09:29:20Z; the captured output shows this hash as verified; entry verifiedAt 09:28:52Z."
+        }
+      },
       "kind": "exact",
       "mode": "erc20",
       "chainId": 5042,
@@ -159,6 +177,15 @@
       "id": "native-batch",
       "label": "Atomic native batch to three recipients via LastDollarSplitter",
       "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "sdk-script",
+        "source": "tools/run-mainnet-proof.mjs --execute, signing with a local key through the @lastdollar/arc SDK (no browser or wallet extension)",
+        "reviewedEvidence": "pre-signing quote recorded by the runner in the quote field",
+        "addedRetrospectively": {
+          "on": "2026-10-14",
+          "basis": "Recorded agent session log: the command `node tools/run-mainnet-proof.mjs --execute` started 2026-10-12T09:28:37Z and returned at 09:29:20Z; the captured output shows this step submitted and verified with this hash; entry verifiedAt 09:28:57Z."
+        }
+      },
       "kind": "batch",
       "mode": "native",
       "chainId": 5042,
@@ -292,6 +319,15 @@
       "id": "erc20-max",
       "label": "ERC-20 send-max from wallet C",
       "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "sdk-script",
+        "source": "tools/run-mainnet-proof.mjs --execute, signing with a local key through the @lastdollar/arc SDK (no browser or wallet extension)",
+        "reviewedEvidence": "pre-signing quote recorded by the runner in the quote field",
+        "addedRetrospectively": {
+          "on": "2026-10-14",
+          "basis": "Recorded agent session log: the command `node tools/run-mainnet-proof.mjs --execute` started 2026-10-12T09:28:37Z and returned at 09:29:20Z; the captured output shows this step submitted and verified with this hash; entry verifiedAt 09:29:06Z."
+        }
+      },
       "kind": "max",
       "mode": "erc20",
       "chainId": 5042,
@@ -409,6 +445,15 @@
       "id": "native-max",
       "label": "Native send-max from wallet D",
       "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "sdk-script",
+        "source": "tools/run-mainnet-proof.mjs --execute, signing with a local key through the @lastdollar/arc SDK (no browser or wallet extension)",
+        "reviewedEvidence": "pre-signing quote recorded by the runner in the quote field",
+        "addedRetrospectively": {
+          "on": "2026-10-14",
+          "basis": "Recorded agent session log: the command `node tools/run-mainnet-proof.mjs --execute` started 2026-10-12T09:28:37Z and returned at 09:29:20Z; the captured output shows this step submitted and verified with this hash; entry verifiedAt 09:29:18Z."
+        }
+      },
       "kind": "max",
       "mode": "native",
       "chainId": 5042,
