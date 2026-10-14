@@ -78,7 +78,8 @@ pnpm e2e                     # Playwright: flows, responsive 320-1440px, axe, bo
 pnpm test:pack               # packed SDK installs and works in a fresh project
 pnpm typecheck && pnpm lint
 pnpm verify:network          # re-run Arc mainnet validation gates
-pnpm verify:evidence         # re-check every mainnet proof on two RPCs
+pnpm contracts:build         # build the splitter (needed by verify:evidence)
+pnpm verify:evidence         # re-check every mainnet proof and the bytecode on two RPCs
 ```
 
 Operational scripts: `pnpm deploy:browser` (deploy the splitter with MetaMask), `pnpm deploy:record`, `pnpm proof:run` (plan, or `--execute`), `pnpm proof:record <id> <hash>` (record a payment made in the app), `pnpm test:record`.
