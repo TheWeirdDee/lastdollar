@@ -6,19 +6,31 @@ import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lastdollar.vercel.app'
 
+const description =
+  'Send exactly what you intend. Know what it costs. Verify what arrived. Fee-aware USDC payments, send-max and atomic batches on Arc, with an open-source SDK.'
+const socialDescription = 'Quote the full cost, recheck before signing, verify what arrived. Open source, on Arc mainnet.'
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: 'LastDollar: Arc-aware USDC payments', template: '%s · LastDollar' },
-  description:
-    'Send exactly what you intend. Know what it costs. Verify what arrived. Fee-aware USDC payments, send-max and atomic batches on Arc, with an open-source SDK.',
+  description,
   applicationName: 'LastDollar',
+  keywords: ['Arc', 'USDC', 'stablecoin payments', 'send max', 'gas fees', 'batch payments', 'viem', 'TypeScript SDK', 'Circle'],
+  authors: [{ name: 'TheWeirdDee', url: 'https://github.com/TheWeirdDee' }],
+  creator: 'TheWeirdDee',
+  category: 'finance',
+  alternates: { canonical: '/' },
+  icons: { apple: '/logo.png' },
   openGraph: {
     type: 'website',
     siteName: 'LastDollar',
+    url: '/',
+    locale: 'en_US',
     title: 'LastDollar: Arc-aware USDC payments',
-    description: 'Quote the full cost, recheck before signing, verify what arrived. Open source, on Arc mainnet.',
+    description: socialDescription,
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: { card: 'summary_large_image', title: 'LastDollar: Arc-aware USDC payments', description: socialDescription },
+  formatDetection: { telephone: false, address: false, email: false },
 }
 
 export const viewport: Viewport = {
