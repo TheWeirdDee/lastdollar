@@ -38,6 +38,10 @@ export interface TxRecord {
   blockNumber?: string | undefined
   replacementHash?: `0x${string}` | undefined
   lastCheckedAt?: number | undefined
+  /** Outcome of the most recent chain check: 'confirmed', or why it could not corroborate the status. */
+  lastCheck?: 'confirmed' | 'not-found' | 'pending' | 'rpc-error' | undefined
+  /** Set when delivered payouts matched but the actual fee exceeded the reviewed maximum. */
+  feeOverBudget18?: string | undefined
   note?: string | undefined
 }
 
@@ -50,9 +54,32 @@ const EVENT = 'lastdollar-history'
 const keyFor = (chainId: number, account: string) => `${PREFIX}:${chainId}:${account.toLowerCase()}`
 const reviewKeyFor = (chainId: number, account: string, quoteId: string) => `${REVIEW_PREFIX}:${chainId}:${account.toLowerCase()}:${quoteId}`
 
-/** Stores public reviewed terms before the wallet is asked to sign. */
+const REVIEW_TTL = 30 * 24 * 60 * 60_000
+
+/** Stores public reviewed terms before the wallet is asked to sign. Snapshots expire after 30 days. */
 export function saveReviewSnapshot(snapshot: StoredReviewSnapshot) {
-  try { window.localStorage.setItem(reviewKeyFor(snapshot.chainId, snapshot.account, snapshot.quoteId), JSON.stringify(snapshot)) } catch { /* best effort */ }
+  try {
+    pruneReviewSnapshots()
+    window.localStorage.setItem(reviewKeyFor(snapshot.chainId, snapshot.account, snapshot.quoteId), JSON.stringify(snapshot))
+  } catch {
+    /* best effort */
+  }
+}
+
+function pruneReviewSnapshots() {
+  const now = Date.now()
+  const expired: string[] = []
+  for (let i = 0; i < window.localStorage.length; i++) {
+    const k = window.localStorage.key(i)
+    if (!k?.startsWith(REVIEW_PREFIX)) continue
+    try {
+      const v = JSON.parse(window.localStorage.getItem(k) ?? '{}') as { observedAt?: number }
+      if (!v.observedAt || now - v.observedAt > REVIEW_TTL) expired.push(k)
+    } catch {
+      expired.push(k)
+    }
+  }
+  for (const k of expired) window.localStorage.removeItem(k)
 }
 
 /** Reads the pre-signing snapshot without consuming it: replacement hashes need the same evidence. */
@@ -122,6 +149,14 @@ export function patchRecord(chainId: number, account: string, hash: string, patc
 export function clearRecords(chainId: number, account: string) {
   try {
     window.localStorage.removeItem(keyFor(chainId, account))
+    // Also remove this account's retained pre-signing review snapshots.
+    const prefix = `${REVIEW_PREFIX}:${chainId}:${account.toLowerCase()}:`
+    const stale: string[] = []
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const k = window.localStorage.key(i)
+      if (k?.startsWith(prefix)) stale.push(k)
+    }
+    for (const k of stale) window.localStorage.removeItem(k)
   } catch {
     /* ignore */
   }
