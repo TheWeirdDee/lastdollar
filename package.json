@@ -15,6 +15,7 @@
     "lint": "pnpm -r --if-present lint",
     "typecheck": "pnpm sdk:build && pnpm -r --if-present typecheck",
     "test": "pnpm --filter @lastdollar/arc test",
+    "contracts:build": "node tools/contracts-build.mjs",
     "test:contracts": "node tools/forge.mjs test",
     "test:integration": "pnpm --filter @lastdollar/arc test:integration",
     "test:pack": "node tools/verify-pack.mjs",
