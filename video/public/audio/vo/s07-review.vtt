@@ -1,0 +1,12 @@
+1
+00:00:00,050 --> 00:00:04,985
+Before anything is signed, I confirm the recipient and the amount.
+
+2
+00:00:04,985 --> 00:00:10,342
+When I continue, LastDollar rechecks my balance, nonce and fees.
+
+3
+00:00:10,342 --> 00:00:14,136
+If anything changed, it would ask me to review again.
+
