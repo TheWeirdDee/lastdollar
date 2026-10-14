@@ -693,6 +693,70 @@
       },
       "sdkVersion": "0.1.0",
       "reviewedQuote": "not recorded: no pre-signing review was exported for this hash; the figures under \"submitted\" are the caps in the broadcast transaction"
+    },
+    {
+      "id": "browser-native-max",
+      "label": "Native send-max in MetaMask, filmed for the demo video",
+      "evidenceType": "mainnet",
+      "provenance": {
+        "channel": "browser-wallet",
+        "source": "LastDollar web app (lastdollar.vercel.app, Send maximum, Native), signed by the wallet owner in MetaMask on 2026-10-14; the quote, review, MetaMask confirmation and result were screen-recorded for the demo video. The hash was then recorded from the chain.",
+        "reviewedEvidence": "filmed on screen (quote: recipient 0.0323724999664413 USDC, estimated fee 0.00042, maximum fee budget 0.000627, remaining about 0.000207); not exported as a file"
+      },
+      "kind": "exact",
+      "mode": "native",
+      "chainId": 5042,
+      "hash": "0xb2c5fa7a4e84a94850378ba4346b4966fe7fc6290fdf549d3cc11162de6a6c49",
+      "blockNumber": "25877539",
+      "blockTimestamp": "1791958325",
+      "from": "0x97f32ba0b4dd5c274dfd9c2a7e6aa403a9b7de8d",
+      "to": "0xe306b8ae6e958f7c8e3401f1f12d550e5daecab6",
+      "intended": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "32372499966441300"
+        }
+      ],
+      "intendedSource": "asserted at recording time, after execution",
+      "delivered": [
+        {
+          "recipient": "0xE306b8ae6e958F7C8e3401f1f12d550E5DAecab6",
+          "amount18": "32372499966441300"
+        }
+      ],
+      "submitted": {
+        "gasLimit": "25100",
+        "maxFeePerGas": "25000001337",
+        "maxPriorityFeePerGas": "1337",
+        "maxFeeBudget18": "627500033558700"
+      },
+      "quote": null,
+      "reviewedQuote": "not recorded: no pre-signing review was exported for this hash",
+      "actual": {
+        "gasUsed": "21000",
+        "effectiveGasPrice": "20000001337",
+        "fee18": "420000028077000",
+        "feeWithinSubmittedCap": true,
+        "mirroredNativeLogs": 0
+      },
+      "sender": {
+        "before18": "33000000000000000",
+        "beforeToken6": "33000",
+        "after18": "207500005481700",
+        "afterToken6": "207",
+        "afterSubMicro18": "500005481700"
+      },
+      "result": "verified",
+      "operation": "native-transfer",
+      "issues": [],
+      "verification": {
+        "primaryRpc": "https://rpc.mainnet.arc.io",
+        "independentRpc": "https://rpc.drpc.mainnet.arc.io",
+        "independentStatus": "observed",
+        "rpcsAgree": true,
+        "verifiedAt": "2026-10-14T08:08:36.172Z"
+      },
+      "sdkVersion": "0.1.0"
     }
   ],
   "splitter": "0xFfF3427E2E3C9CEac64ebEb3F34e48485D434944"
