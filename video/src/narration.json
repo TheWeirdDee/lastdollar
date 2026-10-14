@@ -1,0 +1,57 @@
+[
+  {
+    "id": "s01-hook",
+    "speak": "You press send max. But what happens when the fee comes from that same balance?",
+    "caption": "You press send max. But what happens when the fee comes from that same balance?"
+  },
+  {
+    "id": "s02-problem",
+    "speak": "On Arc, the money and the gas are the same USDC. Every transaction needs a network fee, paid from the balance you're sending. Try to send every cent, and nothing is left to pay for it.",
+    "caption": "On Arc, the money and the gas are the same USDC. Every transaction needs a network fee, paid from the balance you're sending. Try to send every cent, and nothing is left to pay for it."
+  },
+  {
+    "id": "s03-promise",
+    "speak": "LastDollar shows what you can actually send, what the fee may cost, and what remains, before you approve anything.",
+    "caption": "LastDollar shows what you can actually send, what the fee may cost, and what remains, before you approve anything."
+  },
+  {
+    "id": "s04-app",
+    "speak": "This is the live app on Arc mainnet, with real USDC. I am connected with MetaMask, using a small wallet that holds about three cents. I will send its maximum to my other wallet.",
+    "caption": "This is the live app on Arc mainnet, with real USDC. I am connected with MetaMask, using a small wallet that holds about three cents. I will send its maximum to my other wallet."
+  },
+  {
+    "id": "s05-quote",
+    "speak": "I choose Send maximum, and native USDC. LastDollar estimates the real transaction, sets aside a maximum fee budget, and offers everything else. The estimated fee is what it will probably cost. The budget is the most it can cost.",
+    "caption": "I choose Send maximum, and native USDC. LastDollar estimates the real transaction, sets aside a maximum fee budget, and offers everything else. The estimated fee is what it will probably cost. The budget is the most it can cost."
+  },
+  {
+    "id": "s06-remaining",
+    "speak": "Because the real fee is usually below the budget, a tiny amount stays behind. LastDollar says so up front, instead of promising an empty wallet.",
+    "caption": "Because the real fee is usually below the budget, a tiny amount stays behind. LastDollar says so up front, instead of promising an empty wallet."
+  },
+  {
+    "id": "s07-review",
+    "speak": "Before anything is signed, I confirm the recipient and the amount. When I continue, LastDollar rechecks my balance, nonce and fees. If anything changed, it would ask me to review again.",
+    "caption": "Before anything is signed, I confirm the recipient and the amount. When I continue, LastDollar rechecks my balance, nonce and fees. If anything changed, it would ask me to review again."
+  },
+  {
+    "id": "s08-wallet",
+    "speak": "Then I approve the payment in MetaMask.",
+    "caption": "Then I approve the payment in MetaMask."
+  },
+  {
+    "id": "s09-result",
+    "speak": "Confirmed. LastDollar reads the receipt from the chain. The recipient got exactly the reviewed amount, and the actual fee, less than a twentieth of a cent, stayed inside the budget. What is left in the wallet is the unused part of that budget.",
+    "caption": "Confirmed. LastDollar reads the receipt from the chain. The recipient got exactly the reviewed amount, and the actual fee, less than a twentieth of a cent, stayed inside the budget. What is left in the wallet is the unused part of that budget."
+  },
+  {
+    "id": "s10-verify",
+    "speak": "Anyone can check it on the Arc explorer. The proof page lists the mainnet payments, and re-verifies each one live from the chain, in your browser.",
+    "caption": "Anyone can check it on the Arc explorer. The proof page lists the mainnet payments, and re-verifies each one live from the chain, in your browser."
+  },
+  {
+    "id": "s11-close",
+    "speak": "LastDollar is open source, with a TypeScript SDK so other Arc apps can use the same checks. Try it at lastdollar dot vercel dot app.",
+    "caption": "LastDollar is open source, with a TypeScript SDK so other Arc apps can use the same checks. Try it at lastdollar.vercel.app"
+  }
+]
