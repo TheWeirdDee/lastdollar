@@ -31,6 +31,14 @@ Total network fees for the five proofs: 0.005095 USDC. The splitter deployment (
 
 These were recorded after the fact with `pnpm proof:record`. Their payouts, fees, blocks and operations are chain facts checked on two RPC providers. Their reviewed quotes were not exported before signing, so the evidence stores only the caps in the broadcast transaction and labels the reviewed quote as not recorded.
 
+### Filmed send-max in MetaMask
+
+| Id | Operation | From → to | Amount | Actual fee | Result |
+|---|---|---|---|---|---|
+| `browser-native-max` | Native transfer, Send maximum | Account 2 → Account 1 | 0.0323724999664413 | 0.000420000028077 | verified |
+
+Made in the live app on 2026-10-14 and signed by the owner in MetaMask, with the quote, review, wallet confirmation and result screen-recorded for the demo video. The quote showed an estimated fee of 0.00042, a maximum fee budget of 0.000627 and about 0.000207 remaining. The chain shows the sender went from 0.033 to 0.0002075000054817 USDC: the unused part of the fee budget. The reviewed quote is on film, not in an exported file, so the evidence describes it in the provenance field.
+
 ### What the baselines showed
 
 - On Arc, `eth_call` with the final gas limit and fee caps **accepted** naive full-balance transfers. Simulation alone therefore does not demonstrate the naive failure, and the evidence does not claim it does.
@@ -79,6 +87,6 @@ The proof page's **Re-verify live** button performs the same reconciliation from
 
 ## Limits
 
-- The five scripted proofs (`native-exact`, `erc20-exact`, `native-batch`, `erc20-max`, `native-max`) were signed by a local key through the SDK. The three `browser-*` entries were reported by the owner as payments made in the live app with MetaMask; a receipt cannot prove which interface created it, so the proof page labels their execution channel unknown and records their reviewed quote as not recorded. The splitter deployment was signed in MetaMask.
+- The five scripted proofs (`native-exact`, `erc20-exact`, `native-batch`, `erc20-max`, `native-max`) were signed by a local key through the SDK. The three historical `browser-*` entries were reported by the owner as payments made in the live app with MetaMask; a receipt cannot prove which interface created it, so the proof page labels their execution channel unknown and records their reviewed quote as not recorded. `browser-native-max` was filmed in the live app and MetaMask, so its channel is labelled browser wallet. The splitter deployment was signed in MetaMask.
 - Two RPC providers are operated independently, but both read the same chain. They guard against a faulty or dishonest endpoint, not against the chain itself.
 - Value moved between the user's own accounts and helper wallets, so this shows that the mechanics work, not that anyone has adopted the tool.
