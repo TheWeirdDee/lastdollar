@@ -1,9 +1,12 @@
-// Records a mainnet payment made through the live app (browser wallet) as public evidence.
-// Reconciles the hash on two RPC providers and writes it to evidence/mainnet/proofs.json.
+// Records an already-broadcast mainnet payment as public evidence. Reconciles the hash on two RPC
+// providers and writes it to evidence/mainnet/proofs.json.
 //
 // Usage: pnpm proof:record <id> <hash> "<label>" [--intended 0xRecipient=0.01,...]
-//   id: native-exact | erc20-exact | native-batch | erc20-max | native-max
-// Without --intended, the delivered payouts are recorded as observed (the quote is not known).
+//
+// Only what the chain shows is recorded as fact. Mode and kind come from the decoded operation, not
+// the id. The reviewed quote is not known after the fact, so it is recorded as unavailable and the
+// fee is compared with the submitted cap instead. --intended is labelled as asserted at recording
+// time, after execution.
 import { SDK_VERSION, parseUsdc, readArcBalance, verifyPaymentReceipt } from '@lastdollar/arc'
 import { getAddress, isHash } from 'viem'
 import { PRIMARY_RPC, PROOFS_FILE, SECONDARY_RPC, assertMainnet, clientFor, networkConfig, readJson, writeJson } from './lib.mjs'
@@ -37,6 +40,7 @@ const agree = a.status === b.status && a.actualFee18 === b.actualFee18 && str(li
 const issues = [...a.issues]
 if (a.status !== 'observed') issues.push(`Receipt status ${a.status}`)
 if (intended && str(intended) !== str(lines(a))) issues.push('Delivered payouts differ from the intended payouts')
+if (a.operation === 'unknown') issues.push('Transaction is not a recognised USDC payment')
 const ok = issues.length === 0 && agree
 const tx = await primary.getTransaction({ hash })
 const after = await readArcBalance({ publicClient: primary, address: a.from, config, blockNumber: a.blockNumber })
@@ -50,8 +54,9 @@ const entry = {
   // A hash and receipt cannot prove which UI or wallet produced it.  Callers
   // may add owner-attested provenance outside this recorder; unknown stays unknown.
   provenance: { channel: 'unknown', source: 'chain receipt and caller-supplied hash', reviewedEvidence: 'unavailable unless exported before signing' },
-  kind: id.includes('batch') ? 'batch' : id.includes('max') ? 'max' : 'exact',
-  mode: id.startsWith('erc20') ? 'erc20' : 'native',
+  // A receipt cannot distinguish exact from send-max; only batches are identifiable.
+  kind: a.operation === 'splitter-batch' ? 'batch' : 'exact',
+  mode: a.operation === 'erc20-transfer' ? 'erc20' : 'native',
   chainId: 5042,
   hash,
   blockNumber: a.blockNumber,
@@ -60,15 +65,16 @@ const entry = {
   to: a.to,
   splitter: a.viaSplitter ? config.splitter : undefined,
   intended: intended ?? lines(a),
-  intendedSource: intended ? 'stated before signing' : 'observed (no prior statement)',
+  intendedSource: intended ? 'asserted at recording time, after execution' : 'observed (no prior statement)',
   delivered: lines(a),
-  submitted: { gasLimit: tx.gas, maxFeePerGas: tx.maxFeePerGas, maxPriorityFeePerGas: tx.maxPriorityFeePerGas },
-  quote: { gasLimit: tx.gas, maxFeePerGas: tx.maxFeePerGas, maxFeeBudget18: tx.gas * (tx.maxFeePerGas ?? 0n), estimatedFee18: undefined },
+  submitted: { gasLimit: tx.gas, maxFeePerGas: tx.maxFeePerGas, maxPriorityFeePerGas: tx.maxPriorityFeePerGas, maxFeeBudget18: tx.gas * (tx.maxFeePerGas ?? 0n) },
+  quote: null,
+  reviewedQuote: 'not recorded: no pre-signing review was exported for this hash',
   actual: {
     gasUsed: a.gasUsed,
     effectiveGasPrice: a.effectiveGasPrice,
     fee18: a.actualFee18,
-    feeWithinBudget: a.actualFee18 <= tx.gas * (tx.maxFeePerGas ?? 0n),
+    feeWithinSubmittedCap: a.actualFee18 <= tx.gas * (tx.maxFeePerGas ?? 0n),
     mirroredNativeLogs: a.mirroredNativeLogs,
   },
   sender: { before18: before.native18, beforeToken6: before.token6, after18: after.native18, afterToken6: after.token6, afterSubMicro18: after.subMicro18 },
