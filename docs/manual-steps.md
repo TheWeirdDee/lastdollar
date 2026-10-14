@@ -9,7 +9,7 @@ Only actions that genuinely need the user. Everything else is done or automated.
 
 ## 1. Proof payments
 
-Done: five scripted proofs and three owner-reported browser payments, all verified on two RPC providers (`evidence/mainnet/proofs.json`).
+Done: five scripted proofs, three owner-reported browser payments and one filmed MetaMask send-max (`browser-native-max`), all verified on two RPC providers (`evidence/mainnet/proofs.json`).
 
 Still to do: move the remaining funds from Account 1 to a freshly created account in MetaMask, and stop using Account 1. Never paste a recovery phrase or private key anywhere to do this.
 
