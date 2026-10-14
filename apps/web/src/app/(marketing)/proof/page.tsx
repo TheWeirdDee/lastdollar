@@ -456,8 +456,9 @@ export default function ProofPage() {
           title="shell"
           code={`git clone ${REPO_URL} && cd lastdollar
 pnpm install && pnpm sdk:build
+pnpm contracts:build     # needs Foundry; builds the splitter for the bytecode check
 pnpm verify:network      # re-run the Arc mainnet validation gates
-pnpm verify:evidence     # re-check every proof on two RPC providers
+pnpm verify:evidence     # re-check every proof and the bytecode on two RPC providers
 pnpm test && pnpm test:contracts && pnpm test:integration`}
         />
         <p className="mt-3 text-sm text-muted">
