@@ -4,8 +4,9 @@ import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
-import { docs, readDoc } from '@/lib/docs'
+import { docBlurbs, docs, readDoc } from '@/lib/docs'
 import { REPO_URL } from '@/lib/network'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return docs.map((d) => ({ slug: d.slug }))
@@ -16,7 +17,8 @@ export const dynamicParams = false
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const d = docs.find((x) => x.slug === slug)
-  return { title: d?.title ?? 'Docs' }
+  if (!d) return { title: 'Docs' }
+  return pageMetadata({ title: d.title, description: docBlurbs[d.slug] ?? `${d.title}: LastDollar documentation.`, path: `/docs/${d.slug}` })
 }
 
 /** Rewrites repository-relative links (e.g. "payment-math.md", "../evidence/…") for the site. */
