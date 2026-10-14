@@ -50,7 +50,9 @@ export function BatchView() {
   const [rows, setRows] = useState<Row[]>(() => [blank(), blank()])
   const [touched, setTouched] = useState(false)
   const [ackDuplicates, setAckDuplicates] = useState(false)
-  const [csvReport, setCsvReport] = useState<{ fileName: string; errors: string[]; rows: CsvRow[] } | null>(null)
+  const [csvReport, setCsvReport] = useState<{ fileName: string; errors: string[]; rows: (CsvRow & { rowId: number })[] } | null>(null)
+  // Each import gets a generation; a slower, older import never overwrites a newer state.
+  const importGeneration = useRef(0)
   const [connectOpen, setConnectOpen] = useState(false)
   const connectRef = useRef<HTMLButtonElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -76,17 +78,27 @@ export function BatchView() {
     flow.invalidate()
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)))
     setAckDuplicates(false)
+    // An edited row is re-validated live; its historical import message no longer applies.
+    setCsvReport((rep) => (rep ? { ...rep, rows: rep.rows.filter((r) => r.rowId !== id) } : rep))
   }
 
   async function importCsv(file: File) {
+    const generation = ++importGeneration.current
     flow.invalidate()
     const text = await file.text()
+    if (generation !== importGeneration.current) return
     const parsed = parseBatchCsv(text)
-    setCsvReport({ fileName: file.name, errors: parsed.errors, rows: parsed.rows.filter((r) => r.errors.length > 0) })
-    if (parsed.rows.length > 0) {
+    const loaded = parsed.rows.map((r) => ({ id: nextId++, recipient: r.recipient, amount: r.amount, reference: r.reference }))
+    setCsvReport({
+      fileName: file.name,
+      errors: parsed.errors,
+      rows: parsed.rows.flatMap((r, i) => (r.errors.length > 0 ? [{ ...r, rowId: loaded[i]!.id }] : [])),
+    })
+    if (loaded.length > 0) {
       // Rows are loaded exactly as written, including invalid ones, so CSV-only
       // errors are actionable in the same editable list used for quoting.
-      setRows(parsed.rows.map((r) => ({ id: nextId++, recipient: r.recipient, amount: r.amount, reference: r.reference })))
+      flow.invalidate()
+      setRows(loaded)
       setTouched(true)
       setAckDuplicates(false)
     }
@@ -289,7 +301,11 @@ export function BatchView() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => { flow.invalidate(); setRows((rs) => (rs.length > 1 ? rs.filter((x) => x.id !== r.id) : [blank()])) }}
+                        onClick={() => {
+                          flow.invalidate()
+                          setRows((rs) => (rs.length > 1 ? rs.filter((x) => x.id !== r.id) : [blank()]))
+                          setCsvReport((rep) => (rep ? { ...rep, rows: rep.rows.filter((x) => x.rowId !== r.id) } : rep))
+                        }}
                         className="col-start-3 row-start-1 inline-flex size-10 items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-danger md:col-start-auto md:row-start-auto"
                         aria-label={`Remove recipient ${i + 1}`}
                       >
