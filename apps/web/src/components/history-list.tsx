@@ -26,6 +26,12 @@ export function HistoryList({ records }: { records: TxRecord[] }) {
                 <span className="font-mono">{shortHash(r.hash)}</span>
                 {r.lastCheckedAt ? ` · checked ${formatTime(r.lastCheckedAt)}` : ' · not yet checked'}
               </p>
+              {r.status !== 'pending' && r.lastCheck && r.lastCheck !== 'confirmed' ? (
+                <p className="mt-0.5 text-xs text-warning">
+                  {r.lastCheck === 'rpc-error' ? 'Latest check could not reach Arc' : 'Latest check could not find this transaction'}; status shown is the last confirmed result.
+                </p>
+              ) : null}
+              {r.feeOverBudget18 ? <p className="mt-0.5 text-xs text-danger">Fee exceeded the reviewed maximum by {usd(r.feeOverBudget18)} USDC.</p> : null}
             </div>
             <div className="text-right">
               <p className="tabular text-sm font-semibold">{usd(r.total18)}</p>
