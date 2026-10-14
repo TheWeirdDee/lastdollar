@@ -1,0 +1,16 @@
+1
+00:00:00,050 --> 00:00:01,145
+Confirmed.
+
+2
+00:00:01,145 --> 00:00:04,181
+LastDollar reads the receipt from the chain.
+
+3
+00:00:04,181 --> 00:00:13,050
+The recipient got exactly the reviewed amount, and the actual fee, less than a twentieth of a cent, stayed inside the budget.
+
+4
+00:00:13,050 --> 00:00:17,038
+What is left in the wallet is the unused part of that budget.
+
