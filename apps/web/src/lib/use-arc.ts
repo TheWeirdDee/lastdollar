@@ -39,10 +39,14 @@ export function useArcBalance(address: `0x${string}` | undefined) {
 }
 
 /** Derives a history status from chain data and the locally recorded intent. */
-export function statusFromReceipt(record: TxRecord, r: ReconciledPayment): Partial<TxRecord> {
-  if (r.status === 'pending' || r.status === 'not-found') return { lastCheckedAt: Date.now() }
+export function statusFromReceipt(
+  record: Pick<TxRecord, 'recipients' | 'kind' | 'mode' | 'maxFeeBudget18'> & Partial<Pick<TxRecord, 'reviewed'>>,
+  r: ReconciledPayment,
+): Partial<TxRecord> {
+  if (r.status === 'pending' || r.status === 'not-found') return { lastCheckedAt: Date.now(), lastCheck: r.status }
   const base = {
     lastCheckedAt: Date.now(),
+    lastCheck: 'confirmed' as const,
     actualFee18: r.actualFee18?.toString(),
     blockNumber: r.blockNumber?.toString(),
   }
@@ -52,7 +56,15 @@ export function statusFromReceipt(record: TxRecord, r: ReconciledPayment): Parti
     r.delivered.length === expected.length &&
     expected.every((e, i) => r.delivered[i]?.recipient.toLowerCase() === e.recipient.toLowerCase() && r.delivered[i]?.amount18.toString() === e.amount18)
   const expectedOp = record.kind === 'batch' ? 'splitter-batch' : record.mode === 'native' ? 'native-transfer' : 'erc20-transfer'
-  return { ...base, status: matches && r.operation === expectedOp && r.issues.length === 0 ? 'verified' : 'mismatch' }
+  // Compare against the reviewed fee ceiling: the pre-signing snapshot when present, else the quoted budget.
+  const reviewedBudget = record.reviewed
+    ? BigInt(record.reviewed.request.gas) * BigInt(record.reviewed.request.maxFeePerGas)
+    : record.maxFeeBudget18 !== undefined
+      ? BigInt(record.maxFeeBudget18)
+      : undefined
+  const over = reviewedBudget !== undefined && r.actualFee18 !== undefined && r.actualFee18 > reviewedBudget ? r.actualFee18 - reviewedBudget : 0n
+  const clean = matches && r.operation === expectedOp && r.issues.length === 0 && over === 0n
+  return { ...base, status: clean ? 'verified' : 'mismatch', feeOverBudget18: over > 0n ? over.toString() : undefined }
 }
 
 /**
@@ -114,21 +126,21 @@ export function useSettledRecheck() {
   const records = useRecords(appNetwork.chainId, address)
   const settled = records.filter((r) => r.status === 'verified' || r.status === 'mismatch' || r.status === 'reverted')
   const key = settled.map((r) => r.hash).join(',')
-  const done = useRef(new Set<string>())
+  const confirmed = useRef(new Set<string>())
 
   useEffect(() => {
     if (!address || !publicClient) return
     let stopped = false
     void (async () => {
       for (const rec of settled) {
-        if (stopped || done.current.has(rec.hash)) continue
-        done.current.add(rec.hash)
+        if (stopped || confirmed.current.has(rec.hash)) continue
         try {
           const r = await verifyPaymentReceipt({ publicClient, hash: rec.hash, config: appNetwork })
-          if (r.status === 'pending' || r.status === 'not-found') continue
+          // A not-found or pending answer cannot corroborate a settled status: keep it, but say so.
           patchRecord(appNetwork.chainId, address, rec.hash, statusFromReceipt(rec, r))
+          if (r.status !== 'pending' && r.status !== 'not-found') confirmed.current.add(rec.hash)
         } catch {
-          /* keep the last known status and check time */
+          patchRecord(appNetwork.chainId, address, rec.hash, { lastCheckedAt: Date.now(), lastCheck: 'rpc-error' })
         }
       }
     })()
