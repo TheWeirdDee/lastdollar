@@ -61,6 +61,11 @@ function EntryCard({ e }: { e: MainnetEntry }) {
             {e.kind} · {e.mode === 'native' ? 'native' : 'ERC-20'} · block {e.blockNumber}
             {e.blockTimestamp ? ` · ${formatTime(Number(e.blockTimestamp) * 1000)}` : ''}
           </p>
+          {e.provenance?.addedRetrospectively ? (
+            <p className="mt-0.5 text-xs text-muted">
+              Provenance added retrospectively on {e.provenance.addedRetrospectively.on}: {e.provenance.addedRetrospectively.basis}
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-wrap gap-1.5">
           <Badge tone="success" icon={<BadgeCheck className="size-3" aria-hidden />}>
@@ -480,7 +485,7 @@ pnpm test && pnpm test:contracts && pnpm test:integration`}
 
       <Section id="limits" icon={<CircleDashed />} title="What this evidence does not show" kind={null}>
         <ul className="max-w-3xl list-disc space-y-2 pl-5 text-sm text-muted">
-          <li>Each entry labels its own recorded provenance. A receipt alone cannot establish whether a browser wallet, MetaMask, or an SDK script created it; historical entries without independent provenance are labelled unknown.</li>
+          <li>Each entry labels its own recorded provenance. A receipt alone cannot establish whether a browser wallet, MetaMask, or an SDK script created it; historical entries without independent provenance are labelled unknown. The five SDK script labels were added on 2026-10-14 from the recorded session log of the proof run, not from data in the receipts.</li>
           <li>Transfers moved value between wallets controlled for this proof. They demonstrate mechanics, not adoption or third-party usage.</li>
           <li>The splitter contract has internal tests and no external audit.</li>
           <li>Fee estimates reflect conditions at the time; a quote is never a fee guarantee.</li>
