@@ -1,0 +1,16 @@
+1
+00:00:00,050 --> 00:00:03,511
+I choose Send maximum, and native USDC.
+
+2
+00:00:03,511 --> 00:00:11,860
+LastDollar estimates the real transaction, sets aside a maximum fee budget, and offers everything else.
+
+3
+00:00:11,860 --> 00:00:15,327
+The estimated fee is what it will probably cost.
+
+4
+00:00:15,327 --> 00:00:17,827
+The budget is the most it can cost.
+
