@@ -7,7 +7,7 @@
 // the id. The reviewed quote is not known after the fact, so it is recorded as unavailable and the
 // fee is compared with the submitted cap instead. --intended is labelled as asserted at recording
 // time, after execution.
-import { SDK_VERSION, parseUsdc, readArcBalance, verifyPaymentReceipt } from '@lastdollar/arc'
+import { SDK_VERSION, parseNativeUsdc, readArcBalance, verifyPaymentReceipt } from '@lastdollar/arc'
 import { getAddress, isHash } from 'viem'
 import { PRIMARY_RPC, PROOFS_FILE, SECONDARY_RPC, assertMainnet, clientFor, networkConfig, readJson, writeJson } from './lib.mjs'
 
@@ -21,7 +21,7 @@ const intended =
   i > 0
     ? process.argv[i + 1].split(',').map((pair) => {
         const [addr, amount] = pair.split('=')
-        return { recipient: getAddress(addr), amount18: parseUsdc(amount) }
+        return { recipient: getAddress(addr), amount18: parseNativeUsdc(amount) }
       })
     : undefined
 
