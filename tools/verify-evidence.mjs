@@ -36,13 +36,16 @@ for (const url of rpcs) {
   if (deployment?.address) {
     const code = await client.getCode({ address: deployment.address })
     const onchain = code ? keccak256(code) : 'none'
-    let local = 'unavailable (run forge build)'
+    let local
     try {
       local = splitterArtifact().runtimeHash
     } catch {
-      /* contracts not built locally */
+      local = undefined
     }
-    console.log(`  splitter ${deployment.address}: runtime ${onchain === deployment.onchainRuntimeKeccak ? 'matches record' : 'DIFFERS'}; local build ${local === onchain ? 'matches' : local}`)
+    console.log(`  splitter ${deployment.address}: runtime ${onchain === deployment.onchainRuntimeKeccak ? 'matches record' : 'DIFFERS'}; local build ${local === undefined ? 'unavailable' : local === onchain ? 'matches' : `DIFFERS (${local})`}`)
+    // The proof page claims the deployed runtime equals this repository's build, so the gate must fail otherwise.
+    if (local === undefined) fail('local splitter build unavailable: run `pnpm test:contracts` (forge build) first')
+    else if (local !== onchain) fail('local build of contracts/src/LastDollarSplitter.sol does not match the deployed runtime')
     if (onchain !== deployment.onchainRuntimeKeccak) fail('splitter runtime differs from the deployment record')
   }
 
