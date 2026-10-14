@@ -144,7 +144,7 @@ export function HistoryView() {
                 <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-surface p-5 shadow-soft">
                   <Dialog.Title className="font-semibold">Clear local history?</Dialog.Title>
                   <Dialog.Description className="mt-2 text-sm text-muted">
-                    This removes {records.length} record{records.length === 1 ? '' : 's'} for this account from this browser. Transactions stay on chain and can still be looked up by hash.
+                    This removes {records.length} record{records.length === 1 ? '' : 's'} and the saved review snapshots for this account from this browser. Transactions stay on chain and can still be looked up by hash.
                     {records.some((r) => r.status === 'pending') ? ' Some payments are still pending; you will lose automatic tracking for them.' : ''}
                   </Dialog.Description>
                   <div className="mt-5 flex justify-end gap-2">
