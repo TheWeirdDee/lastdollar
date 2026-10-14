@@ -66,7 +66,8 @@ export function saveReviewSnapshot(snapshot: StoredReviewSnapshot) {
   }
 }
 
-function pruneReviewSnapshots() {
+/** Removes review snapshots older than 30 days. Runs when the app opens and before each save. */
+export function pruneReviewSnapshots() {
   const now = Date.now()
   const expired: string[] = []
   for (let i = 0; i < window.localStorage.length; i++) {
@@ -89,6 +90,11 @@ export function getReviewSnapshot(chainId: number, account: string, quoteId: str
     const raw = window.localStorage.getItem(key)
     if (!raw) return undefined
     const value = JSON.parse(raw) as StoredReviewSnapshot
+    // Expiry is enforced on read too, not only when the next snapshot is saved.
+    if (!value.observedAt || Date.now() - value.observedAt > REVIEW_TTL) {
+      window.localStorage.removeItem(key)
+      return undefined
+    }
     return value.quoteId === quoteId ? value : undefined
   } catch { return undefined }
 }
