@@ -44,7 +44,7 @@ for (const url of rpcs) {
     }
     console.log(`  splitter ${deployment.address}: runtime ${onchain === deployment.onchainRuntimeKeccak ? 'matches record' : 'DIFFERS'}; local build ${local === undefined ? 'unavailable' : local === onchain ? 'matches' : `DIFFERS (${local})`}`)
     // The proof page claims the deployed runtime equals this repository's build, so the gate must fail otherwise.
-    if (local === undefined) fail('local splitter build unavailable: run `pnpm test:contracts` (forge build) first')
+    if (local === undefined) fail('local splitter build unavailable: run `pnpm contracts:build` first')
     else if (local !== onchain) fail('local build of contracts/src/LastDollarSplitter.sol does not match the deployed runtime')
     if (onchain !== deployment.onchainRuntimeKeccak) fail('splitter runtime differs from the deployment record')
   }
@@ -62,14 +62,17 @@ for (const url of rpcs) {
     const expectedOperation = e.kind === 'batch' ? 'splitter-batch' : e.mode === 'erc20' ? 'erc20-transfer' : 'native-transfer'
     const ok =
       r.status === 'observed' &&
+      r.issues.length === 0 &&
       r.operation === expectedOperation &&
       (!e.operation || e.operation === r.operation) &&
       r.actualFee18?.toString() === e.actual.fee18 &&
       JSON.stringify(delivered) === JSON.stringify(e.delivered) &&
       JSON.stringify(e.delivered) === JSON.stringify(e.intended) &&
-      r.blockNumber?.toString() === e.blockNumber
+      r.blockNumber?.toString() === e.blockNumber &&
+      (!e.from || r.from?.toLowerCase() === e.from.toLowerCase()) &&
+      (!e.to || r.to?.toLowerCase() === e.to.toLowerCase())
     console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${e.id} ${e.hash} fee ${formatUsdc(r.actualFee18 ?? 0n)} USDC, ${delivered.length} payout(s)`)
-    if (!ok) fail(`${e.id} does not match chain data (expected ${expectedOperation}, observed ${r.operation})`)
+    if (!ok) fail(`${e.id} does not match chain data (expected ${expectedOperation}, observed ${r.operation}${r.issues.length ? `; issues: ${r.issues.join('; ')}` : ''})`)
   }
 }
 
