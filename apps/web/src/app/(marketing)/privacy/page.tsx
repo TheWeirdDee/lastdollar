@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = { title: 'Privacy', description: 'What LastDollar stores, where, and what it never collects.' }
+export const metadata: Metadata = pageMetadata({ title: 'Privacy', description: 'What LastDollar stores, where, and what it never collects.', path: '/privacy' })
 
 export default function PrivacyPage() {
   return (
