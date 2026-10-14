@@ -24,7 +24,7 @@ type NetworkCheck = {
   balanceViews?: { address: string; native18: string; token6: string; truncationHolds: boolean; subMicro18: string }[]
   restrictions?: { zeroAddressValueTransfer?: string; nativeTransferGasToEoa?: string }
 }
-type TestSummary = { recordedAt?: string; suites?: { name: string; passed: number; failed: number; kind: string }[] }
+type TestSummary = { recordedAt?: string; testedCommit?: string; workingTreeClean?: boolean; suites?: { name: string; passed: number; failed: number; kind: string }[] }
 
 const nc = networkCheck as NetworkCheck
 const ts = testSummary as TestSummary
@@ -45,7 +45,10 @@ function Section({ id, icon, title, kind, children }: { id: string; icon: React.
 }
 
 function EntryCard({ e }: { e: MainnetEntry }) {
-  const budget = BigInt(e.quote.maxFeeBudget18)
+  // Compare with the reviewed budget when it was recorded, otherwise with the broadcast cap, and say which.
+  const reviewed = e.quote
+  const cap = reviewed ? BigInt(reviewed.maxFeeBudget18) : e.submitted ? BigInt(e.submitted.maxFeeBudget18) : undefined
+  const capLabel = reviewed ? 'budget' : 'submitted cap'
   const fee = BigInt(e.actual.fee18)
   return (
     <Card className="p-5">
@@ -91,22 +94,25 @@ function EntryCard({ e }: { e: MainnetEntry }) {
       <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
         <div>
           <dt className="text-xs text-muted">Estimated fee</dt>
-          <dd className="tabular">{usd(e.quote.estimatedFee18)} USDC</dd>
+          <dd className="tabular">{reviewed ? `${usd(reviewed.estimatedFee18)} USDC` : 'Reviewed quote not recorded'}</dd>
         </div>
         <div>
-          <dt className="text-xs text-muted">Maximum fee budget</dt>
-          <dd className="tabular">{usd(e.quote.maxFeeBudget18)} USDC</dd>
+          <dt className="text-xs text-muted">{reviewed ? 'Maximum fee budget (reviewed)' : 'Fee cap (submitted transaction)'}</dt>
+          <dd className="tabular">{cap === undefined ? 'Unknown' : `${usd(cap)} USDC`}</dd>
         </div>
         <div>
           <dt className="text-xs text-muted">Actual fee</dt>
           <dd className="tabular">
-            {usdExact(e.actual.fee18)} USDC <span className={fee <= budget ? 'text-success' : 'text-danger'}>{fee <= budget ? '(within budget)' : '(over budget)'}</span>
+            {usdExact(e.actual.fee18)} USDC{' '}
+            {cap === undefined ? null : (
+              <span className={fee <= cap ? 'text-success' : 'text-danger'}>{fee <= cap ? `(within ${capLabel})` : `(over ${capLabel})`}</span>
+            )}
           </dd>
         </div>
         <div>
           <dt className="text-xs text-muted">Gas used / limit</dt>
           <dd className="tabular">
-            {e.actual.gasUsed} / {e.quote.gasLimit}
+            {e.actual.gasUsed} / {reviewed?.gasLimit ?? e.submitted?.gasLimit ?? '—'}
           </dd>
         </div>
         <div>
@@ -119,7 +125,13 @@ function EntryCard({ e }: { e: MainnetEntry }) {
         </div>
       </dl>
       <div className="mt-4 border-t border-border pt-4">
-        <Reverify hash={e.hash} fee18={e.actual.fee18} delivered={e.delivered} />
+        <Reverify
+          hash={e.hash}
+          fee18={e.actual.fee18}
+          delivered={e.delivered}
+          operation={e.kind === 'batch' ? 'splitter-batch' : e.mode === 'erc20' ? 'erc20-transfer' : 'native-transfer'}
+          blockNumber={e.blockNumber}
+        />
       </div>
     </Card>
   )
@@ -359,10 +371,11 @@ export default function ProofPage() {
       </Section>
 
       <Section id="residuals" icon={<Calculator />} title="Native versus ERC-20 residuals" kind={<Badge tone="neutral">Measured from mainnet receipts</Badge>}>
-        {erc20Max && nativeMax ? (
+        {erc20Max?.quote && nativeMax?.quote ? (
           <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
             {[erc20Max, nativeMax].map((e) => {
-              const unused = BigInt(e.quote.maxFeeBudget18) - BigInt(e.actual.fee18)
+              // Both send-max proofs carry their reviewed quote (checked above), which defines the budget.
+              const unused = BigInt(e.quote!.maxFeeBudget18) - BigInt(e.actual.fee18)
               const rounding = e.mode === 'erc20' ? BigInt(e.sender.after18) - unused : 0n
               return (
                 <Card key={e.id} className="p-5">
@@ -418,7 +431,20 @@ export default function ProofPage() {
                 ))}
               </tbody>
             </table>
-            {ts.recordedAt ? <p className="border-t border-border px-4 py-2 text-xs text-muted">Recorded {formatTime(Date.parse(ts.recordedAt))}</p> : null}
+            {ts.recordedAt ? (
+              <p className="border-t border-border px-4 py-2 text-xs text-muted">
+                Recorded {formatTime(Date.parse(ts.recordedAt))}
+                {ts.testedCommit ? (
+                  <>
+                    {' '}against commit{' '}
+                    <a href={`${REPO_URL}/commit/${ts.testedCommit}`} className="font-mono underline underline-offset-2">
+                      {ts.testedCommit.slice(0, 7)}
+                    </a>
+                    {ts.workingTreeClean === false ? ' plus uncommitted changes that were committed afterwards' : ''}
+                  </>
+                ) : null}
+              </p>
+            ) : null}
           </Card>
         ) : (
           <p className="text-sm text-muted">Run the test commands below to reproduce.</p>
