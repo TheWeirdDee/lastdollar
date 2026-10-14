@@ -54,8 +54,12 @@ async function forward(body: string): Promise<Response | undefined> {
 }
 
 export async function POST(request: Request) {
-  const text = await request.text()
-  if (text.length > MAX_BODY) return Response.json(rpcError(null, -32600, 'Request too large'), { status: 413 })
+  // Reject by declared size before reading, then by actual UTF-8 bytes (not characters).
+  const declared = Number(request.headers.get('content-length') ?? '0')
+  if (declared > MAX_BODY) return Response.json(rpcError(null, -32600, 'Request too large'), { status: 413 })
+  const bytes = new Uint8Array(await request.arrayBuffer())
+  if (bytes.byteLength > MAX_BODY) return Response.json(rpcError(null, -32600, 'Request too large'), { status: 413 })
+  const text = new TextDecoder().decode(bytes)
   let payload: RpcRequest | RpcRequest[]
   try {
     payload = JSON.parse(text) as RpcRequest | RpcRequest[]
